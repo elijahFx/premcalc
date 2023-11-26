@@ -1,0 +1,200 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.table {
+	width: 100%;
+	margin-bottom: 20px;
+	border: 1px solid #dddddd;
+	border-collapse: collapse; 
+	font-size: 15px;
+}
+.table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+.table td {
+	border: 1px solid #dddddd;
+	padding: 5px;
+  text-align: center;
+}
+
+.table tr:hover {
+	border: 1px solid #dddddd;
+	padding: 5px;
+  opacity: 0.8;
+}
+
+.green {
+  background: #47d547;
+}
+
+.red {
+  background: rgba(255, 0, 0, 0.582);
+}
+
+input {
+  width: 40px;
+}
+
+.material-symbols-outlined {
+	cursor: pointer;
+	user-select: none;
+}
+
+.result {
+	width: 100vw;
+	height: 6vh;
+	background: #efefef;
+	border: 1px solid #dddddd;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+}
+
+.result h1 {
+	font-size: 15px;
+	text-align: center;
+}
+
+.navbar {
+	width: 100%;
+	height: 20vh;
+	background-color: #dddddd;
+	border: 1px solid black;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	padding: 10px;
+}
+
+.navbar input {
+	width: 20%;
+	height: 33%;
+	padding: 0 0 0 5px;
+}
+
+.navbar button {
+	height: 33%;
+	width: 20%;
+}
+
+header {
+	display: grid; 
+	grid-auto-columns: 1fr; 
+	grid-template-columns: 30% 70%; 
+	grid-template-rows: 1fr; 
+	gap: 0px 0px; 
+	grid-template-areas: 
+	  ". .";
+}
+
+.logo {
+	background-color: #dddddd;
+	border: 1px solid black;
+	border-right: none;
+	border-top: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.logo span {
+	font-size: 60px;
+	color: rgba(255, 0, 0, 0.582);
+	animation: walk;
+	animation-duration: 10s;
+	animation-iteration-count: infinite;
+}
+
+.logo {
+	font-family: 'Yeseva One', serif;
+	user-select: none;
+	cursor: pointer;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 10vh;
+	background-color: #dddddd;
+	border: 1px solid black;
+	border-left: none;
+	border-right: none;
+}
+
+footer p {
+	text-align: center;
+	font-size: 15px;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+}
+
+.redInput {
+	border: 1px solid red;
+	outline: 1px solid red;
+}
+
+.money {
+	color: rgb(34, 141, 34);
+}
+
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color:rgba(255, 0, 0, 0.582);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+.containder-for-loader {
+	width: 100vw;
+	height: 50vh;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+
+@keyframes walk {
+	0% {color: black;}
+	25% {color: rgba(255, 0, 0, 0.582);
+	transform: rotate(-25deg);}
+	50% {color: gold;}
+	100% {color: rgb(0, 0, 0);}
+}
+
+
+
+
+
+
