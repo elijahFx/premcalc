@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
 });
 
 const corsOptions = {
-    origin: "https://premcalc.onrender.com" // frontend URI (ReactJS)
+    origin: "https://premcalc.onrender.com/cases" // frontend URI (ReactJS)
 }
 
 app.use(cors(corsOptions))
