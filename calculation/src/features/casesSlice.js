@@ -5,7 +5,7 @@ export const fetchCases = createAsyncThunk(
     "cases/fetchCases",
     async function (_, {rejectWithValue}) {
         try {
-            const response = await fetch("http://localhost:4000/cases")
+            const response = await fetch("https://premcalc.onrender.com/cases")
 
             if(!response.ok) {
                 throw new Error("Ошибка сервера")
@@ -27,7 +27,7 @@ export const deleteCase = createAsyncThunk(
     "cases/deleteCase",
     async function (id, {rejectWithValue, dispatch}) {
         try {
-            const response = await fetch(`http://localhost:4000/cases/${id}`, {
+            const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
                 method: "DELETE"
             })
 
@@ -51,7 +51,7 @@ export const toggleStatus = createAsyncThunk(
 
 
         try {
-            const response = await fetch(`http://localhost:4000/cases/${id}`, {
+            const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -79,7 +79,7 @@ export const addNewCase = createAsyncThunk(
     "cases/addNewCase",
     async function (newCaseData, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch("http://localhost:4000/cases", {
+        const response = await fetch("https://premcalc.onrender.com/cases", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
