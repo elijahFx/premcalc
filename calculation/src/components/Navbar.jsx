@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addCase, addNewCase } from '../features/casesSlice'
+import { addCase, addNewCase } from '../features/casesSlice.js'
 import { useDispatch } from 'react-redux'
 
 export default function Navbar() {

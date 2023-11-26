@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import Row from "./components/Row"
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import Row from "./components/Row.jsx"
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCases } from './features/casesSlice'
+import { fetchCases } from './features/casesSlice.js'
 
 function App() {
 

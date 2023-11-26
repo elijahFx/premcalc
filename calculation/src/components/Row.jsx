@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCase, removeCase, toggleIsPaid, toggleStatus } from '../features/casesSlice';
+import { deleteCase, removeCase, toggleIsPaid, toggleStatus } from '../features/casesSlice.js';
 
 export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
