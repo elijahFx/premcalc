@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
 });
 
 const corsOptions = {
-    origin: "http://127.0.0.1:5173/" // frontend URI (ReactJS)
+    origin: "http://127.0.0.1:5173" // frontend URI (ReactJS)
 }
 
 app.use(cors(corsOptions))
