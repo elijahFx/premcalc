@@ -3,7 +3,7 @@ import Row from "./components/Row.jsx"
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCases } from './features/casesSlice.js'
+import { fetchCases } from './features/casesSlice.mjs'
 
 function App() {
 
