@@ -193,6 +193,12 @@ footer p {
 	100% {color: rgb(0, 0, 0);}
 }
 
+@media only screen and (max-width: 600px) {
+	.table {
+		overflow-x: scroll;
+	}
+}
+
 
 
 
