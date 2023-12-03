@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addCase, addNewCase } from '../features/casesSlice.mjs'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../features/usersSlice'
 
 export default function Navbar() {
 
@@ -8,12 +9,23 @@ export default function Navbar() {
   const [money, setMoney] = useState(0)
   const [takes, setTakes] = useState(1)
   const [myTakes, setMyTakes] = useState(1)
+  const [email, setEmail] = useState("")
+  const user = useSelector(state => state.users.user)
 
   const [error1, setError1] = useState(false)
   const [error2, setError2] = useState(false)
 
   const dispatch = useDispatch()
 
+
+  useEffect(() => {
+    setEmail(user?.email)
+  }, [user])
+
+
+  function handleClick() {
+    dispatch(logout())
+  }
 
 
   function handleSubmit(e) {
@@ -44,11 +56,6 @@ export default function Navbar() {
       setTakes(1)
       setMyTakes(1)
     }
-
-   
-    console.log(name === true, money === true, error1, error2);
-
-
     setError1(false)
     setError2(false)
   }
@@ -60,11 +67,14 @@ export default function Navbar() {
 
 <div className='logo'>
   
+<div className="subLogo">
   <span className="material-symbols-outlined">
 savings
 </span>
 <h2>Премкальк</h2>
-
+</div>
+{email && <h5>{email}</h5>}
+{email && <button onClick={() => handleClick()} className='exitBtn'>Выйти</button>}
 </div>
 
 

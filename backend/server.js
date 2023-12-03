@@ -22,8 +22,10 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 const casesRoutes = require("./routes/cases")
+const usersRoutes = require("./routes/users") 
 
 app.use("/cases", casesRoutes)
+app.use("/users", usersRoutes)
 
 
 mongoose.connect(process.env.URI)

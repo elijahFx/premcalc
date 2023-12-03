@@ -75,6 +75,39 @@ export const toggleStatus = createAsyncThunk(
     }
 )
 
+export const toggleTakes = createAsyncThunk(
+  "cases/toggleTakes",
+  async function (updatedCaseData, {rejectWithValue, dispatch, getState}) {
+
+      const CASE = getState().cases.cases.find(el => el._id === updatedCaseData.id)
+
+
+      try {
+          const response = await fetch(`https://premcalc.onrender.com/cases/${updatedCaseData.id}`, {
+              method: "PATCH",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                takes: updatedCaseData.takes,
+                myTakes: updatedCaseData.myTakes
+              })
+          })
+
+          
+
+          if(!response.ok) {
+              throw new Error("Нельзя удалить несуществующее дело")
+          }
+
+          dispatch(changeTakes({ id: updatedCaseData.id, takes: updatedCaseData.takes, myTakes: updatedCaseData.myTakes }));
+  
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+  }
+)
+
 export const addNewCase = createAsyncThunk(
     "cases/addNewCase",
     async function (newCaseData, { rejectWithValue, dispatch }) {
@@ -121,14 +154,22 @@ export const casesSlice = createSlice({
         toggleIsPaid: (state, action) => {
             const { id } = action.payload;
 
-      // Find the case with the specified id
       const caseToUpdate = state.cases.find((el) => el._id === id);
 
-      // If found, update the isPaid property
       if (caseToUpdate) {
         caseToUpdate.isPaid = !caseToUpdate.isPaid;
       }
     },
+        changeTakes: (state, action) => {
+            const { id } = action.payload;
+
+      const caseToUpdate = state.cases.find((el) => el._id === id);
+
+      if (caseToUpdate) {
+        caseToUpdate.takes = action.payload.takes;
+        caseToUpdate.myTakes = action.payload.myTakes;
+      }
+        }
   },
     extraReducers: {
         [fetchCases.pending]: (state) => {
@@ -137,7 +178,6 @@ export const casesSlice = createSlice({
         },
         [fetchCases.fulfilled]: (state, action) => {
             state.status = "resolved"
-            console.log(state);
             state.cases = action.payload
         },
         [fetchCases.rejected]: (state, action) => {
@@ -168,6 +208,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases } = casesSlice.actions
 
 export default casesSlice.reducer

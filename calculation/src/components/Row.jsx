@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCase, removeCase, toggleIsPaid, toggleStatus } from '../features/casesSlice.mjs';
+import { deleteCase, removeCase, toggleIsPaid, toggleStatus, toggleTakes } from '../features/casesSlice.mjs';
 
 export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
@@ -19,19 +19,12 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
     const calculate = () => {
         if(parseInt(myPPARTS) > parseInt(PPARTS)) {
-            console.log("wtf");
             setMyPPARTS(parseInt(PPARTS))
         }
 
         TAKE = money * 0.3
         moneyBefore = (TAKE - (((TAKE / 100) * 14)))
         PUREMONEY = Math.round(((moneyBefore / PPARTS) * myPPARTS) * 100) / 100
-
-        console.log(TAKE, PPARTS, myPPARTS);
-
- 
-        
-
     }
 
     useEffect(() => {
@@ -46,6 +39,10 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
         dispatch(toggleStatus(id))
     }
 
+    function handleChange() {
+        dispatch(toggleTakes(id))
+    }
+
 
   return (
     <tr className={isPaid ? "green" : "red"}>
@@ -54,8 +51,8 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 			<td>{money.toFixed(2)} бел. руб.</td>
 			<td>{TAKE.toFixed(2)} бел. руб.</td>
 			<td>{PUREMONEY.toFixed(2)} бел. руб.</td>
-			<td><input type="number" id="tentacles"  name="tentacles" min="1" value={PPARTS} onChange={(e) => setPPARTS(e.target.value)}/></td>
-            <td><input type="number" id="tentacles"  name="tentacles" min="1" value={myPPARTS} onChange={(e) => setMyPPARTS(e.target.value)}/></td>
+			<td><input type="number" id="tentacles"  name="tentacles" min="1" value={PPARTS} onChange={(e) => {setPPARTS(e.target.value); handleChange()}}/></td>
+            <td><input type="number" id="tentacles"  name="tentacles" min="1" value={myPPARTS} onChange={(e) => {setMyPPARTS(e.target.value); handleChange()}}/></td>
             <td>{isPaid ? <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => deleteElement()} class="material-symbols-outlined">close</span></td>
 	</tr>
   )
