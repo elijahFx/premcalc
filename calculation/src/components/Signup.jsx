@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { loginUser } from '../features/usersSlice'
+import { signupUser } from '../features/usersSlice'
 import { useDispatch } from 'react-redux'
 
 export default function Signup() {
@@ -12,9 +12,15 @@ export default function Signup() {
 
         if(!email || !password || !password2)return
         if(password !== password2)return
+        if(password.length < 7) {
+          return
+        }
 
-        
-        dispatch(loginUser({password: password, email: email}))
+        console.log("должно работать");
+        dispatch(signupUser({password: password, email: email}))
+        setEmail("")
+        setPassword("")
+        setPassword2("")
     }
 
     const [email, setEmail] = useState("")
@@ -27,11 +33,11 @@ export default function Signup() {
         <form onSubmit={(e) => handleSubmit(e)} className='inForm'>
             <h2>Зарегистрироваться</h2>
             <label htmlFor="email">Введите Ваш email:</label>
-            <input type="text" type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email'/>
+            <input type="text" type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email'/>
             <label htmlFor="password">Введите Ваш пароль:</label>
-            <input type="text" type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password'/>
+            <input type="text" type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
             <label htmlFor="password2">Повторите Ваш пароль:</label>
-            <input type="text" type="password" onChange={(e) => setPassword2(e.target.value)} placeholder='Повторный пароль' value={password2} name='password2'/>
+            <input type="text" type="password" onChange={(e) => setPassword2(e.target.value)} placeholder='Повторный пароль' value={password2} name='password2' id='password2'/>
             <button>Зарегистрироваться</button>
         </form>
         <h5>Уже есть акааунт? <Link to="/">Войди</Link></h5>

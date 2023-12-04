@@ -4,19 +4,20 @@ import Month from './components/Month.jsx'
 import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import { Routes, BrowserRouter, Route } from "react-router-dom"
+import { useSelector } from 'react-redux'
 
 function App() {
+
+  const user = useSelector(state => state.users.user)
 
   return (
 <div className='container'>
 	<Navbar/>
 		<BrowserRouter>
-
         <div className="pages">
           <Routes>
-            <Route path="/" element={<Login />}/>
-            <Route path="/signup" element={<Signup />}/>
-            <Route path="/cases" element={<Month />}/>
+            <Route path="/" element={!user ? <Login /> : <Month />}/>
+            <Route path="/signup" element={!user ? <Signup /> : <Month />}/>
           </Routes>
         </div>
       </BrowserRouter>

@@ -1,13 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { loginUser } from '../features/usersSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Login() {
+
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.users)
 
 
     function handleSubmit(e) {
         e.preventDefault()
+
+        if(!email || !password)return
+
+        dispatch(loginUser({email: email, password: password}))
+        setEmail("")
+        setPassword("")
     }
 
+    useEffect(() => {
+      console.log(user);
+    }, [user])
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
