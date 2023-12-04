@@ -116,28 +116,28 @@ export default function Month() {
   return (
     <div className='monthContainer'>
     <div className='month'><h5>{month}</h5></div>
-    <table class="table">
+    <table className="table">
 	<thead>
 		<tr>
 			{cases.length > 1 ? <th>№</th> : <th></th>}
-			<th onClick={() => onSort("name")}>Ответчик: {isDown1 ? <span class="material-symbols-outlined">
+			<th onClick={() => onSort("name")}>Ответчик: {isDown1 ? <span className="material-symbols-outlined">
 arrow_upward
-</span> : <span class="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined">
 arrow_downward
 </span>}</th>
-			<th>Расходы РОЗП: {isDown2 ? <span class="material-symbols-outlined">
+			<th>Расходы РОЗП: {isDown2 ? <span className="material-symbols-outlined">
 arrow_upward
-</span> : <span class="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined">
 arrow_downward
 </span>}</th>
-			<th>Рабочая доля: {isDown3 ? <span class="material-symbols-outlined">
+			<th>Рабочая доля: {isDown3 ? <span className="material-symbols-outlined">
 arrow_upward
-</span> : <span class="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined">
 arrow_downward
 </span>}</th>
-			<th>Чистый доход: {isDown4 ? <span class="material-symbols-outlined">
+			<th>Чистый доход: {isDown4 ? <span className="material-symbols-outlined">
 arrow_upward
-</span> : <span class="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined">
 arrow_downward
 </span>}</th>
 			<th>Доли:</th>
@@ -146,7 +146,7 @@ arrow_downward
 		</tr>
 	</thead>
 	<tbody>
-	 {status === "loading" && <div className='containder-for-loader'><span class="loader"></span></div>}
+	 {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
 	 {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}
      {cases ? cases.map((el, number) => {
       return <Row id={el._id} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes}/>

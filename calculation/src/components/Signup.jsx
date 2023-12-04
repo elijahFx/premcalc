@@ -33,11 +33,11 @@ export default function Signup() {
         <form onSubmit={(e) => handleSubmit(e)} className='inForm'>
             <h2>Зарегистрироваться</h2>
             <label htmlFor="email">Введите Ваш email:</label>
-            <input type="text" type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email'/>
+            <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email' autoComplete="on"/>
             <label htmlFor="password">Введите Ваш пароль:</label>
-            <input type="text" type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
+            <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
             <label htmlFor="password2">Повторите Ваш пароль:</label>
-            <input type="text" type="password" onChange={(e) => setPassword2(e.target.value)} placeholder='Повторный пароль' value={password2} name='password2' id='password2'/>
+            <input type="password" onChange={(e) => setPassword2(e.target.value)} placeholder='Повторный пароль' value={password2} name='password2' id='password2'/>
             <button>Зарегистрироваться</button>
         </form>
         <h5>Уже есть акааунт? <Link to="/">Войди</Link></h5>

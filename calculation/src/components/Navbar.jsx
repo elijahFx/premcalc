@@ -79,10 +79,10 @@ savings
 
 
     <form className='navbar' onSubmit={handleSubmit}>
-      <input className={error1 ? "redInput" : ""} type="text" placeholder='Ответчик' value={name} onChange={(e) => setName(e.target.value)}/>
-      <input className={error2 ? "redInput" : ""}type="number" placeholder='Расходы' value={money} onChange={(e) => setMoney(e.target.value)}/>
-      <input type="number" placeholder='Доли' value={takes} onChange={(e) => setTakes(e.target.value)}/>
-      <input type="number" placeholder='Мои доли' value={myTakes} onChange={(e) => setMyTakes(e.target.value)}/>
+      <input className={error1 ? "redInput" : ""} type="text" placeholder='Ответчик' value={name} onChange={(e) => setName(e.target.value)} name='name' autoComplete='on'/>
+      <input className={error2 ? "redInput" : ""}type="number" placeholder='Расходы' value={money} onChange={(e) => setMoney(e.target.value)} name='expenses'/>
+      <input type="number" placeholder='Доли' value={takes} onChange={(e) => setTakes(e.target.value)} name='takes'/>
+      <input type="number" placeholder='Мои доли' value={myTakes} onChange={(e) => setMyTakes(e.target.value)} name='myTakes'/>
       <button >Добавить+</button>
     </form>
 

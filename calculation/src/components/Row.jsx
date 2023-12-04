@@ -53,7 +53,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 			<td>{PUREMONEY.toFixed(2)} бел. руб.</td>
 			<td><input type="number" id="tentacles"  name="tentacles" min="1" value={PPARTS} onChange={(e) => {setPPARTS(e.target.value); handleChange()}}/></td>
             <td><input type="number" id="tentacles"  name="tentacles" min="1" value={myPPARTS} onChange={(e) => {setMyPPARTS(e.target.value); handleChange()}}/></td>
-            <td>{isPaid ? <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => deleteElement()} class="material-symbols-outlined">close</span></td>
+            <td>{isPaid ? <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => deleteElement()} className="material-symbols-outlined">close</span></td>
 	</tr>
   )
 }
