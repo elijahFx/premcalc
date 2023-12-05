@@ -42,7 +42,7 @@ export default function Navbar() {
     return
     }
 
-    if(name && money && takes > 0 && myTakes > 0) {
+    if(name && money && takes > 0 && myTakes > 0 && user) {
       setError1(false)
       setError2(false)
       dispatch(addNewCase({name: name,

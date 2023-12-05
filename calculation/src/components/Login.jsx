@@ -7,6 +7,8 @@ export default function Login() {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.users)
+  const status = user.status
+  const [isLoading, setIsLoading] = useState(false)
 
 
     function handleSubmit(e) {
@@ -22,18 +24,27 @@ export default function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    useEffect(() => {
+      if(status === "loading") {
+        setIsLoading(true)
+      } else {
+        setIsLoading(false)
+      }
+    }, [user])
 
   return (
-    <div className='inContainer'>
-        <form onSubmit={(e) => handleSubmit(e)} className='inForm'>
-            <h2>Войти</h2>
-            <label htmlFor="email">Введите Ваш email:</label>
-            <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email' autoComplete="on"/>
-            <label htmlFor="password">Введите Ваш пароль:</label>
-            <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
-            <button>Войти</button>
-        </form>
-        <h5>Нет аккаунта? <Link to="/signup">Зарегистрируйся</Link></h5>
-    </div>
-  )
-}
+    <>
+    {isLoading && <div className='containder-for-loader'><span className="loader"></span></div>}
+    <div className='inContainer' style={{ display: !isLoading ? 'flex' : 'none' }}>
+    <form onSubmit={(e) => handleSubmit(e)} className='inForm'>
+        <h2>Войти</h2>
+        <label htmlFor="email">Введите Ваш email:</label>
+        <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email' autoComplete="on"/>
+        <label htmlFor="password">Введите Ваш пароль:</label>
+        <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
+        <button>Войти</button>
+    </form>
+    <h5>Нет аккаунта? <Link to="/signup">Зарегистрируйся</Link></h5>
+</div>
+</>
+)}

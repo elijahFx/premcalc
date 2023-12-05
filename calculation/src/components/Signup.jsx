@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { signupUser } from '../features/usersSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function Signup() {
 
     const dispatch = useDispatch()
+    const status = useSelector(state => state.users.status)
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -26,10 +27,21 @@ export default function Signup() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [password2, setPassword2] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+      if(status === "loading") {
+        setIsLoading(true)
+      } else {
+        setIsLoading(false)
+      }
+    }, [status])
 
 
   return (
-    <div className='inContainer'>
+    <>
+    {isLoading && <div className='containder-for-loader'><span className="loader"></span></div>}
+    <div className='inContainer' style={{display: !isLoading ? "flex" : "none"}}>
         <form onSubmit={(e) => handleSubmit(e)} className='inForm'>
             <h2>Зарегистрироваться</h2>
             <label htmlFor="email">Введите Ваш email:</label>
@@ -42,5 +54,6 @@ export default function Signup() {
         </form>
         <h5>Уже есть акааунт? <Link to="/">Войди</Link></h5>
     </div>
+    </>
   )
 }
