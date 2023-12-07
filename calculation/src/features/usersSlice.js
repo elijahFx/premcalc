@@ -21,7 +21,7 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
   
-        // Assuming the response contains the newly added case
+        localStorage.setItem("token", data.token)
         dispatch(signup(data));
   
         return data;
@@ -51,10 +51,10 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
 
-        localStorage.setItem("token", data.token)
+        
         console.log(data);
   
-        // Assuming the response contains the newly added case
+        localStorage.setItem("token", data.token)
         dispatch(login(data));
   
         return data;

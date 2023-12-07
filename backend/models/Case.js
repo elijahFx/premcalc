@@ -23,6 +23,10 @@ const caseSchema = new Schema({
     myTakes: {
         type: Number,
         required: true
+    },
+    user_id: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true})
 

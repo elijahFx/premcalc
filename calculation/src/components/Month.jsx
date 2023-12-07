@@ -149,7 +149,7 @@ arrow_downward
 	 {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
 	 {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}
      {cases ? cases.map((el, number) => {
-      return <Row id={el._id} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes}/>
+      return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes}/>
     }) : <></>}
 	</tbody>
 </table>

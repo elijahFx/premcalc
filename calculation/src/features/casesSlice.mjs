@@ -3,9 +3,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchCases = createAsyncThunk(
     "cases/fetchCases",
-    async function (_, {rejectWithValue}) {
+    async function (_, {rejectWithValue, getState}) {
+
+        const userToken = getState().users.token
+
         try {
-            const response = await fetch("https://premcalc.onrender.com/cases")
+            const response = await fetch("https://premcalc.onrender.com/cases", {
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
+            }
+            )
 
             if(!response.ok) {
                 throw new Error("Ошибка сервера")
@@ -25,10 +33,16 @@ export const fetchCases = createAsyncThunk(
 
 export const deleteCase = createAsyncThunk(
     "cases/deleteCase",
-    async function (id, {rejectWithValue, dispatch}) {
+    async function (id, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.token
+
         try {
             const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
             })
 
             if(!response.ok) {
@@ -48,13 +62,14 @@ export const toggleStatus = createAsyncThunk(
     async function (id, {rejectWithValue, dispatch, getState}) {
 
         const CASE = getState().cases.cases.find(el => el._id === id)
-
+        const userToken = getState().users.token
 
         try {
             const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
                 },
                 body: JSON.stringify({
                     isPaid: !CASE.isPaid
@@ -80,13 +95,14 @@ export const toggleTakes = createAsyncThunk(
   async function (updatedCaseData, {rejectWithValue, dispatch, getState}) {
 
       const CASE = getState().cases.cases.find(el => el._id === updatedCaseData.id)
-
+      const userToken = getState().users.token
 
       try {
           const response = await fetch(`https://premcalc.onrender.com/cases/${updatedCaseData.id}`, {
               method: "PATCH",
               headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${userToken}`
               },
               body: JSON.stringify({
                 takes: updatedCaseData.takes,
@@ -110,12 +126,17 @@ export const toggleTakes = createAsyncThunk(
 
 export const addNewCase = createAsyncThunk(
     "cases/addNewCase",
-    async function (newCaseData, { rejectWithValue, dispatch }) {
+    async function (newCaseData, { rejectWithValue, dispatch, getState }) {
+
+        const userToken = getState().users.token
+
+
       try {
         const response = await fetch("https://premcalc.onrender.com/cases", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${userToken}`
           },
           body: JSON.stringify(newCaseData),
         });
