@@ -20,6 +20,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setEmail(user?.email)
+    console.log(user);
   }, [user])
 
 
@@ -49,7 +50,9 @@ export default function Navbar() {
                        expenses: Number(money),
                        takes: Number(takes),
                        myTakes: Number(myTakes),
-                       isPaid: false}))
+                       isPaid: false,
+                       user_id: ""
+                    }))
 
       setName("")
       setMoney(0)

@@ -5,7 +5,7 @@ export const fetchCases = createAsyncThunk(
     "cases/fetchCases",
     async function (_, {rejectWithValue, getState}) {
 
-        const userToken = getState().users.token
+        const userToken = getState().users.user.token
 
         try {
             const response = await fetch("https://premcalc.onrender.com/cases", {
@@ -16,11 +16,11 @@ export const fetchCases = createAsyncThunk(
             )
 
             if(!response.ok) {
-                throw new Error("Ошибка сервера")
+                throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
+                console.log(response);
             }
     
             const data = await response.json()
-            console.log(userToken);
             return data
             
         } catch (error) {
@@ -35,7 +35,7 @@ export const deleteCase = createAsyncThunk(
     "cases/deleteCase",
     async function (id, {rejectWithValue, dispatch, getState}) {
 
-        const userToken = getState().users.token
+        const userToken = getState().users.user.token
 
         try {
             const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
@@ -63,7 +63,7 @@ export const toggleStatus = createAsyncThunk(
     async function (id, {rejectWithValue, dispatch, getState}) {
 
         const CASE = getState().cases.cases.find(el => el._id === id)
-        const userToken = getState().users.token
+        const userToken = getState().users.user.token
         console.log(userToken);
 
         try {
@@ -97,7 +97,7 @@ export const toggleTakes = createAsyncThunk(
   async function (updatedCaseData, {rejectWithValue, dispatch, getState}) {
 
       const CASE = getState().cases.cases.find(el => el._id === updatedCaseData.id)
-      const userToken = getState().users.token
+      const userToken = getState().users.user.token
 
       try {
           const response = await fetch(`https://premcalc.onrender.com/cases/${updatedCaseData.id}`, {
@@ -130,7 +130,9 @@ export const addNewCase = createAsyncThunk(
     "cases/addNewCase",
     async function (newCaseData, { rejectWithValue, dispatch, getState }) {
 
-        const userToken = getState().users.token
+        const userToken = getState().users.user.token
+        const user_id = getState().users.user
+        const finalCase = {...newCaseData, user_id: user_id}
 
 
       try {
@@ -140,19 +142,19 @@ export const addNewCase = createAsyncThunk(
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userToken}`
           },
-          body: JSON.stringify(newCaseData),
+          body: JSON.stringify(finalCase),
         });
-
-  
-        if (!response.ok) {
-            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
-            throw new Error(errorMessage);
-          }
-  
         const data = await response.json();
   
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText} - ${userToken}`;
+            throw new Error(JSON.stringify(user_id));
+          }
+  
+        
+  
         // Assuming the response contains the newly added case
-        dispatch(addCase(data));
+        dispatch(addCase(newCaseData));
   
         return data;
       } catch (error) {

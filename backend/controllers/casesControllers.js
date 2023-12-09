@@ -10,7 +10,7 @@ const createCase = async (req, res) => {
         const CASE = await Case.create({ name, expenses, takes, myTakes, number, isPaid, user_id })
         res.status(200).json(CASE)
     } catch (error) {
-        res.status(400).json({err: error.message})
+        res.status(400).json({err: req.user})
     }
 }
 
@@ -51,7 +51,9 @@ const updateCase = async (req, res) => {
 }
 
 const getCases = async (req, res) => {
-    const cases = await Case.find({}).sort({createdAt: 1})
+    const user_id = req.user._id
+
+    const cases = await Case.find({ user_id }).sort({createdAt: 1})
 
     res.status(200).json(cases)
 }
