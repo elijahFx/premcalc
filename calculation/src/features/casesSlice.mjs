@@ -20,7 +20,7 @@ export const fetchCases = createAsyncThunk(
             }
     
             const data = await response.json()
-    
+            console.log(userToken);
             return data
             
         } catch (error) {
@@ -50,6 +50,7 @@ export const deleteCase = createAsyncThunk(
             }
     
             dispatch(removeCase({id}))
+            console.log(userToken);
             
         } catch (error) {
            return rejectWithValue(error.message)
@@ -63,6 +64,7 @@ export const toggleStatus = createAsyncThunk(
 
         const CASE = getState().cases.cases.find(el => el._id === id)
         const userToken = getState().users.token
+        console.log(userToken);
 
         try {
             const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
