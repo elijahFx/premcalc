@@ -6,15 +6,15 @@ const app = express()
 const cors = require("cors")
 
 app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+   // res.setHeader('Access-Control-Allow-Origin', '*');
+   // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
+   // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+   // res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
 
 const corsOptions = {
-    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173"]  // frontend URI (ReactJS)
+    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173", "http://127.0.0.1:5173/"]  // frontend URI (ReactJS)
 }
 
 app.use(cors(corsOptions))

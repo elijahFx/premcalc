@@ -78,10 +78,11 @@ export const toggleStatus = createAsyncThunk(
                 })
             })
 
+            const data = await response.json()
             
 
             if(!response.ok) {
-                throw new Error("Нельзя удалить несуществующее дело")
+                throw new Error(data)
             }
 
             dispatch(toggleIsPaid({id}))
