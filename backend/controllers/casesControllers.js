@@ -10,7 +10,7 @@ const createCase = async (req, res) => {
         const CASE = await Case.create({ name, expenses, takes, myTakes, number, isPaid, user_id })
         res.status(200).json(CASE)
     } catch (error) {
-        res.status(400).json({err: req.user})
+        res.status(400).json({err: `То что ты просил...${req.user}`})
     }
 }
 
