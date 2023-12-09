@@ -4,10 +4,11 @@ const mongoose = require("mongoose")
 
 const createCase = async (req, res) => {
     const { name, expenses, takes, myTakes, number, isPaid } = req.body
-    const { user_id } = req.user._id
+    const user_id = req.user._id
 
     try {
         const CASE = await Case.create({ name, expenses, takes, myTakes, number, isPaid, user_id })
+        console.log(CASE);
         res.status(200).json(CASE)
     } catch (error) {
         res.status(400).json({err: `То что ты просил...${req.user}`})
