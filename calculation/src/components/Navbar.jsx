@@ -33,6 +33,7 @@ export default function Navbar() {
 
   function handleClick() {
     dispatch(logout())
+    localStorage.clear()
   }
 
 
