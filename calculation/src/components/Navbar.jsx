@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { addCase, addNewCase } from '../features/casesSlice.mjs'
+import { addCase, addNewCase, fetchCases } from '../features/casesSlice.mjs'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../features/usersSlice'
+import { login, logout } from '../features/usersSlice'
 
 export default function Navbar() {
 
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [myTakes, setMyTakes] = useState(1)
   const [email, setEmail] = useState("")
   const user = useSelector(state => state.users.user)
+  const cases = useSelector(state => state.cases.cases)
 
   const [error1, setError1] = useState(false)
   const [error2, setError2] = useState(false)
@@ -20,8 +21,14 @@ export default function Navbar() {
 
   useEffect(() => {
     setEmail(user?.email)
-    console.log(user);
   }, [user])
+
+  useEffect(() => {
+    const autoLogin = JSON.parse(localStorage.getItem("token"));
+    if(autoLogin) {
+      dispatch(login(autoLogin))
+    }
+  }, [])
 
 
   function handleClick() {
@@ -51,9 +58,7 @@ export default function Navbar() {
                        takes: Number(takes),
                        myTakes: Number(myTakes),
                        isPaid: false,
-                       user_id: ""
                     }))
-
       setName("")
       setMoney(0)
       setTakes(1)
@@ -62,7 +67,6 @@ export default function Navbar() {
     setError1(false)
     setError2(false)
   }
-
 
   return (
 <header>

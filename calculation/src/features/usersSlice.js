@@ -21,7 +21,7 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
   
-        localStorage.setItem("token", data.token)
+        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email}))
         dispatch(signup(data));
   
         return data;
@@ -50,11 +50,8 @@ export const signupUser = createAsyncThunk(
           }
   
         const data = await response.json();
-
-        
-        console.log(data);
   
-        localStorage.setItem("token", data.token)
+        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email}))
         dispatch(login(data));
   
         return data;
@@ -77,7 +74,7 @@ export const usersSlice = createSlice({
       },
         logout: (state) => {
             state.user = null
-        }
+        },
 }, extraReducers: {
     [signupUser.pending]: (state) => {
         state.status = "loading"
@@ -103,6 +100,6 @@ export const usersSlice = createSlice({
       state.error = action.payload
   }},})
 
-export const { login, signup, logout } = usersSlice.actions
+export const { login, signup, logout, getToken } = usersSlice.actions
 
 export default usersSlice.reducer

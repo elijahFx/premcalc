@@ -17,7 +17,6 @@ export const fetchCases = createAsyncThunk(
 
             if(!response.ok) {
                 throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
-                console.log(response);
             }
     
             const data = await response.json()
@@ -50,7 +49,6 @@ export const deleteCase = createAsyncThunk(
             }
     
             dispatch(removeCase({id}))
-            console.log(userToken);
             
         } catch (error) {
            return rejectWithValue(error.message)
@@ -64,7 +62,6 @@ export const toggleStatus = createAsyncThunk(
 
         const CASE = getState().cases.cases.find(el => el._id === id)
         const userToken = getState().users.user.token
-        console.log(userToken);
 
         try {
             const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
@@ -82,7 +79,7 @@ export const toggleStatus = createAsyncThunk(
             
 
             if(!response.ok) {
-                throw new Error(data)
+                throw new Error(JSON.stringify(data))
             }
 
             dispatch(toggleIsPaid({id}))
@@ -143,19 +140,19 @@ export const addNewCase = createAsyncThunk(
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userToken}`
           },
-          body: JSON.stringify(finalCase),
+          body: JSON.stringify(newCaseData),
         });
-        const data = await response.json();
+        
   
         if (!response.ok) {
             const errorMessage = `Server Error: ${response.status} - ${response.statusText} - ${userToken}`;
             throw new Error(JSON.stringify(user_id));
           }
   
-        
+        const data = await response.json();
   
         // Assuming the response contains the newly added case
-        dispatch(addCase(newCaseData));
+        dispatch(addCase(data));
   
         return data;
       } catch (error) {

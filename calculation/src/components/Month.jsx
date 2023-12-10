@@ -9,12 +9,11 @@ export default function Month() {
 
     const cases = useSelector((state) => state.cases.cases)
 	const {error, status} = useSelector((state) => state.cases)
-	const [sumOfExpenses, setSumOfExpenses] = useState(0)
 	const [myTake, setMyTake] = useState(0)
 	const [myPureMoney, setMyPureMoney] = useState(0)
 	const [rozpMoney, setRozpMoney] = useState(0)
     const [month, setMonth] = useState("")
-	const OKLAD = 473
+	const OKLAD = 476.44
 
 	const [isDown1, setIsDown1] = useState(false)
 	const [isDown2, setIsDown2] = useState(false)
@@ -32,23 +31,23 @@ export default function Month() {
 
 	async function count() {
 		let moneyOfROZP = 0
-		let sum = 0;
-		let myMoney = 0;
-		let myMoneyAfterTaxes = 0;
+        
+        let myActualMoney = 0
+        let myBonus = 0
 	  
 		await cases.forEach((el) => {
 			if(el.isPaid) {
-		  sum += el.expenses;
-		  moneyOfROZP = sum * 0.7
-		  myMoney = sum * 0.3;
-		  myMoneyAfterTaxes = myMoney - (myMoney / 100) * 14;
+          moneyOfROZP += el.expenses * 0.7
+          let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
+          myBonus += thoseMoney
+          let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
+          myActualMoney += thoseMoneyAfterTaxes
 		}
 		});
 	  
-		setSumOfExpenses(sum.toFixed(2));
 		setRozpMoney(moneyOfROZP.toFixed(2))
-		setMyTake(myMoney.toFixed(2));
-		setMyPureMoney((myMoneyAfterTaxes + OKLAD).toFixed(2));
+		setMyTake(myBonus.toFixed(2));
+		setMyPureMoney((myActualMoney + OKLAD).toFixed(2));
 	  
 	  }
 
@@ -63,7 +62,7 @@ export default function Month() {
 	}, [cases])
 
    async function getMonth() {
-        let firstCase = await cases[0].createdAt
+        let firstCase = await cases[0]?.createdAt
         let date = new Date(firstCase)
         let finalDate = ""
         let year = date.getFullYear()
@@ -116,10 +115,12 @@ export default function Month() {
   return (
     <div className='monthContainer'>
     <div className='month'><h5>{month}</h5></div>
+    {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
+    {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}
     <table className="table">
 	<thead>
 		<tr>
-			{cases.length > 1 ? <th>№</th> : <th></th>}
+			{cases.length > 1 && status === "loading" ? <th>№</th> : <th></th>}
 			<th onClick={() => onSort("name")}>Ответчик: {isDown1 ? <span className="material-symbols-outlined">
 arrow_upward
 </span> : <span className="material-symbols-outlined">
@@ -146,9 +147,7 @@ arrow_downward
 		</tr>
 	</thead>
 	<tbody>
-	 {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
-	 {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}
-     {cases ? cases.map((el, number) => {
+     {cases && status !== "loading" ? cases.map((el, number) => {
       return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes}/>
     }) : <></>}
 	</tbody>
