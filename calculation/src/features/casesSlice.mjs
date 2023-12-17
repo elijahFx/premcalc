@@ -90,38 +90,72 @@ export const toggleStatus = createAsyncThunk(
     }
 )
 
-export const toggleTakes = createAsyncThunk(
-  "cases/toggleTakes",
-  async function (updatedCaseData, {rejectWithValue, dispatch, getState}) {
+export const alterTakes = createAsyncThunk(
+    "cases/alterTakes",
+    async function (newTake, {rejectWithValue, dispatch, getState}) {
 
-      const CASE = getState().cases.cases.find(el => el._id === updatedCaseData.id)
-      const userToken = getState().users.user.token
+        const CASE = getState().cases.cases.find(el => el._id === newTake.id)
+        const userToken = getState().users.user.token
 
-      try {
-          const response = await fetch(`https://premcalc.onrender.com/cases/${updatedCaseData.id}`, {
-              method: "PATCH",
-              headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": `Bearer ${userToken}`
-              },
-              body: JSON.stringify({
-                takes: updatedCaseData.takes,
-                myTakes: updatedCaseData.myTakes
-              })
-          })
+        try {
+            const response = await fetch(`https://premcalc.onrender.com/cases/${newTake.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    takes: newTake.takes
+                })
+            })
 
-          
+            const data = await response.json()
+            
 
-          if(!response.ok) {
-              throw new Error("Нельзя удалить несуществующее дело")
-          }
+            if(!response.ok) {
+                throw new Error(JSON.stringify(data))
+            }
 
-          dispatch(changeTakes({ id: updatedCaseData.id, takes: updatedCaseData.takes, myTakes: updatedCaseData.myTakes }));
-  
-      } catch (error) {
-         return rejectWithValue(error.message)
-      }
-  }
+            dispatch(changeTakes(newTake))
+    
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
+export const alterMyTakes = createAsyncThunk(
+    "cases/alterMyTakes",
+    async function (newTake, {rejectWithValue, dispatch, getState}) {
+
+        const CASE = getState().cases.cases.find(el => el._id === newTake.id)
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`https://premcalc.onrender.com/cases/${newTake.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    myTakes: newTake.myTakes
+                })
+            })
+
+            const data = await response.json()
+            
+
+            if(!response.ok) {
+                throw new Error(JSON.stringify(data))
+            }
+
+            dispatch(changeMyTakes(newTake))
+    
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
 )
 
 export const addNewCase = createAsyncThunk(
@@ -166,7 +200,7 @@ export const addNewCase = createAsyncThunk(
 
 export const casesSlice = createSlice({
     name: "cases",
-    initialState: {cases: [], status: null, error: null},
+    initialState: {cases: [], status: null, error: null, myTake: 0, myPureMoney: 0, rozpMoney: 0},
     reducers: {
         addCase: (state, action) => {
             state.cases.push(action.payload)
@@ -190,8 +224,21 @@ export const casesSlice = createSlice({
 
       if (caseToUpdate) {
         caseToUpdate.takes = action.payload.takes;
-        caseToUpdate.myTakes = action.payload.myTakes;
       }
+        },
+        changeMyTakes: (state, action) => {
+            const { id } = action.payload;
+
+      const caseToUpdate = state.cases.find((el) => el._id === id);
+
+      if (caseToUpdate) {
+        caseToUpdate.myTakes = action.payload.takes;
+      }
+        },
+        updateMoney: (state, action) => {
+            state.myTake = action.payload.myTake
+            state.myPureMoney = action.payload.myPureMoney
+            state.rozpMoney = action.payload.rozpMoney
         }
   },
     extraReducers: {
@@ -231,6 +278,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney } = casesSlice.actions
 
 export default casesSlice.reducer

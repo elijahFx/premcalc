@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCase, removeCase, toggleIsPaid, toggleStatus, toggleTakes } from '../features/casesSlice.mjs';
+import { alterMyTakes, alterTakes, deleteCase, toggleStatus } from '../features/casesSlice.mjs';
 
-export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func(...args);
+            console.log("сработало");
+        }, delay);
+    };
+}
+
+export default function Row({ name, money, parts, isPaid, my_parts, num, id, updateMonth }) {
 
     const [PPARTS, setPPARTS] = useState(parts)
     const [myPPARTS, setMyPPARTS] = useState(my_parts)
@@ -29,7 +40,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
     useEffect(() => {
         calculate()
-    }, [my_parts, parts, money, PPARTS, myPPARTS])
+    }, [PPARTS, myPPARTS])
 
     function deleteElement() {
         dispatch(deleteCase(id))
@@ -39,9 +50,26 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
         dispatch(toggleStatus(id))
     }
 
-    function handleChange() {
-        dispatch(toggleTakes(id))
-    }
+ 
+    
+    const debouncedHandleChangeParts = debounce((value) => {
+        dispatch(alterTakes({ id, takes: value }));
+    }, 500);
+
+    const debouncedHandleChangeMyParts = debounce((value) => {
+        dispatch(alterMyTakes({id, myTakes: value}));
+    }, 500);
+
+    const handleChange = (e, value) => {
+        if (value === 'takes') {
+            setPPARTS(e.target.value);
+            debouncedHandleChangeParts(e.target.value);
+        } else {
+            setMyPPARTS(e.target.value);
+            debouncedHandleChangeMyParts(e.target.value);
+        }
+        updateMonth()
+    };
 
 
   return (
@@ -51,8 +79,8 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 			<td>{money.toFixed(2)} бел. руб.</td>
 			<td>{TAKE.toFixed(2)} бел. руб.</td>
 			<td>{PUREMONEY.toFixed(2)} бел. руб.</td>
-			<td><input type="number" id="tentacles"  name="tentacles" min="1" value={PPARTS} onChange={(e) => {setPPARTS(e.target.value); handleChange()}}/></td>
-            <td><input type="number" id="tentacles"  name="tentacles" min="1" value={myPPARTS} onChange={(e) => {setMyPPARTS(e.target.value); handleChange()}}/></td>
+			<td><input type="number" min="1" name={`takes ${name}`} value={PPARTS} onChange={(e) => handleChange(e,"takes")}/></td>
+            <td><input type="number" min="1" name={`myTakes ${name}`} value={myPPARTS} onChange={(e) => handleChange(e,"myTakes")}/></td>
             <td>{isPaid ? <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => deleteElement()} className="material-symbols-outlined">close</span></td>
 	</tr>
   )

@@ -1,17 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Row from "./Row.jsx"
-import Navbar from './Navbar.jsx'
-import Footer from './Footer.jsx'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCases } from '../features/casesSlice.mjs'
+import { fetchCases, updateMoney } from '../features/casesSlice.mjs'
 
 export default function Month() {
 
+    const CASES = useSelector((state) => state.cases)
     const cases = useSelector((state) => state.cases.cases)
 	const {error, status} = useSelector((state) => state.cases)
-	const [myTake, setMyTake] = useState(0)
-	const [myPureMoney, setMyPureMoney] = useState(0)
-	const [rozpMoney, setRozpMoney] = useState(0)
+
+    const myTake = useSelector(state => state.cases.myTake)
+    const myPureMoney = useSelector(state => state.cases.myPureMoney)
+    const rozpMoney = useSelector(state => state.cases.rozpMoney)
+    
+	//const [myTake, setMyTake] = useState(0)
+	//const [myPureMoney, setMyPureMoney] = useState(0)
+	//const [rozpMoney, setRozpMoney] = useState(0)
+
+
     const [month, setMonth] = useState("")
 	const OKLAD = 476.44
 
@@ -29,10 +35,10 @@ export default function Month() {
 
 	const dispatch = useDispatch()
 
-	async function count() {
+ async function count() {
 		let moneyOfROZP = 0
         
-        let myActualMoney = 0
+        let myActualMoney = 0 + OKLAD
         let myBonus = 0
 	  
 		await cases.forEach((el) => {
@@ -45,15 +51,19 @@ export default function Month() {
 		}
 		});
 	  
-		setRozpMoney(moneyOfROZP.toFixed(2))
-		setMyTake(myBonus.toFixed(2));
-		setMyPureMoney((myActualMoney + OKLAD).toFixed(2));
-	  
+		dispatch(updateMoney({rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2)}))
+        //setRozpMoney(moneyOfROZP.toFixed(2))
+		//setMyTake(myBonus.toFixed(2));
+		//setMyPureMoney((myActualMoney + OKLAD).toFixed(2));
 	  }
+
+      const updateMonth = useCallback(() => {
+        // Recalculate and update the states when called
+        count();
+      }, [count]);
 
 	useEffect(() => {
 		dispatch(fetchCases())
-        
 	}, [1])	
 
 	useEffect(() => {
@@ -120,7 +130,7 @@ export default function Month() {
     <table className="table">
 	<thead>
 		<tr>
-			{cases.length > 1 && status === "loading" ? <th>№</th> : <th></th>}
+			{cases.length > 1 && status !== "loading" ? <th>№</th> : <th></th>}
 			<th onClick={() => onSort("name")}>Ответчик: {isDown1 ? <span className="material-symbols-outlined">
 arrow_upward
 </span> : <span className="material-symbols-outlined">
@@ -148,7 +158,7 @@ arrow_downward
 	</thead>
 	<tbody>
      {cases && status !== "loading" ? cases.map((el, number) => {
-      return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes}/>
+      return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes} updateMonth={updateMonth}/>
     }) : <></>}
 	</tbody>
 </table>
