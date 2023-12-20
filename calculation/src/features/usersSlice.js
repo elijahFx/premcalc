@@ -97,7 +97,7 @@ export const usersSlice = createSlice({
   },
     [loginUser.rejected]: (state, action) => {
       state.status = "rejected"
-      state.error = action.payload
+      state.error = `Введен неправильный email или пароль`
   }},})
 
 export const { login, signup, logout, getToken } = usersSlice.actions

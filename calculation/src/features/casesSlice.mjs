@@ -128,7 +128,6 @@ export const alterMyTakes = createAsyncThunk(
     "cases/alterMyTakes",
     async function (newTake, {rejectWithValue, dispatch, getState}) {
 
-        const CASE = getState().cases.cases.find(el => el._id === newTake.id)
         const userToken = getState().users.user.token
 
         try {
@@ -224,6 +223,7 @@ export const casesSlice = createSlice({
 
       if (caseToUpdate) {
         caseToUpdate.takes = action.payload.takes;
+        console.log(caseToUpdate);
       }
         },
         changeMyTakes: (state, action) => {
@@ -232,7 +232,8 @@ export const casesSlice = createSlice({
       const caseToUpdate = state.cases.find((el) => el._id === id);
 
       if (caseToUpdate) {
-        caseToUpdate.myTakes = action.payload.takes;
+        caseToUpdate.myTakes = action.payload.myTakes;
+        console.log(caseToUpdate);
       }
         },
         updateMoney: (state, action) => {
@@ -275,9 +276,27 @@ export const casesSlice = createSlice({
             state.status = "rejected";
             state.error = action.payload;
           },
+          [alterTakes.fulfilled]: (state, action) => {
+            state.status = "fullfilled";
+            state.error = null;
+            console.log(action);
+          },
+          [alterMyTakes.fulfilled]: (state, action) => {
+            state.status = "fullfilled";
+            state.error = null;
+            console.log(action);
+          },
+          [alterMyTakes.rejected]: (state, action) => {
+            state.status = "rejected";
+            state.error = action.payload;
+          },
+          [alterTakes.rejected]: (state, action) => {
+            state.status = "rejected";
+            state.error = action.payload;
+          },
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes } = casesSlice.actions
 
 export default casesSlice.reducer

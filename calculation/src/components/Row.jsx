@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { alterMyTakes, alterTakes, deleteCase, toggleStatus } from '../features/casesSlice.mjs';
 
 function debounce(func, delay) {
@@ -8,29 +8,25 @@ function debounce(func, delay) {
         clearTimeout(timer);
         timer = setTimeout(() => {
             func(...args);
-            console.log("сработало");
         }, delay);
     };
 }
 
-export default function Row({ name, money, parts, isPaid, my_parts, num, id, updateMonth }) {
+export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
-    const [PPARTS, setPPARTS] = useState(parts)
-    const [myPPARTS, setMyPPARTS] = useState(my_parts)
+    const [PPARTS, setPPARTS] = useState(parseInt(parts))
+    const [myPPARTS, setMyPPARTS] = useState(parseInt(my_parts))
     
     const dispatch = useDispatch()
-    const cases = useSelector(state => state.cases.cases)
-
-
-
 
     let TAKE = money * 0.3
     let moneyBefore = (TAKE - (((TAKE / 100) * 14)))
     let PUREMONEY = Math.round(((moneyBefore / PPARTS) * myPPARTS) * 100) / 100
 
     const calculate = () => {
-        if(parseInt(myPPARTS) > parseInt(PPARTS)) {
+        if(myPPARTS > PPARTS) {
             setMyPPARTS(parseInt(PPARTS))
+            debouncedHandleChangeMyParts(PPARTS);
         }
 
         TAKE = money * 0.3
@@ -53,22 +49,38 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id, upd
  
     
     const debouncedHandleChangeParts = debounce((value) => {
-        dispatch(alterTakes({ id, takes: value }));
+        dispatch(alterTakes({id, takes: parseInt(value) }));
     }, 500);
 
     const debouncedHandleChangeMyParts = debounce((value) => {
+        console.log(value);
         dispatch(alterMyTakes({id, myTakes: value}));
     }, 500);
 
     const handleChange = (e, value) => {
-        if (value === 'takes') {
-            setPPARTS(e.target.value);
-            debouncedHandleChangeParts(e.target.value);
-        } else {
-            setMyPPARTS(e.target.value);
-            debouncedHandleChangeMyParts(e.target.value);
+        const inputNumber = e.target.value
+
+        if(!e.target.value || e.target.value <= 0) {
+            console.log(`null`);
+             return
         }
-        updateMonth()
+
+        if (value === 'takes') {
+            setPPARTS(inputNumber)
+            setPPARTS(parseInt(e.target.value));
+            debouncedHandleChangeParts(parseInt(e.target.value));
+        } else if(value === "myTakes") {
+            setMyPPARTS(inputNumber)
+            if(parseInt(myPPARTS) > parseInt(PPARTS)) {
+                setMyPPARTS(PPARTS)
+                debouncedHandleChangeMyParts(PPARTS);
+                return
+            } else if(parseInt(myPPARTS) <= parseInt(PPARTS)) {
+            setMyPPARTS(parseInt(e.target.value));
+            debouncedHandleChangeMyParts(parseInt(e.target.value));  
+        }
+            
+        }
     };
 
 
@@ -79,8 +91,8 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id, upd
 			<td>{money.toFixed(2)} бел. руб.</td>
 			<td>{TAKE.toFixed(2)} бел. руб.</td>
 			<td>{PUREMONEY.toFixed(2)} бел. руб.</td>
-			<td><input type="number" min="1" name={`takes ${name}`} value={PPARTS} onChange={(e) => handleChange(e,"takes")}/></td>
-            <td><input type="number" min="1" name={`myTakes ${name}`} value={myPPARTS} onChange={(e) => handleChange(e,"myTakes")}/></td>
+			<td><input type="number" min="1" name={`takes ${name}`} value={PPARTS} onInput={(e) => handleChange(e, "takes")} onClick={(e) => handleChange(e, "takes")}/></td>
+            <td><input type="number" min="1" name={`myTakes ${name}`} value={myPPARTS} onInput={(e) => handleChange(e, "myTakes")} onClick={(e) => handleChange(e, "myTakes")}/></td>
             <td>{isPaid ? <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => toggleValue()} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => deleteElement()} className="material-symbols-outlined">close</span></td>
 	</tr>
   )

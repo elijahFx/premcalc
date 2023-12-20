@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Row from "./Row.jsx"
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchCases, updateMoney } from '../features/casesSlice.mjs'
+import { logout } from '../features/usersSlice.js'
 
 export default function Month() {
 
@@ -12,11 +13,6 @@ export default function Month() {
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)
     const rozpMoney = useSelector(state => state.cases.rozpMoney)
-    
-	//const [myTake, setMyTake] = useState(0)
-	//const [myPureMoney, setMyPureMoney] = useState(0)
-	//const [rozpMoney, setRozpMoney] = useState(0)
-
 
     const [month, setMonth] = useState("")
 	const OKLAD = 476.44
@@ -45,25 +41,21 @@ export default function Month() {
 			if(el.isPaid) {
           moneyOfROZP += el.expenses * 0.7
           let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
+         // console.log(`${el.name} - ${thoseMoney}: elTakes: ${el.takes}, elMyTakes: ${el.myTakes}, 0.3: ${el.expenses * 0.3}`);
           myBonus += thoseMoney
           let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
           myActualMoney += thoseMoneyAfterTaxes
 		}
 		});
-	  
 		dispatch(updateMoney({rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2)}))
-        //setRozpMoney(moneyOfROZP.toFixed(2))
-		//setMyTake(myBonus.toFixed(2));
-		//setMyPureMoney((myActualMoney + OKLAD).toFixed(2));
 	  }
-
-      const updateMonth = useCallback(() => {
-        // Recalculate and update the states when called
-        count();
-      }, [count]);
 
 	useEffect(() => {
 		dispatch(fetchCases())
+        setTimeout(function() {
+            localStorage.clear()
+            dispatch(logout())
+        }, (36 * 100000) * 5)
 	}, [1])	
 
 	useEffect(() => {
@@ -158,7 +150,7 @@ arrow_downward
 	</thead>
 	<tbody>
      {cases && status !== "loading" ? cases.map((el, number) => {
-      return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={el.takes} isPaid={el.isPaid} my_parts={el.myTakes} updateMonth={updateMonth}/>
+      return <Row id={el._id} key={number} num={number} name={el.name} money={el.expenses} parts={parseInt(el.takes)} isPaid={el.isPaid} my_parts={el.myTakes} count={count}/>
     }) : <></>}
 	</tbody>
 </table>

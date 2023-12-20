@@ -7,8 +7,10 @@ export default function Login() {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.users)
+  const errorFromServer = useSelector(state => state.users.error)
   const status = user.status
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
 
     function handleSubmit(e) {
@@ -17,6 +19,10 @@ export default function Login() {
         if(!email || !password)return
 
         dispatch(loginUser({email: email, password: password}))
+        if(errorFromServer) {
+          setError(errorFromServer)
+          return
+        }
         setEmail("")
         setPassword("")
     }
@@ -42,6 +48,7 @@ export default function Login() {
         <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder='Email' value={email} name='email' id='email' autoComplete="on"/>
         <label htmlFor="password">Введите Ваш пароль:</label>
         <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Пароль' value={password} name='password' id='password'/>
+        {error && <div className='error'><h4>{error}</h4></div>}
         <button>Войти</button>
     </form>
     <h5>Нет аккаунта? <Link to="/signup">Зарегистрируйся</Link></h5>

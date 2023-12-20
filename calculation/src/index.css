@@ -272,6 +272,24 @@ th span {
 	border-top: 1px solid;
 }
 
+
+.error {
+	margin-top: 20px;
+	width: 60%;
+	height: 45px;
+	padding: 5px;
+	background-color: #d83f3fce;
+	border: 3px solid #d83f3f;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.error h3 {
+	text-align: center;
+}
+
     @keyframes rotation {
     0% {
         transform: rotate(0deg);

@@ -81,8 +81,8 @@ savings
 </span>
 <h2>Премкальк</h2>
 </div>
-{email && !user.error ? <h5>{email}</h5> : <></>}
-{email && !user.error ? <button onClick={() => handleClick()} className='exitBtn'>Выйти</button> : <></>}
+{email && !user?.error ? <h5>{email}</h5> : <></>}
+{email && !user?.error ? <button onClick={() => handleClick()} className='exitBtn'>Выйти</button> : <></>}
 </div>
 
 
