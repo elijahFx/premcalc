@@ -70,30 +70,52 @@ input {
 	height: 20vh;
 	background-color: #dddddd;
 	border: 1px solid black;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px;
+	display: grid;
 	border-left: none;
 	border-right: none;
+	grid-auto-columns: 1fr; 
+	grid-template-columns: 30% 30% 10% 10% 20%; 
+  	grid-template-rows: 1fr; 
+  	gap: 0px -20px; 
+  	grid-template-areas: 
+    ". . . . ."; 
 	border-top: none;
 	padding: 10px;
+	justify-items: center;
+	align-items: center;
 }
 
 .navbar input {
-	width: 20%;
-	height: 33%;
 	padding: 0 0 0 5px;
+	height: 40px;	
+}
+
+.navbar input[name="name"] {
+	width: 250px;
+}
+
+.navbar input[name="expenses"] {
+	width: 250px;
+}
+
+.navbar input[name="takes"] {
+	width: 80px;
+	text-align: center;
+}
+
+.navbar input[name="myTakes"] {
+	width: 80px;
+	text-align: center;
 }
 
 .navbar button {
-	height: 33%;
-	width: 20%;
+	height: 60px;
+	width: 100px
 }
 
 header {
 	display: grid; 
+	border-left: none;
 	grid-auto-columns: 1fr; 
 	grid-template-columns: 30% 70%; 
 	grid-template-rows: 1fr; 
@@ -111,6 +133,7 @@ header {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	border-left: none;
 }
 
 .subLogo {
@@ -246,7 +269,7 @@ footer p {
 
 .containder-for-loader {
 	width: 100vw;
-	height: 50vh;
+	height: 70vh;
 	background-color: white;
 	display: flex;
 	justify-content: center;
@@ -264,7 +287,7 @@ th span {
 	background: #efefef;
 	display: flex;
 	align-items: center;
-	justify-content: start;
+	justify-content: space-evenly;
 	padding-left: 15px;
 }
 
@@ -288,6 +311,47 @@ th span {
 
 .error h3 {
 	text-align: center;
+}
+
+.navbarContainer {
+	gap: 7px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+
+.noCases {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 70vh;
+	background-color: #efefef;
+	width: 100vw;
+}
+
+.noCases h2 {
+	text-align: center;
+	font-family: 'Yeseva One', serif;
+	color: #3d3d3dd5;
+	padding: 0 40px;
+}
+
+.adminBtn {
+	background-color: gold;
+	border: 1px solid;
+	padding: 2px;
+}
+
+.adminBtn:hover {
+	background-color: rgb(179, 152, 1);
+}
+
+.adminPnl {
+	width: 100vw;
+	height: 70vh;
+	background-color: white;
 }
 
     @keyframes rotation {

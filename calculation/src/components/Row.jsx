@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { alterMyTakes, alterTakes, deleteCase, toggleStatus } from '../features/casesSlice.mjs';
 
 function debounce(func, delay) {
@@ -16,6 +16,9 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
     const [PPARTS, setPPARTS] = useState(parseInt(parts))
     const [myPPARTS, setMyPPARTS] = useState(parseInt(my_parts))
+
+    const cases = useSelector(state => state.cases.cases)
+    const caseToUpdate = cases.find((el) => el._id === id);
     
     const dispatch = useDispatch()
 
@@ -29,6 +32,8 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
             debouncedHandleChangeMyParts(PPARTS);
         }
 
+        
+
         TAKE = money * 0.3
         moneyBefore = (TAKE - (((TAKE / 100) * 14)))
         PUREMONEY = Math.round(((moneyBefore / PPARTS) * myPPARTS) * 100) / 100
@@ -37,6 +42,11 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
     useEffect(() => {
         calculate()
     }, [PPARTS, myPPARTS])
+
+    useEffect(() => {
+        setPPARTS(caseToUpdate.takes)
+        setMyPPARTS(caseToUpdate.myTakes)
+    }, cases)
 
     function deleteElement() {
         dispatch(deleteCase(id))

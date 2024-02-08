@@ -87,10 +87,22 @@ savings
 
 
     <form className='navbar' onSubmit={handleSubmit}>
+      <div className="navbarContainer">
+      <label htmlFor="name">Ответчик:</label>
       <input className={error1 ? "redInput" : ""} type="text" placeholder='Ответчик' value={name} onChange={(e) => setName(e.target.value)} name='name' autoComplete='on'/>
+      </div>
+      <div className="navbarContainer">
+      <label htmlFor="expenses">Расходы РОЗП:</label>
       <input className={error2 ? "redInput" : ""}type="number" placeholder='Расходы' value={money} onChange={(e) => setMoney(e.target.value)} name='expenses'/>
+      </div>
+      <div className="navbarContainer">
+      <label htmlFor="takes">Доли:</label>
       <input type="number" placeholder='Доли' value={takes} onChange={(e) => setTakes(e.target.value)} name='takes'/>
+      </div>
+      <div className="navbarContainer">
+      <label htmlFor="myTakes">Мои доли:</label>
       <input type="number" placeholder='Мои доли' value={myTakes} onChange={(e) => setMyTakes(e.target.value)} name='myTakes'/>
+      </div>
       <button >Добавить+</button>
     </form>
 

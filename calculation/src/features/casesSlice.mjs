@@ -240,6 +240,9 @@ export const casesSlice = createSlice({
             state.myTake = action.payload.myTake
             state.myPureMoney = action.payload.myPureMoney
             state.rozpMoney = action.payload.rozpMoney
+        },
+        setState: (state, action) => {
+            state.cases = action.payload
         }
   },
     extraReducers: {
@@ -297,6 +300,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTake, setState } = casesSlice.actions
 
 export default casesSlice.reducer

@@ -1,12 +1,14 @@
 import { useEffect, useState, useCallback } from 'react'
 import Row from "./Row.jsx"
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCases, updateMoney } from '../features/casesSlice.mjs'
+import { fetchCases, setState, updateMoney } from '../features/casesSlice.mjs'
 import { logout } from '../features/usersSlice.js'
+import NoCases from './NoCases.jsx'
+import { Link } from 'react-router-dom'
+import AdminPanel from './AdminPanel.jsx'
 
 export default function Month() {
 
-    const CASES = useSelector((state) => state.cases)
     const cases = useSelector((state) => state.cases.cases)
 	const {error, status} = useSelector((state) => state.cases)
 
@@ -21,13 +23,106 @@ export default function Month() {
 	const [isDown2, setIsDown2] = useState(false)
 	const [isDown3, setIsDown3] = useState(false)
 	const [isDown4, setIsDown4] = useState(false)
+    const [isDown5, setIsDown5] = useState(false)
+    const [isVisible, setIsVisible] = useState("none")
 
 
-	const [sortConfig, setSortConfig] = useState({
-		key: "name",
-		direction: 'ascending',
-	  });
 
+
+  function sortTable(value) {
+        switch (value) {
+            case "expenses":
+                setIsDown1(false)
+                setIsDown3(false)
+                setIsDown4(false)
+                setIsDown5(false)
+                const sortExpensesOrder = isDown2 ? 1 : -1;
+
+                setIsDown2(!isDown2)
+  
+                const newCasesExpenses = JSON.parse(JSON.stringify(cases));
+                
+                newCasesExpenses.sort((a, b) => (a[value] - b[value]) * sortExpensesOrder);
+                
+                dispatch(setState(newCasesExpenses));
+                console.log(isDown2);
+                break;
+            case "name":
+                setIsDown2(false)
+                setIsDown3(false)
+                setIsDown4(false)
+                setIsDown5(false)
+                const sortNameOrder = isDown1 ? 1 : -1;
+
+                setIsDown1(!isDown1)
+
+                const newCasesNames = JSON.parse(JSON.stringify(cases));
+
+                newCasesNames.sort((a, b) => a[value].localeCompare(b[value]) * sortNameOrder);
+                dispatch(setState(newCasesNames));
+                console.log(newCasesNames);
+            break;
+            case "thirty":
+                setIsDown1(false)
+                setIsDown2(false)
+                setIsDown4(false)
+                setIsDown5(false)
+                const sortThirtyOrder = isDown3 ? 1 : -1;
+
+                setIsDown3(!isDown3)
+
+                const newCasesThirty = JSON.parse(JSON.stringify(cases));
+
+                newCasesThirty.sort((a, b) => {
+                    return ((a.expenses * 0.3) - (b.expenses * 0.3)) * sortThirtyOrder
+                });
+                dispatch(setState(newCasesThirty));
+                console.log(newCasesThirty);
+            break;
+            case "bonus":
+                setIsDown1(false)
+                setIsDown2(false)
+                setIsDown3(false)
+                setIsDown5(false)
+
+                const sortBonusOrder = isDown4 ? 1 : -1;
+
+                setIsDown4(!isDown4)
+
+                const newCasesBonus = JSON.parse(JSON.stringify(cases));
+
+                newCasesBonus.sort((a, b) => {
+                    let sumA = (((a.expenses * 0.3) / a.takes) * a.myTakes)
+                    let sumB = (((b.expenses * 0.3) / b.takes) * b.myTakes)
+                    console.log(`${a.name} - ${sumA} - ${b.name} - ${sumB}`);
+                    return (sumA - sumB) * sortBonusOrder
+                });
+                dispatch(setState(newCasesBonus));
+                console.log(newCasesBonus);
+            break;
+            case "isPaid":
+                setIsDown1(false)
+                setIsDown2(false)
+                setIsDown3(false)
+                setIsDown4(false)
+
+                const sortIsPaidOrder = isDown5 ? 1 : -1;
+
+                setIsDown5(!isDown5)
+
+                const newCasesIsPaid = JSON.parse(JSON.stringify(cases));
+
+                newCasesIsPaid.sort((a, b) => {
+                   return (a.isPaid - b.isPaid) * sortIsPaidOrder
+                });
+                dispatch(setState(newCasesIsPaid));
+                console.log(newCasesIsPaid);
+            break;
+            default:
+                console.log("default");
+                break;
+        }
+    }
 
 	const dispatch = useDispatch()
 
@@ -41,7 +136,6 @@ export default function Month() {
 			if(el.isPaid) {
           moneyOfROZP += el.expenses * 0.7
           let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
-         // console.log(`${el.name} - ${thoseMoney}: elTakes: ${el.takes}, elMyTakes: ${el.myTakes}, 0.3: ${el.expenses * 0.3}`);
           myBonus += thoseMoney
           let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
           myActualMoney += thoseMoneyAfterTaxes
@@ -61,7 +155,21 @@ export default function Month() {
 	useEffect(() => {
 		count()
         getMonth()
+        if(cases.length <= 0 && status !== "loading") {
+            setIsVisible("none")
+            console.log(status);
+        } else if(status === "loading") {
+            console.log(status);
+            setIsVisible("block")
+        }
 	}, [cases])
+
+    const date = new Date();
+    const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+    }).format(date);
 
    async function getMonth() {
         let firstCase = await cases[0]?.createdAt
@@ -112,35 +220,44 @@ export default function Month() {
         setMonth(finalDate)
     }
 
+    const [isAdmin, setIsAdmin] = useState(true)
    
 
   return (
+    <>
+    {cases.length < 1 && status !== "loading" && <NoCases />}
     <div className='monthContainer'>
-    <div className='month'><h5>{month}</h5></div>
+    <div className='month'><h5>{formattedDate}</h5>
+    {isAdmin && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}</div>
+    
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
     {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}
     <table className="table">
 	<thead>
 		<tr>
-			{cases.length > 1 && status !== "loading" ? <th>№</th> : <th></th>}
-			<th onClick={() => onSort("name")}>Ответчик: {isDown1 ? <span className="material-symbols-outlined">
+			{cases.length > 1 && status !== "loading" ? <th>№ {isDown5 ? <span className="material-symbols-outlined" onClick={() => {sortTable("isPaid")}}>
 arrow_upward
-</span> : <span className="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("isPaid")}}>
+arrow_downward
+</span>}</th> : <th></th>}
+			<th>Ответчик: {isDown1 ? <span className="material-symbols-outlined" onClick={() => {sortTable("name")}}>
+arrow_upward
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("name")}}>
 arrow_downward
 </span>}</th>
-			<th>Расходы РОЗП: {isDown2 ? <span className="material-symbols-outlined">
+			<th>Расходы РОЗП: {isDown2 ? <span className="material-symbols-outlined" onClick={() => {sortTable("expenses")}}>
 arrow_upward
-</span> : <span className="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("expenses")}}>
 arrow_downward
 </span>}</th>
-			<th>Рабочая доля: {isDown3 ? <span className="material-symbols-outlined">
+			<th>Рабочая доля: {isDown3 ? <span className="material-symbols-outlined" onClick={() => {sortTable("thirty")}}>
 arrow_upward
-</span> : <span className="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("thirty")}}>
 arrow_downward
 </span>}</th>
-			<th>Чистый доход: {isDown4 ? <span className="material-symbols-outlined">
+			<th>Чистый доход: {isDown4 ? <span className="material-symbols-outlined" onClick={() => {sortTable("bonus")}}>
 arrow_upward
-</span> : <span className="material-symbols-outlined">
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("bonus")}}>
 arrow_downward
 </span>}</th>
 			<th>Доли:</th>
@@ -162,5 +279,6 @@ arrow_downward
 
 </div>
 </div>
+</>
   )
 }
