@@ -14,7 +14,7 @@ app.use(function(req, res, next) {
  });
 
 const corsOptions = {
-    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173", "http://127.0.0.1:5173/"]  // frontend URI (ReactJS)
+    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173", "http://127.0.0.1:5173/", "http://localhost:5173"]  // frontend URI (ReactJS)
 }
 
 app.use(cors(corsOptions))

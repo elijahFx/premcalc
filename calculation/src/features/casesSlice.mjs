@@ -300,6 +300,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTake, setState } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState } = casesSlice.actions
 
 export default casesSlice.reducer
