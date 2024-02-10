@@ -18,7 +18,7 @@ export default function Signup() {
         }
 
         console.log("должно работать");
-        dispatch(signupUser({password: password, email: email}))
+        dispatch(signupUser({password: password, email: email, role: "worker"}))
         setEmail("")
         setPassword("")
         setPassword2("")
