@@ -6,6 +6,7 @@ import { logout } from '../features/usersSlice.js'
 import NoCases from './NoCases.jsx'
 import { Link } from 'react-router-dom'
 import AdminPanel from './AdminPanel.jsx'
+export const OKLAD = 476.44
 
 export default function Month() {
 
@@ -18,7 +19,7 @@ export default function Month() {
     const rozpMoney = useSelector(state => state.cases.rozpMoney)
 
     const [month, setMonth] = useState("")
-	const OKLAD = 476.44
+
 
 	const [isDown1, setIsDown1] = useState(false)
 	const [isDown2, setIsDown2] = useState(false)

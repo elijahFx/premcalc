@@ -20,6 +20,7 @@ export default function AdminPanel() {
     console.log(listOfUsers);
   }, [1])
 
+
     const date = new Date();
     const formattedDate = new Intl.DateTimeFormat('ru-RU', {
   day: 'numeric',
