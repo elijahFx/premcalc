@@ -30,6 +30,35 @@ export const fetchCases = createAsyncThunk(
     }
 )
 
+export const fetchAllCases = createAsyncThunk(
+    "cases/fetchAllCases",
+    async function (_, {rejectWithValue, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch("https://premcalc.onrender.com/cases/all", {
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
+            }
+            )
+
+            if(!response.ok) {
+                throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
+            }
+    
+            const data = await response.json()
+            return data
+            
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
+
+       
+    }
+)
+
 export const deleteCase = createAsyncThunk(
     "cases/deleteCase",
     async function (id, {rejectWithValue, dispatch, getState}) {
@@ -296,6 +325,18 @@ export const casesSlice = createSlice({
           [alterTakes.rejected]: (state, action) => {
             state.status = "rejected";
             state.error = action.payload;
+          },
+          [fetchAllCases.fulfilled]: (state, action) => {
+            state.status = "fullfilled";
+            state.allCases = action.payload
+          },
+          [fetchAllCases.rejected]: (state, action) => {
+            state.status = "rejected";
+            state.error = action.payload;
+          },
+          [fetchAllCases.pending]: (state, action) => {
+            state.status = "loading";
+            state.error = null;
           },
     }
 })

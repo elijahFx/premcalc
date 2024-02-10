@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { addCase, addNewCase, fetchCases } from '../features/casesSlice.mjs'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, logout } from '../features/usersSlice'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
 
@@ -74,13 +75,14 @@ export default function Navbar() {
 
 
 <div className='logo'>
-  
+<Link to="/">
 <div className="subLogo">
   <span className="material-symbols-outlined">
 savings
 </span>
 <h2>Премкальк</h2>
 </div>
+</Link>
 {email && !user?.error ? <h5>{email}</h5> : <></>}
 {email && !user?.error ? <button onClick={() => handleClick()} className='exitBtn'>Выйти</button> : <></>}
 </div>

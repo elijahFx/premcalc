@@ -51,7 +51,7 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
   
-        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email}))
+        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email, role: data.role}))
         dispatch(login(data));
   
         return data;
@@ -87,13 +87,14 @@ export const signupUser = createAsyncThunk(
 
 export const usersSlice = createSlice({
     name: "users",
-    initialState: {user: null, status: null, error: null, token: null, listOfUsers: []},
+    initialState: {user: null, status: null, error: null, token: null, listOfUsers: [], role: null},
     reducers: {
         signup: (state, action) => {
             state.user = action.payload
         },
         login: (state, action) => {
           state.user = action.payload;
+          state.role = action.payload.role
       },
         logout: (state) => {
             state.user = null
@@ -119,7 +120,8 @@ export const usersSlice = createSlice({
   },
     [loginUser.fulfilled]: (state, action) => {
       state.status = "resolved"
-      state.user = action.payload
+      state.user = action.payload;
+      state.role = action.payload.role
   },
     [loginUser.rejected]: (state, action) => {
       state.status = "rejected"

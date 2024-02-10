@@ -11,6 +11,7 @@ export default function Month() {
 
     const cases = useSelector((state) => state.cases.cases)
 	const {error, status} = useSelector((state) => state.cases)
+    const role = useSelector((state) => state.users.role)
 
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)
@@ -228,7 +229,7 @@ export default function Month() {
     {cases.length < 1 && status !== "loading" && <NoCases />}
     <div className='monthContainer'>
     <div className='month'><h5>{formattedDate}</h5>
-    {isAdmin && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}</div>
+    {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}</div>
     
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
     {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}

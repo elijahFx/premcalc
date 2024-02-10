@@ -164,6 +164,11 @@ header {
 	cursor: pointer;
 }
 
+.logo a {
+	text-decoration: none;
+	color: black;
+}
+
 .exitBtn {
 	background-color: #ff000000;
 	border: none;

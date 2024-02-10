@@ -13,6 +13,7 @@ const [isPaid, setIsPaid] = useState(true)
             <td>{role}</td>
 			<td>{password}</td>
 			<td>{id}</td>
+            <td>0,00 бел. руб.</td>
             <td>{isPaid ? <span onClick={() => console.log(`Работаем...`)} className="material-symbols-outlined">toggle_off</span> : <span onClick={() => console.log(`Работаем...`)} className="material-symbols-outlined">toggle_on</span>}<span onClick={() => console.log(`Удаляем...`)} className="material-symbols-outlined">close</span></td>
 	</tr>
   )

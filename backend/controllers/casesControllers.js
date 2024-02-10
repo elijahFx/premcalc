@@ -61,9 +61,18 @@ const getCases = async (req, res) => {
     res.status(200).json(cases)
 }
 
+const getAllCases = async (req, res) => {
+    const cases = await Case.find({}).sort({createdAt: 1})
+
+    res.status(200).json(cases)
+}
+
+
+
 module.exports = {
     createCase,
     deleteCase,
     updateCase,
-    getCases
+    getCases,
+    getAllCases
 }

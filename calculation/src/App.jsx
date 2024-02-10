@@ -14,12 +14,13 @@ import { useSelector } from 'react-redux'
 function App() {
 
   const user = useSelector(state => state.users.user)
-  console.log(user);
+  const mainState = useSelector(state => state.users)
+  console.log(mainState);
 
   return (
 <div className='container'>
+<BrowserRouter>
 	<Navbar/>
-		<BrowserRouter>
         <div className="pages">
           <Routes>
             <Route path="/" element={!user ? <Login /> : <Month />}/>
