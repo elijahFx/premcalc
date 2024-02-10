@@ -61,10 +61,33 @@ export const signupUser = createAsyncThunk(
     }
   );
 
+  export const getUsers = createAsyncThunk(
+    "users/getUsers",
+    async function (user, { rejectWithValue, dispatch }) {
+      try {
+        const response = await fetch("https://premcalc.onrender.com/users");
+
+  
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
+            throw new Error(errorMessage);
+          }
+  
+        const data = await response.json();
+  
+        dispatch(getAllUsers(data));
+  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
 
 export const usersSlice = createSlice({
     name: "users",
-    initialState: {user: null, status: null, error: null, token: null},
+    initialState: {user: null, status: null, error: null, token: null, listOfUsers: []},
     reducers: {
         signup: (state, action) => {
             state.user = action.payload
@@ -75,6 +98,9 @@ export const usersSlice = createSlice({
         logout: (state) => {
             state.user = null
         },
+        getAllUsers: (state, action) => {
+          state.listOfUsers = action.payload
+        }
 }, extraReducers: {
     [signupUser.pending]: (state) => {
         state.status = "loading"
@@ -100,6 +126,6 @@ export const usersSlice = createSlice({
       state.error = `Введен неправильный email или пароль`
   }},})
 
-export const { login, signup, logout, getToken } = usersSlice.actions
+export const { login, signup, logout, getToken, getAllUsers } = usersSlice.actions
 
 export default usersSlice.reducer
