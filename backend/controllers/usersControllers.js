@@ -30,7 +30,7 @@ async function loginUser(req, res) {
 
     const token = createToken(user._id)
 
-    res.status(200).json({email, token})
+    res.status(200).json({email, token, role: user.role})
 
   } catch (error) {
     res.status(400).json({err: error.message})

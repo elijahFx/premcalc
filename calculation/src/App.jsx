@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux'
 function App() {
 
   const user = useSelector(state => state.users.user)
+  console.log(user);
 
   return (
 <div className='container'>
@@ -23,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={!user ? <Login /> : <Month />}/>
             <Route path="/signup" element={!user ? <Signup /> : <Month />}/>
-            <Route path="/admin" element={<AdminPanel />}/>
+            <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>
           </Routes>
         </div>

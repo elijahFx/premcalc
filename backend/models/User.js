@@ -58,7 +58,7 @@ userSchema.statics.login = async function(email, password) {
     if(!match) {
         throw Error("Неправильный пароль")
     }
-
+    console.log(user);
     return user
 
 
