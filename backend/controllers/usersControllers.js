@@ -7,14 +7,14 @@ function createToken(_id) {
 }
 
 async function signupUser(req, res) {
-  const { email, password } = req.body
+  const { email, password, role } = req.body
 
   try {
-    const user = await User.signup(email, password)
+    const user = await User.signup(email, password, role)
 
     const token = createToken(user._id)
 
-    res.status(200).json({email, token})
+    res.status(200).json({email, token, role})
 
   } catch (error) {
     res.status(400).json({err: error.message})
