@@ -17,6 +17,7 @@ async function signupUser(req, res) {
     res.status(200).json({email, token, role})
 
   } catch (error) {
+    console.log(`ЭТО ТУУУУТ!`);
     res.status(400).json({err: error.message})
   }
 }

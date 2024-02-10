@@ -7,6 +7,7 @@ export default function Signup() {
 
     const dispatch = useDispatch()
     const status = useSelector(state => state.users.status)
+    const mainState = useSelector(state => state.users)
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -22,6 +23,7 @@ export default function Signup() {
         setEmail("")
         setPassword("")
         setPassword2("")
+        console.log(mainState);
     }
 
     const [email, setEmail] = useState("")
