@@ -40,7 +40,7 @@ async function loginUser(req, res) {
 async function getUsers(req, res) {
 
   const users = await User.find({}).sort({createdAt: 1})
-
+  console.log(users)
   res.status(200).json(users)
 
 }

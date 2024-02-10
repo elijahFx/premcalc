@@ -124,7 +124,21 @@ export const usersSlice = createSlice({
     [loginUser.rejected]: (state, action) => {
       state.status = "rejected"
       state.error = `Введен неправильный email или пароль`
-  }},})
+  }},
+  [getUsers.pending]: (state) => {
+    state.status = "loading"
+    state.error = null
+},
+[getUsers.fulfilled]: (state, action) => {
+    state.status = "resolved"
+    state.listOfUsers = action.payload
+},
+[getUsers.rejected]: (state, action) => {
+    state.status = "rejected"
+    state.error = action.payload
+}
+
+})
 
 export const { login, signup, logout, getToken, getAllUsers } = usersSlice.actions
 

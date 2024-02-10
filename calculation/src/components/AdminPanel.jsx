@@ -6,13 +6,14 @@ import { getAllUsers } from '../features/usersSlice';
 export default function AdminPanel() {
 
   const dispatch = useDispatch()
-  const listOfUsers = useSelector(state => state.users.listOfUsers)
+  const listOfUsers = useSelector(state => state.users)
 
   console.log(listOfUsers);
 
 
   useEffect(() => {
     dispatch(getAllUsers())
+    console.log(listOfUsers);
   }, [1])
 
     const date = new Date();
