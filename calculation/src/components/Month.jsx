@@ -5,8 +5,7 @@ import { fetchCases, setState, updateMoney } from '../features/casesSlice.mjs'
 import { logout } from '../features/usersSlice.js'
 import NoCases from './NoCases.jsx'
 import { Link } from 'react-router-dom'
-import AdminPanel from './AdminPanel.jsx'
-export const OKLAD = 476.44
+export const OKLAD = 538.36
 
 export default function Month() {
 
@@ -47,7 +46,6 @@ export default function Month() {
                 newCasesExpenses.sort((a, b) => (a[value] - b[value]) * sortExpensesOrder);
                 
                 dispatch(setState(newCasesExpenses));
-                console.log(isDown2);
                 break;
             case "name":
                 setIsDown2(false)
@@ -62,7 +60,6 @@ export default function Month() {
 
                 newCasesNames.sort((a, b) => a[value].localeCompare(b[value]) * sortNameOrder);
                 dispatch(setState(newCasesNames));
-                console.log(newCasesNames);
             break;
             case "thirty":
                 setIsDown1(false)
@@ -79,7 +76,6 @@ export default function Month() {
                     return ((a.expenses * 0.3) - (b.expenses * 0.3)) * sortThirtyOrder
                 });
                 dispatch(setState(newCasesThirty));
-                console.log(newCasesThirty);
             break;
             case "bonus":
                 setIsDown1(false)
@@ -96,11 +92,9 @@ export default function Month() {
                 newCasesBonus.sort((a, b) => {
                     let sumA = (((a.expenses * 0.3) / a.takes) * a.myTakes)
                     let sumB = (((b.expenses * 0.3) / b.takes) * b.myTakes)
-                    console.log(`${a.name} - ${sumA} - ${b.name} - ${sumB}`);
                     return (sumA - sumB) * sortBonusOrder
                 });
                 dispatch(setState(newCasesBonus));
-                console.log(newCasesBonus);
             break;
             case "isPaid":
                 setIsDown1(false)
@@ -118,10 +112,8 @@ export default function Month() {
                    return (a.isPaid - b.isPaid) * sortIsPaidOrder
                 });
                 dispatch(setState(newCasesIsPaid));
-                console.log(newCasesIsPaid);
             break;
             default:
-                console.log("default");
                 break;
         }
     }
@@ -159,9 +151,7 @@ export default function Month() {
         getMonth()
         if(cases.length <= 0 && status !== "loading") {
             setIsVisible("none")
-            console.log(status);
         } else if(status === "loading") {
-            console.log(status);
             setIsVisible("block")
         }
 	}, [cases])
@@ -230,6 +220,7 @@ export default function Month() {
     {cases.length < 1 && status !== "loading" && <NoCases />}
     <div className='monthContainer'>
     <div className='month'><h5>{formattedDate}</h5>
+    {cases.length >= 1 && <button className='greenBtn'>Удалить все оплаченные дела</button>}
     {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}</div>
     
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}

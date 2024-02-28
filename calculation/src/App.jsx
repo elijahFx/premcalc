@@ -15,7 +15,6 @@ function App() {
 
   const user = useSelector(state => state.users.user)
   const mainState = useSelector(state => state.users)
-  console.log(mainState);
 
   return (
 <div className='container'>

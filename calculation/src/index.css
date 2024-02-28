@@ -225,25 +225,27 @@ footer p {
 }
 
 .inForm label {
-	margin: 5px 0;
+	margin: 2px 0;
 	font-weight: 600;
+	font-size: 15px;
 }
 
 .inForm input {
 	width: 60%;
-	height: 35px;
+	height: 30px;
 	font-size: 20px;
 	padding: 5px;
 }
 
 .inForm h2 {
-	margin-bottom: 35px;
+	margin-bottom: 15px;
+	font-size: 20px;
 }
 
 .inForm button {
-	margin-top: 35px;
-	height: 30px;
-	width: 250px;
+	margin-top: 10px;
+	height: 25px;
+	width: 220px;
 	border-radius: 25px;
 	border: none;
 	background-color: #47d547;
@@ -415,6 +417,13 @@ input[type="checkbox"] {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+}
+
+.greenBtn {
+	background: #47d547;
+	border: 1px solid black;
+	padding: 4px;
+	cursor: pointer;
 }
   
 

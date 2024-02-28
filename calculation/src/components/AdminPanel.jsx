@@ -11,13 +11,11 @@ export default function AdminPanel() {
   const listOfUsers = useSelector(state => state.users.listOfUsers)
   const allCases = useSelector(state => state.cases.allCases)
 
-  console.log(allCases);
 
 
   useEffect(() => {
     dispatch(getUsers())
     dispatch(fetchAllCases())
-    console.log(listOfUsers);
   }, [1])
 
 

@@ -272,6 +272,11 @@ export const casesSlice = createSlice({
         },
         setState: (state, action) => {
             state.cases = action.payload
+        },
+        deleteAllPaidCases: (state) => {
+            const allButPaid = state.cases.filter((el) => {
+                return el.isPaid !== true
+            })
         }
   },
     extraReducers: {
@@ -288,7 +293,7 @@ export const casesSlice = createSlice({
             state.error = action.payload
         },
         [deleteCase.fulfilled]: (state, action) => {
-            state.cases = state.cases.filter(el => el.id !== action.payload.id);
+            //state.cases = state.cases.filter(el => el.id !== action.payload.id);
         },
         [addNewCase.pending]: (state) => {
             state.status = "loading";
@@ -341,6 +346,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases } = casesSlice.actions
 
 export default casesSlice.reducer

@@ -44,9 +44,11 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
     }, [PPARTS, myPPARTS])
 
     useEffect(() => {
-        setPPARTS(caseToUpdate.takes)
-        setMyPPARTS(caseToUpdate.myTakes)
-    }, cases)
+        if(id) {
+            setPPARTS(caseToUpdate.takes)
+            setMyPPARTS(caseToUpdate.myTakes)
+        }
+    }, [cases])
 
     function deleteElement() {
         dispatch(deleteCase(id))
