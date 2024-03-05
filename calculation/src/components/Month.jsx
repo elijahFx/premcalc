@@ -221,7 +221,9 @@ export default function Month() {
     <div className='monthContainer'>
     <div className='month'><h5>{formattedDate}</h5>
     {cases.length >= 1 && <button className='greenBtn'>Удалить все оплаченные дела</button>}
-    {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}</div>
+    {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}
+    <Link to="trashbin"><span class="material-symbols-outlined green-trash-bin">delete</span></Link>
+    </div>
     
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
     {error && <div className='containder-for-loader'><h1>На сервере ошибка, которая не позволяет использовать данный сервис: {error}</h1></div>}

@@ -425,6 +425,14 @@ input[type="checkbox"] {
 	padding: 4px;
 	cursor: pointer;
 }
+
+.green-trash-bin {
+	color: #47d547;
+}
+
+.gray {
+	background-color: gray;
+}
   
 
     @keyframes rotation {

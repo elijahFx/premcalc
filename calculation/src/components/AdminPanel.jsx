@@ -5,6 +5,14 @@ import { getUsers } from '../features/usersSlice';
 import UserRow from './UserRow';
 import { fetchAllCases } from '../features/casesSlice.mjs';
 
+const date = new Date();
+export const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+    }).format(date);
+
+
 export default function AdminPanel() {
 
   const dispatch = useDispatch()
@@ -19,12 +27,7 @@ export default function AdminPanel() {
   }, [1])
 
 
-    const date = new Date();
-    const formattedDate = new Intl.DateTimeFormat('ru-RU', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-    }).format(date);
+    
 
   return (
     <div className='adminPnl'>
