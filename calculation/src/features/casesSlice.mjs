@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
+const BASIC_URL = "http://localhost:4000/"
 
 
 export const fetchCases = createAsyncThunk(
@@ -8,7 +10,7 @@ export const fetchCases = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch("https://premcalc.onrender.com/cases", {
+            const response = await fetch(`${BASIC_URL}cases`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
                 }
@@ -37,7 +39,7 @@ export const fetchAllCases = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch("https://premcalc.onrender.com/cases/all", {
+            const response = await fetch(`${BASIC_URL}cases/all`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
                 }
@@ -66,7 +68,7 @@ export const deleteCase = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
+            const response = await fetch(`${BASIC_URL}cases/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${userToken}`
@@ -93,7 +95,7 @@ export const toggleStatus = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`https://premcalc.onrender.com/cases/${id}`, {
+            const response = await fetch(`${BASIC_URL}cases/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -127,7 +129,7 @@ export const alterTakes = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`https://premcalc.onrender.com/cases/${newTake.id}`, {
+            const response = await fetch(`${BASIC_URL}cases/${newTake.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -160,7 +162,7 @@ export const alterMyTakes = createAsyncThunk(
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`https://premcalc.onrender.com/cases/${newTake.id}`, {
+            const response = await fetch(`${BASIC_URL}cases/${newTake.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -196,7 +198,7 @@ export const addNewCase = createAsyncThunk(
 
 
       try {
-        const response = await fetch("https://premcalc.onrender.com/cases", {
+        const response = await fetch(`${BASIC_URL}cases`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

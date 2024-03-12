@@ -9,16 +9,13 @@ export const OKLAD = 538.36
 
 export default function Month() {
 
-    const cases = useSelector((state) => state.cases.cases)
+    const cases = useSelector((state) => state.cases.cases).filter(el => !el.isDeleted)
 	const {error, status} = useSelector((state) => state.cases)
     const role = useSelector((state) => state.users.role)
 
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)
     const rozpMoney = useSelector(state => state.cases.rozpMoney)
-
-    const [month, setMonth] = useState("")
-
 
 	const [isDown1, setIsDown1] = useState(false)
 	const [isDown2, setIsDown2] = useState(false)
@@ -148,7 +145,6 @@ export default function Month() {
 
 	useEffect(() => {
 		count()
-        getMonth()
         if(cases.length <= 0 && status !== "loading") {
             setIsVisible("none")
         } else if(status === "loading") {
@@ -162,57 +158,6 @@ export default function Month() {
   month: 'long',
   year: 'numeric',
     }).format(date);
-
-   async function getMonth() {
-        let firstCase = await cases[0]?.createdAt
-        let date = new Date(firstCase)
-        let finalDate = ""
-        let year = date.getFullYear()
-        switch (date.getMonth() + 1) {
-            case 1:
-                finalDate = `Январь месяц ${year} года`
-                break;
-            case 2:
-                finalDate = `Февраль месяц ${year} года`
-                break;
-            case 3:
-                finalDate = `Март месяц ${year} года`
-                break;
-            case 4:
-                finalDate = `Апрель месяц ${year} года`
-                break;
-            case 5:
-                finalDate = `Май месяц ${year} года`
-                break;
-            case 6:
-                finalDate = `Июнь месяц ${year} года`
-                break;
-            case 7:
-                finalDate = `Июль месяц ${year} года`
-                break;
-            case 8:
-                finalDate = `Август месяц ${year} года`
-                break;
-            case 9:
-                finalDate = `Сентябрь месяц ${year} года`
-                break;
-            case 10:
-                finalDate = `Октябрь месяц ${year} года`
-                break;
-            case 11:
-                finalDate = `Ноябрь месяц ${year} года`
-                break;
-            case 12:
-                finalDate = `Декабрь месяц ${year} года`
-                break;
-            default:
-                finalDate = "Неизвестная дата..."
-                break;
-        }
-        setMonth(finalDate)
-    }
-
-    const [isAdmin, setIsAdmin] = useState(true)
    
 
   return (
@@ -222,7 +167,7 @@ export default function Month() {
     <div className='month'><h5>{formattedDate}</h5>
     {cases.length >= 1 && <button className='greenBtn'>Удалить все оплаченные дела</button>}
     {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}
-    <Link to="trashbin"><span class="material-symbols-outlined green-trash-bin">delete</span></Link>
+    <Link to="trashbin"><span className="material-symbols-outlined green-trash-bin">delete</span></Link>
     </div>
     
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}

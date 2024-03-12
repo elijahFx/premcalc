@@ -107,11 +107,13 @@ input {
 }
 
 .navbar input[name="takes"] {
+	padding: 0 0 0 12px;
 	width: 80px;
 	text-align: center;
 }
 
 .navbar input[name="myTakes"] {
+	padding: 0 0 0 12px;
 	width: 80px;
 	text-align: center;
 }
@@ -357,6 +359,7 @@ th span {
 	background-color: gold;
 	border: 1px solid;
 	padding: 2px;
+	cursor: pointer;
 }
 
 .adminBtn:hover {
@@ -422,8 +425,11 @@ input[type="checkbox"] {
 .greenBtn {
 	background: #47d547;
 	border: 1px solid black;
-	padding: 4px;
+	padding: 2px;
 	cursor: pointer;
+}
+.greenBtn:hover {
+	background: #339c33;
 }
 
 .green-trash-bin {
@@ -432,6 +438,115 @@ input[type="checkbox"] {
 
 .gray {
 	background-color: gray;
+}
+
+.account {
+	padding: 10px 0;
+	border: 1px solid #47d547;
+	min-height: 90%;
+	height: fit-content;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 30px;
+  }
+
+.accountPnl {
+	padding: 10px 0;
+	width: 100vw;
+	min-height: 70vh;
+	height: fit-content;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.account .name {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.name input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.fileInput {
+	width: fit-content;
+	height: fit-content;
+}
+
+.imageUploader {
+	height: 150px;
+	width: 150px;
+	border: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #9c9c9c;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+.imageUploader:hover {
+	transition: 0.4s;
+	background-color:  #c2c2c2;
+}
+
+.imageUploader h6 {
+	text-align: center;
+	user-select: none;
+}
+
+.profilePicture {
+	border: 3px solid #47d547;
+	height: 150px;
+	width: 150px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: 0.4s;
+	object-fit: cover;
+}
+
+.avatarBtn {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.avatarBtn:hover {
+	transition: 0.4s;
+	background-color: #038d5a;
+}
+
+.line-container {
+	display: inline
+}
+
+.microProfilePicture {
+	border: 2px solid #47d547;
+	height: 60px;
+	width: 60px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: 0.4s;
+	object-fit: cover;
 }
   
 

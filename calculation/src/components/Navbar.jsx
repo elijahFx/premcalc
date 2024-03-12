@@ -77,13 +77,11 @@ export default function Navbar() {
 <div className='logo'>
 <Link to="/">
 <div className="subLogo">
-  <span className="material-symbols-outlined">
-savings
-</span>
+  {user?.image ? <img className='microProfilePicture' src={user.image} alt="Ваш аватар" /> : <span className="material-symbols-outlined">savings</span>}
 <h2>Премкальк</h2>
 </div>
 </Link>
-{email && !user?.error ? <h5>{email}</h5> : <></>}
+{email && !user?.error ? <Link to="account"><h5>{user?.name ? user?.name : email}</h5></Link> : <></>}
 {email && !user?.error ? <button onClick={() => handleClick()} className='exitBtn'>Выйти</button> : <></>}
 </div>
 

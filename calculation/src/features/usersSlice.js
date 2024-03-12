@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
+const BASIC_URL = "http://localhost:4000/"
 
 export const signupUser = createAsyncThunk(
     "users/signupUser",
     async function (user, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch("https://premcalc.onrender.com/users/signup", {
+        const response = await fetch(`${BASIC_URL}users/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -21,7 +22,7 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
   
-        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email}))
+        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email, id: data.id, name: data.name, image: data.image}))
         dispatch(signup(data));
   
         return data;
@@ -35,7 +36,7 @@ export const signupUser = createAsyncThunk(
     "users/loginUser",
     async function (user, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch("https://premcalc.onrender.com/users/login", {
+        const response = await fetch(`${BASIC_URL}users/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export const signupUser = createAsyncThunk(
   
         const data = await response.json();
   
-        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email, role: data.role}))
+        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email, role: data.role, id: data.id, name: data.name, image: data.image}))
         dispatch(login(data));
   
         return data;
@@ -65,7 +66,7 @@ export const signupUser = createAsyncThunk(
     "users/getUsers",
     async function (user, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch("https://premcalc.onrender.com/users");
+        const response = await fetch(`${BASIC_URL}users`);
 
   
         if (!response.ok) {
@@ -76,6 +77,38 @@ export const signupUser = createAsyncThunk(
         const data = await response.json();
   
         dispatch(getAllUsers(data));
+  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
+  export const updateOneUser = createAsyncThunk(
+    "users/updateOneUser",
+    async function (userInfo, { rejectWithValue, dispatch, getState }) {
+      const userToken = getState().users.user.token
+     
+      try {
+        const response = await fetch(`${BASIC_URL}users/${userInfo.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${userToken}`
+          },
+          body: JSON.stringify({name: userInfo.name, image: userInfo.image}),
+        });
+
+  
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
+            throw new Error(errorMessage);
+          }
+  
+        const data = await response.json();
+  
+        dispatch(updateUser(data));
   
         return data;
       } catch (error) {
@@ -95,12 +128,15 @@ export const usersSlice = createSlice({
         login: (state, action) => {
           state.user = action.payload;
           state.role = action.payload.role
-      },
+        },
         logout: (state) => {
             state.user = null
         },
         getAllUsers: (state, action) => {
           state.listOfUsers = action.payload
+        },
+        updateUser: (state, action) => {
+          state.user = { ...state.user, ...action.payload}
         }
 }, extraReducers: {
     [signupUser.pending]: (state) => {
@@ -117,31 +153,43 @@ export const usersSlice = createSlice({
     },[loginUser.pending]: (state) => {
       state.status = "loading"
       state.error = null
-  },
+    },
     [loginUser.fulfilled]: (state, action) => {
       state.status = "resolved"
       state.user = action.payload;
       state.role = action.payload.role
-  },
+    },
     [loginUser.rejected]: (state, action) => {
       state.status = "rejected"
       state.error = `Введен неправильный email или пароль`
-  }},
-  [getUsers.pending]: (state) => {
+    },
+    [getUsers.pending]: (state) => {
     state.status = "loading"
     state.error = null
-},
-[getUsers.fulfilled]: (state, action) => {
+    },
+    [getUsers.fulfilled]: (state, action) => {
     state.status = "resolved"
     state.listOfUsers = action.payload
-},
-[getUsers.rejected]: (state, action) => {
+    },
+    [getUsers.rejected]: (state, action) => {
     state.status = "rejected"
     state.error = action.payload
-}
+    },
+    [updateOneUser.rejected]: (state, action) => {
+      state.status = "rejected"
+      state.error = action.payload
+    },
+    [updateOneUser.pending]: (state, action) => {
+      state.status = "pending"
+    },
+    [updateOneUser.fulfilled]: (state, action) => {
+      state.status = "resolved"
+    },
+},
+  
 
 })
 
-export const { login, signup, logout, getToken, getAllUsers } = usersSlice.actions
+export const { login, signup, logout, getToken, getAllUsers, updateUser } = usersSlice.actions
 
 export default usersSlice.reducer

@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom'
 export default function TrashBin() {
 
     const cases = useSelector((state) => state.cases.cases)
-    const deletedCases = cases.filter(el => el.isDeleted === true)
+    const deletedCases = cases.filter(el => el.isDeleted)
     const user = useSelector(state => state.users.user)
-	const {error, status} = useSelector((state) => state.cases)
+	  const {error, status} = useSelector((state) => state.cases)
 
     const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ export default function TrashBin() {
 	</thead>
 	<tbody>
      {cases && status !== "loading" ? deletedCases.map((el, number) => {
-      return <DeletedRow id={el._id} key={number} num={number} name={el.name} />
+      return <DeletedRow id={el._id} key={number} num={number} name={el.name} deleteAt={el.deleteAt} />
     }) : <></>}
 	</tbody>
 </table>

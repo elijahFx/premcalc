@@ -27,6 +27,18 @@ const caseSchema = new Schema({
     user_id: {
         type: String,
         required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deleteAt: {
+        type: Date,
+        default: null
+    },
+    deleteJob: {
+        type: String,
+        default: null
     }
 }, {timestamps: true})
 

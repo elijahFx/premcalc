@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 
+export default function DeletedRow({ name, num, deleteAt }) {
+  const [timeLeft, setTimeLeft] = useState(transformDate(deleteAt));
 
+  useEffect(() => {
+    const timerID = setInterval(() => {
+      setTimeLeft(transformDate(deleteAt));
+    }, 1000);
 
-export default function DeletedRow({ name, num, id }) {
+    return () => clearInterval(timerID);
+  }, []);
 
+  function transformDate(date) {
+    const newDate = Date.parse(date)
+    const currentDate = new Date()
+    const remainingTime = newDate - currentDate
+    
+    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
-    const cases = useSelector(state => state.cases.cases)
-
+    return { hours, minutes, seconds };
+  }
+  
 
   return (
-    <tr className="gray">
+  <tr className="gray">
             <td>{num + 1}</td>
-			<td>{name}</td>
-            <td>{24} часа (-ов) {20} секунд</td>
+			      <td>{name}</td>
+            <td>{timeLeft.hours} часа (-ов) {timeLeft.minutes} минут (-ты) {timeLeft.seconds} секунд (-ы)</td>
             <td><span className="material-symbols-outlined">history</span></td>
 	</tr>
   )

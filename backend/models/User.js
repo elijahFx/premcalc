@@ -19,6 +19,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
         enum: roleOptions
+    },
+    name: {
+        type: String,
+        unique: true
+    },
+    image: {
+        type: Object,
+        default: null
     }
 })
 
