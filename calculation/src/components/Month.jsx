@@ -5,6 +5,8 @@ import { fetchCases, setState, updateMoney } from '../features/casesSlice.mjs'
 import { logout } from '../features/usersSlice.js'
 import NoCases from './NoCases.jsx'
 import { Link } from 'react-router-dom'
+import { Tooltip } from 'react-tooltip'
+
 export const OKLAD = 538.36
 
 export default function Month() {
@@ -22,6 +24,7 @@ export default function Month() {
 	const [isDown3, setIsDown3] = useState(false)
 	const [isDown4, setIsDown4] = useState(false)
     const [isDown5, setIsDown5] = useState(false)
+    const [finalCut, setFinalCut] = useState(0)
     const [isVisible, setIsVisible] = useState("none")
 
 
@@ -132,7 +135,9 @@ export default function Month() {
           myActualMoney += thoseMoneyAfterTaxes
 		}
 		});
+        setFinalCut((myActualMoney - 150).toFixed(2))
 		dispatch(updateMoney({rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2)}))
+        console.log(finalCut);
 	  }
 
 	useEffect(() => {
@@ -212,6 +217,10 @@ arrow_downward
 	</tbody>
 </table>
 <div className="result">
+
+<Tooltip anchorSelect=".money" clickable  place="top">
+  До выплаты аванса: {finalCut} бел. руб.
+</Tooltip>
 
 <h1>Общая сумма расходов РОЗП за этот месяц: {rozpMoney} бел. руб.</h1>
 <h1>Моя премия до налогов: {myTake} бел. руб.</h1>
