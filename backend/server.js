@@ -23,9 +23,12 @@ app.use(express.json())
 
 const casesRoutes = require("./routes/cases")
 const usersRoutes = require("./routes/users") 
+const suitesRoutes = require("./routes/suites")
 
 app.use("/cases", casesRoutes)
 app.use("/users", usersRoutes)
+app.use("/suites", suitesRoutes)
+
 
 
 mongoose.connect(process.env.URI)

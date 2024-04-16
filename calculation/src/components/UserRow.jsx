@@ -14,13 +14,17 @@ function sortUsersMoney() {
         return el.isPaid === true
     })
     let money = 0
-    return paidCases?.reduce((accumulator, currentValue) => {
+    let finalCut = paidCases?.reduce((accumulator, currentValue) => {
         const amount = ((currentValue.expenses * 0.3) / currentValue.takes) * currentValue.myTakes;
         
         const finalAmount = (amount - (amount * 0.14))
 
         return accumulator + finalAmount;
       }, 0) + OKLAD
+      if(finalCut < 538.36) {
+        finalCut = 538.36
+      }
+      return finalCut
 }
 
 useEffect(() => {

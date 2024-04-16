@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Dialog from './Dialog'
 import { addCase, addNewCase, fetchCases } from '../features/casesSlice.mjs'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, logout } from '../features/usersSlice'
@@ -12,7 +13,7 @@ export default function Navbar() {
   const [myTakes, setMyTakes] = useState(1)
   const [email, setEmail] = useState("")
   const user = useSelector(state => state.users.user)
-  const cases = useSelector(state => state.cases.cases)
+  const { showDialog } = useSelector(state => state.cases)
 
   const [error1, setError1] = useState(false)
   const [error2, setError2] = useState(false)
@@ -73,7 +74,7 @@ export default function Navbar() {
   return (
 <header>
 
-
+{showDialog ? <Dialog /> : null} 
 <div className='logo'>
 <Link to="/">
 <div className="subLogo">

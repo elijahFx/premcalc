@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
-const BASIC_URL = "https://premcalc.onrender.com/"
+const BASIC_URL = URLS[0]
 
 
 export const fetchCases = createAsyncThunk(
@@ -80,6 +80,34 @@ export const deleteCase = createAsyncThunk(
             }
     
             dispatch(removeCase({id}))
+            
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
+// DELETE ALL PAID CASES
+
+export const deleteAllTheCases = createAsyncThunk(
+    "cases/deleteAllTheCases",
+    async function (id, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`${BASIC_URL}cases/deleteall`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
+            })
+
+            if(!response.ok) {
+                throw new Error("Нельзя удалить несуществующее дело")
+            }
+    
+            dispatch(deleteAllPaidCases())
             
         } catch (error) {
            return rejectWithValue(error.message)
@@ -230,7 +258,7 @@ export const addNewCase = createAsyncThunk(
 
 export const casesSlice = createSlice({
     name: "cases",
-    initialState: {cases: [], status: null, error: null, myTake: 0, myPureMoney: 0, rozpMoney: 0},
+    initialState: {cases: [], status: null, error: null, myTake: 0, myPureMoney: 0, rozpMoney: 0, showDialog: false},
     reducers: {
         addCase: (state, action) => {
             state.cases.push(action.payload)
@@ -276,9 +304,17 @@ export const casesSlice = createSlice({
             state.cases = action.payload
         },
         deleteAllPaidCases: (state) => {
-            const allButPaid = state.cases.filter((el) => {
+            const allButNotPaid = state.cases.filter((el) => {
                 return el.isPaid !== true
             })
+            state.cases = allButNotPaid
+        },
+        changeDialog: (state, action) => {
+            if(action.payload === "show") {
+                state.showDialog = true
+            } else {
+                state.showDialog = false
+            }
         }
   },
     extraReducers: {
@@ -348,6 +384,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases, changeDialog } = casesSlice.actions
 
 export default casesSlice.reducer

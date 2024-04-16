@@ -1,18 +1,25 @@
 import { useEffect, useState, useCallback } from 'react'
 import Row from "./Row.jsx"
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchCases, setState, updateMoney } from '../features/casesSlice.mjs'
+import { changeDialog, fetchCases, setState, updateMoney } from '../features/casesSlice.mjs'
 import { logout } from '../features/usersSlice.js'
 import NoCases from './NoCases.jsx'
 import { Link } from 'react-router-dom'
 import { Tooltip } from 'react-tooltip'
 
-export const OKLAD = 538.36
+export const OKLAD = 476.44
+
+  const date = new Date();
+  export const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+    }).format(date);
 
 export default function Month() {
 
     const cases = useSelector((state) => state.cases.cases).filter(el => !el.isDeleted)
-	const {error, status} = useSelector((state) => state.cases)
+	const {error, status, showDialog} = useSelector((state) => state.cases)
     const role = useSelector((state) => state.users.role)
 
     const myTake = useSelector(state => state.cases.myTake)
@@ -24,11 +31,10 @@ export default function Month() {
 	const [isDown3, setIsDown3] = useState(false)
 	const [isDown4, setIsDown4] = useState(false)
     const [isDown5, setIsDown5] = useState(false)
+    const [isDown6, setIsDown6] = useState(false)
+    const [isDown7, setIsDown7] = useState(false)
     const [finalCut, setFinalCut] = useState(0)
-    const [isVisible, setIsVisible] = useState("none")
-
-
-
+    const [isDialog, setIsDialog] = useState(false)
 
   function sortTable(value) {
         switch (value) {
@@ -37,6 +43,9 @@ export default function Month() {
                 setIsDown3(false)
                 setIsDown4(false)
                 setIsDown5(false)
+                setIsDown6(false)
+                setIsDown7(false)
+
                 const sortExpensesOrder = isDown2 ? 1 : -1;
 
                 setIsDown2(!isDown2)
@@ -52,6 +61,9 @@ export default function Month() {
                 setIsDown3(false)
                 setIsDown4(false)
                 setIsDown5(false)
+                setIsDown6(false)
+                setIsDown7(false)
+
                 const sortNameOrder = isDown1 ? 1 : -1;
 
                 setIsDown1(!isDown1)
@@ -66,6 +78,9 @@ export default function Month() {
                 setIsDown2(false)
                 setIsDown4(false)
                 setIsDown5(false)
+                setIsDown6(false)
+                setIsDown7(false)
+
                 const sortThirtyOrder = isDown3 ? 1 : -1;
 
                 setIsDown3(!isDown3)
@@ -73,7 +88,7 @@ export default function Month() {
                 const newCasesThirty = JSON.parse(JSON.stringify(cases));
 
                 newCasesThirty.sort((a, b) => {
-                    return ((a.expenses * 0.3) - (b.expenses * 0.3)) * sortThirtyOrder
+                    return ((((a.expenses * 0.3) / a.takes) * a.myTakes) - (((b.expenses * 0.3) / b.takes) * b.myTakes)) * sortThirtyOrder
                 });
                 dispatch(setState(newCasesThirty));
             break;
@@ -82,6 +97,8 @@ export default function Month() {
                 setIsDown2(false)
                 setIsDown3(false)
                 setIsDown5(false)
+                setIsDown6(false)
+                setIsDown7(false)
 
                 const sortBonusOrder = isDown4 ? 1 : -1;
 
@@ -101,6 +118,8 @@ export default function Month() {
                 setIsDown2(false)
                 setIsDown3(false)
                 setIsDown4(false)
+                setIsDown6(false)
+                setIsDown7(false)
 
                 const sortIsPaidOrder = isDown5 ? 1 : -1;
 
@@ -112,6 +131,42 @@ export default function Month() {
                    return (a.isPaid - b.isPaid) * sortIsPaidOrder
                 });
                 dispatch(setState(newCasesIsPaid));
+            break;
+            case "takes":
+                setIsDown1(false)
+                setIsDown2(false)
+                setIsDown3(false)
+                setIsDown4(false)
+                setIsDown7(false)
+
+                const sortIsTakesOrder = isDown6 ? 1 : -1;
+
+                setIsDown6(!isDown6)
+
+                const newCasesTakes = JSON.parse(JSON.stringify(cases));
+
+                newCasesTakes.sort((a, b) => {
+                   return (a.takes - b.takes) * sortIsTakesOrder
+                });
+                dispatch(setState(newCasesTakes));
+            break;
+            case "myTakes":
+                setIsDown1(false)
+                setIsDown2(false)
+                setIsDown3(false)
+                setIsDown4(false)
+                setIsDown6(false)
+
+                const sortIsMyTakesOrder = isDown7 ? 1 : -1;
+
+                setIsDown7(!isDown7)
+
+                const newCasesMyTakes = JSON.parse(JSON.stringify(cases));
+
+                newCasesMyTakes.sort((a, b) => {
+                   return (a.myTakes - b.myTakes) * sortIsMyTakesOrder
+                });
+                dispatch(setState(newCasesMyTakes));
             break;
             default:
                 break;
@@ -134,10 +189,12 @@ export default function Month() {
           let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
           myActualMoney += thoseMoneyAfterTaxes
 		}
-		});
+		})
+        if(myActualMoney < 538.36) {
+            myActualMoney = 538.36
+        }
         setFinalCut((myActualMoney - 150).toFixed(2))
 		dispatch(updateMoney({rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2)}))
-        console.log(finalCut);
 	  }
 
 	useEffect(() => {
@@ -150,27 +207,18 @@ export default function Month() {
 
 	useEffect(() => {
 		count()
-        if(cases.length <= 0 && status !== "loading") {
-            setIsVisible("none")
-        } else if(status === "loading") {
-            setIsVisible("block")
-        }
 	}, [cases])
 
-    const date = new Date();
-    const formattedDate = new Intl.DateTimeFormat('ru-RU', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-    }).format(date);
+    
    
 
   return (
     <>
+  
     {cases.length < 1 && status !== "loading" && <NoCases />}
     <div className='monthContainer'>
     <div className='month'><h5>{formattedDate}</h5>
-    {cases.length >= 1 && <button className='greenBtn'>Удалить все оплаченные дела</button>}
+    {cases.length >= 1 && <button className='greenBtn' onClick={() => dispatch(changeDialog("show"))}>Удалить все оплаченные дела</button>}
     {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}
     <Link to="trashbin"><span className="material-symbols-outlined green-trash-bin">delete</span></Link>
     </div>
@@ -195,7 +243,7 @@ arrow_upward
 </span> : <span className="material-symbols-outlined" onClick={() => {sortTable("expenses")}}>
 arrow_downward
 </span>}</th>
-			<th>Рабочая доля: {isDown3 ? <span className="material-symbols-outlined" onClick={() => {sortTable("thirty")}}>
+			<th>Доход до налогов: {isDown3 ? <span className="material-symbols-outlined" onClick={() => {sortTable("thirty")}}>
 arrow_upward
 </span> : <span className="material-symbols-outlined" onClick={() => {sortTable("thirty")}}>
 arrow_downward
@@ -205,8 +253,16 @@ arrow_upward
 </span> : <span className="material-symbols-outlined" onClick={() => {sortTable("bonus")}}>
 arrow_downward
 </span>}</th>
-			<th>Доли:</th>
-      		<th>Мои доли:</th>
+			<th>Доли: {isDown6 ? <span className="material-symbols-outlined" onClick={() => {sortTable("takes")}}>
+arrow_upward
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("takes")}}>
+arrow_downward
+</span>}</th>
+      		<th>Мои доли: {isDown7 ? <span className="material-symbols-outlined" onClick={() => {sortTable("myTakes")}}>
+arrow_upward
+</span> : <span className="material-symbols-outlined" onClick={() => {sortTable("myTakes")}}>
+arrow_downward
+</span>}</th>
 			<th>Действия:</th>
 		</tr>
 	</thead>
@@ -218,7 +274,7 @@ arrow_downward
 </table>
 <div className="result">
 
-<Tooltip anchorSelect=".money" clickable  place="top">
+<Tooltip anchorSelect=".money" clickable place="top">
   До выплаты аванса: {finalCut} бел. руб.
 </Tooltip>
 

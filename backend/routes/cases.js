@@ -6,7 +6,8 @@ const {
     updateCase,
     getCases,
     getAllCases,
-    deleteCase2
+    deleteCase2,
+    deleteAllPaidCases
 } = require("../controllers/casesControllers")
 const requireAuth = require("../middleware/requireAuth")
 
@@ -19,6 +20,8 @@ router.get("/", getCases)
 router.post("/", createCase)
 
 router.get("/all", getAllCases)
+
+router.delete("/deleteall", deleteAllPaidCases)
 
 router.delete("/:id", deleteCase2)
 

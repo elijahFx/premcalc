@@ -24,6 +24,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
     let TAKE = money * 0.3
     let moneyBefore = (TAKE - (((TAKE / 100) * 14)))
+    let moneyBeforeTAXES = (TAKE / PPARTS) * myPPARTS
     let PUREMONEY = Math.round(((moneyBefore / PPARTS) * myPPARTS) * 100) / 100
 
     const calculate = () => {
@@ -36,6 +37,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
 
         TAKE = money * 0.3
         moneyBefore = (TAKE - (((TAKE / 100) * 14)))
+        moneyBeforeTAXES = (TAKE / PPARTS) * myPPARTS
         PUREMONEY = Math.round(((moneyBefore / PPARTS) * myPPARTS) * 100) / 100
     }
 
@@ -101,7 +103,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
             <td>{num + 1}</td>
 			<td>{name}</td>
 			<td>{money.toFixed(2)} бел. руб.</td>
-			<td>{TAKE.toFixed(2)} бел. руб.</td>
+			<td>{moneyBeforeTAXES.toFixed(2)} бел. руб.</td>
 			<td>{PUREMONEY.toFixed(2)} бел. руб.</td>
 			<td><input type="number" min="1" name={`takes ${name}`} value={PPARTS} onInput={(e) => handleChange(e, "takes")} onClick={(e) => handleChange(e, "takes")}/></td>
             <td><input type="number" min="1" name={`myTakes ${name}`} value={myPPARTS} onInput={(e) => handleChange(e, "myTakes")} onClick={(e) => handleChange(e, "myTakes")}/></td>

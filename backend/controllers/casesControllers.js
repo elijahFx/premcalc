@@ -104,6 +104,17 @@ const getAllCases = async (req, res) => {
     res.status(200).json(cases)
 }
 
+const deleteAllPaidCases = async (req, res) => {
+    const user_id = req.user._id;
+
+    try {
+        const deletedCases = await Case.deleteMany({ user_id, isPaid: true });
+        res.status(200).json(deletedCases);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete paid cases." });
+    }
+}
+
 
 
 module.exports = {
@@ -112,5 +123,6 @@ module.exports = {
     updateCase,
     getCases,
     getAllCases,
-    deleteCase2
+    deleteCase2,
+    deleteAllPaidCases
 }

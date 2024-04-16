@@ -11,6 +11,7 @@ import TrashBin from './components/Trashbin/Trashbin.jsx'
 import EmployerPanel from './components/Employer/EmployerPanel.jsx'
 import Worker from './components/Employer/Worker.jsx'
 import Account from './components/Account.jsx'
+import SuiteMaker from './components/SuiteMaker.jsx'
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
 
 
   return (
-    <div className='container'>
+    <div className="container">
       <BrowserRouter>
         <Navbar/>
         <div className="pages">
@@ -29,6 +30,7 @@ function App() {
             <Route path="/employer/" element={user?.role === "employer" ? <EmployerPanel /> : <NotFound />}/>
             <Route path="/employer/:id" element={<Worker />}/>
             <Route path="/trashbin" element={!user ? <Login /> : <TrashBin />}/>
+            <Route path="/suitemaker" element={<SuiteMaker /> }/>
             <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>
           </Routes>
