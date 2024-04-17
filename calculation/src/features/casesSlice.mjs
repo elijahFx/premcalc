@@ -87,6 +87,32 @@ export const deleteCase = createAsyncThunk(
     }
 )
 
+export const trashBinCase = createAsyncThunk(
+    "cases/trashBinCase",
+    async function (id, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`${BASIC_URL}cases/trashbin/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
+            })
+
+            if(!response.ok) {
+                throw new Error("Нельзя удалить несуществующее дело")
+            }
+    
+            dispatch(removeCase({id}))
+            
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
 // DELETE ALL PAID CASES
 
 export const deleteAllTheCases = createAsyncThunk(

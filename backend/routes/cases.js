@@ -25,6 +25,8 @@ router.delete("/deleteall", deleteAllPaidCases)
 
 router.delete("/:id", deleteCase)
 
+router.delete("/trashbin/:id", deleteCase2)
+
 router.patch("/:id", updateCase)
 
 module.exports = router

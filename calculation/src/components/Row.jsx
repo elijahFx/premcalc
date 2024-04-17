@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { alterMyTakes, alterTakes, deleteCase, toggleStatus } from '../features/casesSlice.mjs';
+import { alterMyTakes, alterTakes, toggleStatus, trashBinCase } from '../features/casesSlice.mjs';
 
 function debounce(func, delay) {
     let timer;
@@ -53,7 +53,7 @@ export default function Row({ name, money, parts, isPaid, my_parts, num, id }) {
     }, [cases])
 
     function deleteElement() {
-        dispatch(deleteCase(id))
+        dispatch(trashBinCase(id))
     }
 
     function toggleValue() {
