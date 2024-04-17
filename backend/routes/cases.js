@@ -23,9 +23,9 @@ router.get("/all", getAllCases)
 
 router.delete("/deleteall", deleteAllPaidCases)
 
-router.delete("/:id", deleteCase)
-
 router.delete("/trashbin/:id", deleteCase2)
+
+router.delete("/:id", deleteCase)
 
 router.patch("/:id", updateCase)
 
