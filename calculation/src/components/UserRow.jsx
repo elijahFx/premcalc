@@ -11,7 +11,7 @@ function sortUsersMoney() {
         return el.user_id === id
     })
     const paidCases = sortedCases?.filter((el) => {
-        return el.isPaid === true
+        return el.isPaid === true && !el.isDeleted
     })
     let money = 0
     let finalCut = paidCases?.reduce((accumulator, currentValue) => {

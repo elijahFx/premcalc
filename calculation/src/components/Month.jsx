@@ -182,7 +182,7 @@ export default function Month() {
         let myBonus = 0
 	  
 		await cases.forEach((el) => {
-			if(el.isPaid) {
+			if(el.isPaid && !el.isDeleted) {
           moneyOfROZP += el.expenses * 0.7
           let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
           myBonus += thoseMoney
