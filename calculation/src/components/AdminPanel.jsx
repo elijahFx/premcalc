@@ -41,8 +41,8 @@ export default function AdminPanel() {
 		<tr>
 			{listOfUsers.length > 1 ? <th>№ </th> : <th></th>}
 			<th>Пользователь (email): </th>
+      <th>Имя: </th>
       <th>Роль: </th>
-			<th>Пароль: </th>
 			<th>id: </th>
       <th>Настоящий заработок: </th>
       <th>Действия: </th>
@@ -50,7 +50,7 @@ export default function AdminPanel() {
 	</thead>
 	<tbody>
      {listOfUsers ? listOfUsers.map((el, number) => {
-      return <UserRow id={el._id} key={number} num={number} email={el.email} password={el.password} role={el.role}/>
+      return <UserRow id={el._id} key={number} num={number} email={el.email} role={el.role} name={el.name}/>
     }) : <></>}
 	</tbody>
 </table>
