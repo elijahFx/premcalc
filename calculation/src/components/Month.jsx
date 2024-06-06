@@ -7,7 +7,8 @@ import NoCases from './NoCases.jsx'
 import { Link } from 'react-router-dom'
 import { Tooltip } from 'react-tooltip'
 
-export const OKLAD = 476.44
+export let OKLAD = 476.44
+
 
   const date = new Date();
   export const formattedDate = new Intl.DateTimeFormat('ru-RU', {
@@ -18,9 +19,14 @@ export const OKLAD = 476.44
 
 export default function Month() {
 
+    const [isOKLAD, setIsOKLAD] = useState(false)
+
     const cases = useSelector((state) => state.cases.cases).filter(el => !el.isDeleted)
 	const {error, status, showDialog} = useSelector((state) => state.cases)
     const role = useSelector((state) => state.users.role)
+    const userId = useSelector((state) => state.users.user.id)
+
+    console.log(userId);
 
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)
@@ -35,6 +41,16 @@ export default function Month() {
     const [isDown7, setIsDown7] = useState(false)
     const [finalCut, setFinalCut] = useState(0)
     const [isDialog, setIsDialog] = useState(false)
+
+    function changeMZP() {
+        if(OKLAD === 476.44) {
+            OKLAD = 538.36
+            setIsOKLAD(!isOKLAD)
+        } else {
+            OKLAD = 476.44
+            setIsOKLAD(!isOKLAD)
+        }
+    }
 
   function sortTable(value) {
         switch (value) {
@@ -177,9 +193,14 @@ export default function Month() {
 
  async function count() {
 		let moneyOfROZP = 0
-        
         let myActualMoney = 0 + OKLAD
         let myBonus = 0
+        
+        if(userId === "6634c2be3d9f0ebeba1ae3b2") {
+            myActualMoney = 0 + 560.72
+        }
+
+        
 	  
 		await cases.forEach((el) => {
 			if(el.isPaid && !el.isDeleted) {
@@ -278,10 +299,14 @@ arrow_downward
   До выплаты аванса: {finalCut} бел. руб.
 </Tooltip>
 
+<Tooltip anchorSelect=".mzpToggle" clickable place="top">
+  Оклад: {OKLAD} бел. руб.
+</Tooltip>
+
 <h1>Общая сумма расходов РОЗП за этот месяц: {rozpMoney} бел. руб.</h1>
 <h1>Моя премия до налогов: {myTake} бел. руб.</h1>
-<h1>Мои чистые деньги: <span className='money'>{myPureMoney}</span> бел. руб.</h1>
-
+<h1>Мои чистые деньги: <span className='money'>{myPureMoney}</span> бел. руб. </h1>
+{isOKLAD ? <span onClick={() => changeMZP()} className="material-symbols-outlined mzpToggle">toggle_off</span> : <span onClick={() => changeMZP()} className="material-symbols-outlined mzpToggle">toggle_on</span>}
 </div>
 </div>
 </>

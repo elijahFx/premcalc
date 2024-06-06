@@ -643,6 +643,33 @@ input[type="checkbox"] {
 	background-color: #025e3c;
 }
 
+.yellow {
+    background: yellow;
+}
+
+td input[type="text"] {
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    width: 100%;
+    text-align: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+	padding: 5px;
+}
+
+.expensesInput {
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 15px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    max-width: 100%;
+	width: 100px;
+    text-align: center;
+}
+
+
   
 
     @keyframes rotation {

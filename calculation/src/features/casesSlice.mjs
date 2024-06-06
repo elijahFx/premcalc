@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { act } from "react";
 const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
 const BASIC_URL = URLS[1]
 
@@ -279,6 +280,40 @@ export const addNewCase = createAsyncThunk(
     }
   );
 
+  export const editCase = createAsyncThunk(
+    "cases/editCase",
+    async function (edit, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`${BASIC_URL}cases/${edit.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    expenses: edit.expenses,
+                    name: edit.name
+                })
+            })
+
+            const data = await response.json()
+            console.log(edit);
+
+            if(!response.ok) {
+                throw new Error(JSON.stringify(data))
+            }
+            console.log(edit);
+            dispatch(editTheCase({id: edit.id, name: edit.name, expenses: edit.expenses}))
+    
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
 
 
 
@@ -341,7 +376,17 @@ export const casesSlice = createSlice({
             } else {
                 state.showDialog = false
             }
-        }
+        },
+        editTheCase: (state, action) => {
+            console.log(action);
+            const { id, name, expenses } = action.payload;
+            const caseToUpdate = state.cases.find((el) => el._id === id);
+        
+            if (caseToUpdate) {
+                caseToUpdate.expenses = expenses;
+                caseToUpdate.name = name;
+            }
+    }
   },
     extraReducers: {
         [fetchCases.pending]: (state) => {
@@ -407,9 +452,20 @@ export const casesSlice = createSlice({
             state.status = "loading";
             state.error = null;
           },
+          [editCase.fulfilled]: (state, action) => {
+            state.status = "fulfilled";
+            console.log(action);
+            const { id, name, expenses } = action.meta.arg;
+            const caseToUpdate = state.cases.find((el) => el._id === id);
+        
+            if (caseToUpdate) {
+                caseToUpdate.expenses = expenses;
+                caseToUpdate.name = name;
+            }
+          },
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases, changeDialog } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases, changeDialog, editTheCase } = casesSlice.actions
 
 export default casesSlice.reducer
