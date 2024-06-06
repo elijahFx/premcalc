@@ -314,6 +314,38 @@ export const addNewCase = createAsyncThunk(
     }
 )
 
+export const returnCase = createAsyncThunk(
+    "cases/returnCase",
+    async function (edit, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`${BASIC_URL}cases/${edit.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    isDeleted: false
+                })
+            })
+
+            const data = await response.json()
+
+            if(!response.ok) {
+                throw new Error(JSON.stringify(data))
+            }
+            console.log(edit);
+            dispatch(returnTheCase({id: edit.id}))
+    
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
 
 
 
@@ -386,7 +418,16 @@ export const casesSlice = createSlice({
                 caseToUpdate.expenses = expenses;
                 caseToUpdate.name = name;
             }
-    }
+    },
+        returnTheCase: (state, action) => {
+            const { id } = action.payload;
+
+            const caseToUpdate = state.cases.find((el) => el._id === id);
+      
+            if (caseToUpdate) {
+              caseToUpdate.isDeleted = false;
+            }
+      }  
   },
     extraReducers: {
         [fetchCases.pending]: (state) => {
@@ -466,6 +507,6 @@ export const casesSlice = createSlice({
     }
 })
 
-export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases, changeDialog, editTheCase } = casesSlice.actions
+export const { addCase, removeCase, toggleIsPaid, updateCases, updateMoney, changeTakes, changeMyTakes, setState, deleteAllPaidCases, changeDialog, editTheCase, returnTheCase } = casesSlice.actions
 
 export default casesSlice.reducer

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { deleteCase } from '../../features/casesSlice.mjs';
+import { deleteCase, returnCase } from '../../features/casesSlice.mjs';
 
 export default function DeletedRow({ name, num, deleteAt, id }) {
   const [timeLeft, setTimeLeft] = useState(transformDate(deleteAt));
@@ -29,6 +29,11 @@ export default function DeletedRow({ name, num, deleteAt, id }) {
   function deleteElement() {
     dispatch(deleteCase(id))
   }
+
+  function handleReturnCase() {
+    console.log("работает нахуй");
+    dispatch(returnCase({id: id}))
+  }
   
 
   return (
@@ -36,7 +41,7 @@ export default function DeletedRow({ name, num, deleteAt, id }) {
             <td>{num + 1}</td>
 			      <td>{name}</td>
             <td>{timeLeft.hours} часа (-ов) {timeLeft.minutes} минут (-ты) {timeLeft.seconds} секунд (-ы)</td>
-            <td><span className="material-symbols-outlined">history</span><span onClick={() => deleteElement()} className="material-symbols-outlined">close</span></td>
+            <td><span className="material-symbols-outlined" onClick={() => handleReturnCase()}>history</span><span onClick={() => deleteElement()} className="material-symbols-outlined">close</span></td>
 	</tr>
   )
 }
