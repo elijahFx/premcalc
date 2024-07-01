@@ -114,6 +114,7 @@ async function resetPassword(req, res) {
 
   console.log(id, token);
 
+  res.send("Done")
   
 }
 
