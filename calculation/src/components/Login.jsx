@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { loginUser } from '../features/usersSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import ForgotPassword from './ForgotPassword'
+
 
 export default function Login() {
 
@@ -52,6 +54,7 @@ export default function Login() {
         <button>Войти</button>
     </form>
     <h5>Нет аккаунта? <Link to="/signup">Зарегистрируйся</Link></h5>
+    <h5><Link to="forgot-password">Забыли пароль?</Link></h5>
 </div>
 </>
 )}

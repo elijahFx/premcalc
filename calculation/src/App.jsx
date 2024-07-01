@@ -12,6 +12,7 @@ import EmployerPanel from './components/Employer/EmployerPanel.jsx'
 import Worker from './components/Employer/Worker.jsx'
 import Account from './components/Account.jsx'
 import SuiteMaker from './components/SuiteMaker.jsx'
+import ForgotPassword from './components/ForgotPassword.jsx'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/employer/" element={user?.role === "employer" ? <EmployerPanel /> : <NotFound />}/>
             <Route path="/employer/:id" element={<Worker />}/>
             <Route path="/trashbin" element={!user ? <Login /> : <TrashBin />}/>
+            <Route path="/forgot-password" element={<ForgotPassword /> }/>
             <Route path="/suitemaker" element={<SuiteMaker /> }/>
             <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>
