@@ -87,17 +87,15 @@ async function getUsers(req, res) {
 async function forgotPassword(req, res) {
   const { email, name } = req.body
 
-  const auth = email || name
 
   try {
-    const oldUser = await User.findOne({ auth })
+    const oldUser = await User.findOne({ email })
 
     if(!oldUser) {
       res.status(400).json({err: `Нет такого пользователя`})
     }
 
-    const oldId = JSON.stringify(oldUser._id)
-    console.log(oldId);
+    
     const secret = process.env.SECRET + oldUser.password
 
     const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
