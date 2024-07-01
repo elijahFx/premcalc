@@ -121,7 +121,7 @@ async function resetPassword(req, res) {
     const secret = process.env.SECRET + oldUser.password
 
     try {
-      const verify = jwt.verify(token, process.env.SECRET)
+      const verify = jwt.verify(token, secret)
       res.send("Verified")
     } catch (error) {
       res.send("Not verified")
