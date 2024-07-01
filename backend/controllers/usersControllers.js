@@ -90,7 +90,7 @@ async function forgotPassword(req, res) {
   const auth = email || name
 
   try {
-    const oldUser = User.findOne({ auth })
+    const oldUser = await User.findOne({ auth })
 
     if(!oldUser) {
       res.status(400).json({err: `Нет такого пользователя`})
