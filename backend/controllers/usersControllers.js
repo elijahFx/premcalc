@@ -101,7 +101,7 @@ async function forgotPassword(req, res) {
 
     const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
     
-    const link = `https://premcalc.onrender.com/reset-password/${oldUser._id}/${token}`
+    const link = `https://premcalc.onrender.com/users/reset-password/${oldUser._id}/${token}`
     console.log(link);
   } catch (error) {
     console.log(`ЭТО ТУУУУТ!`);
