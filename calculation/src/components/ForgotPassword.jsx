@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { forgotPassword } from '../features/usersSlice';
 
 
 export default function ForgotPassword() {
+
+    const dispatch = useDispatch()
 
     const [email, setEmail] = useState("")
     const [isLoading, setIsLoading]= useState(false)
 
     function handleSubmit(e) {
+        if(!email)return
+
+        dispatch(forgotPassword({email: email}))
+
+
         console.log("hello");
     }
-
 
 
   return (

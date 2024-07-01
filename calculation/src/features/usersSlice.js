@@ -62,6 +62,36 @@ export const signupUser = createAsyncThunk(
     }
   );
 
+  export const forgotPassword = createAsyncThunk(
+    "users/forgotPassword",
+    async function (auth, { rejectWithValue, dispatch }) {
+      try {
+        const response = await fetch(`${BASIC_URL}users/forgot-password`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(auth),
+        });
+
+  
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
+            throw new Error(errorMessage);
+          }
+  
+        const data = await response.json();
+  
+        console.log(data);
+   
+  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
   export const getUsers = createAsyncThunk(
     "users/getUsers",
     async function (user, { rejectWithValue, dispatch }) {

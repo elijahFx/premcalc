@@ -84,11 +84,66 @@ async function getUsers(req, res) {
 
 }
 
+async function forgotPassword(req, res) {
+  const { email, name } = req.body
+
+  const auth = email || name
+
+  try {
+    const oldUser = User.findOne({ auth })
+
+    if(!oldUser) {
+      res.status(400).json({err: `Нет такого пользователя`})
+    }
+
+    const secret = process.env.SECRET + oldUser.password
+
+    const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
+    
+    const link = `https://premcalc.netlify.app/forgot-password/${oldUser._id}/${token}`
+    console.log(link);
+  } catch (error) {
+    console.log(`ЭТО ТУУУУТ!`);
+    res.status(400).json({err: error.message})
+  }
+}
+
+async function resetPassword(req, res) {
+  const { email, name } = req.body
+
+  const auth = email || name
+
+  try {
+    const oldUser = User.findOne({ auth })
+
+    if(!oldUser) {
+      res.status(400).json({err: `Нет такого пользователя`})
+    }
+
+    const secret = process.env.SECRET + oldUser.password
+
+    const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
+    
+    const link = `https://premcalc.netlify.app/forgot-password/${oldUser._id}/${token}`
+    console.log(link);
+  } catch (error) {
+    console.log(`ЭТО ТУУУУТ!`);
+    res.status(400).json({err: error.message})
+  }
+}
+
+
+
+
+
+
 
 
 module.exports = {
     loginUser,
     signupUser,
     getUsers,
-    editUser
+    editUser,
+    forgotPassword,
+    resetPassword
 }

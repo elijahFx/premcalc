@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { formattedDate } from './Month';
 import { Link } from 'react-router-dom';
 import { makeNewSuite } from '../features/suitesSlice';
-import { DocViewer } from 'react-doc-viewer';
 
 export default function SuitMaker() {
     const dispatch = useDispatch();
