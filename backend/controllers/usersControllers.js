@@ -91,12 +91,13 @@ async function forgotPassword(req, res) {
 
   try {
     const oldUser = User.findOne({ auth })
-    console.log(oldUser);
 
     if(!oldUser) {
       res.status(400).json({err: `Нет такого пользователя`})
     }
 
+    const oldId = JSON.stringify(oldUser._id)
+    console.log(oldId);
     const secret = process.env.SECRET + oldUser.password
 
     const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
