@@ -127,9 +127,6 @@ async function resetPassword(req, res) {
       res.send("Not verified")
     }
 
-  console.log(id, token);
-
-  res.send("Пришло")
   
 }
 
