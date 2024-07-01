@@ -89,6 +89,7 @@ async function forgotPassword(req, res) {
 
 
   try {
+    console.log(email);
     const oldUser = await User.findOne({ email })
 
     if(!oldUser) {
