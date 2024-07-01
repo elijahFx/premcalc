@@ -2,7 +2,8 @@ const User = require("../models/User")
 const jwt = require("jsonwebtoken")
 const cloudinary = require("../utils/cloudinary")
 const mongoose = require("mongoose")
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt")
+const nodemailer = require("nodemailer")
 
 
 function createToken(_id) {
@@ -98,12 +99,43 @@ async function forgotPassword(req, res) {
     }
 
     
+
+    
     const secret = process.env.SECRET + oldUser.password
 
     const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
     
     const link = `https://premcalc.onrender.com/users/reset-password/${oldUser._id}/${token}`
-    console.log(link);
+
+    const isName = oldUser.name ? true : false 
+
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'layz6644@gmail.com',
+        pass: 'vkxyzpjufsrhnoub'
+      }
+    });
+    
+    const mailOptions = {
+      from: 'layz6644@gmail.com',
+      to: `${email}`,
+      subject: 'Восстановление пароля на сайте premcalc.by',
+      text: `Добрый день${isName ? `, ${oldUser.name}` : ``}. Нам поступила информация о том, что Вам необходим новый пароль. Для того, чтобы установить новый пароль для Вашего аккаунта: перейдете по следующей ссылке - ${link}. Если Вы не пытались изменить пароль на Вашем аккаунте, то свяжитесь с Глебом для установелния личности хакера и его максимального наказания в соответствии со всей строгостью расчетчиков зарплаты ОО «РОЗП»!`
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
+
+
+
   } catch (error) {
     console.log(`ЭТО ТУУУУТ!`);
     res.status(400).json({err: error.message})
