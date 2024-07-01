@@ -2,6 +2,7 @@ const User = require("../models/User")
 const jwt = require("jsonwebtoken")
 const cloudinary = require("../utils/cloudinary")
 const mongoose = require("mongoose")
+const bcrypt = require('bcrypt')
 
 
 function createToken(_id) {
@@ -85,7 +86,7 @@ async function getUsers(req, res) {
 }
 
 async function forgotPassword(req, res) {
-  const { email, name } = req.body
+  const { email } = req.body
 
 
   try {
@@ -130,6 +131,30 @@ async function resetPassword(req, res) {
   
 }
 
+async function resetPassword2(req, res) {
+  const { id, token } = req.params
+  const { password } = req.body
+
+  const oldUser = await User.findOne({ _id: id })
+
+    if(!oldUser) {
+      res.status(400).json({err: `Нет такого пользователя`})
+    }
+
+    const secret = process.env.SECRET + oldUser.password
+
+    try {
+      const verify = jwt.verify(token, secret)
+      const encryptedPassword = await bcrypt.hash(password, 10)
+      const updatedUser = await User.updateOne({ _id: id }, { $set: {password: encryptedPassword}})
+      res.send(`Пароль изменен на ${password}`)
+    } catch (error) {
+      res.send("Что-то пошло не так")
+    }
+
+  
+}
+
 
 
 
@@ -143,5 +168,6 @@ module.exports = {
     getUsers,
     editUser,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    resetPassword2
 }

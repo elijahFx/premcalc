@@ -94,13 +94,14 @@ export const signupUser = createAsyncThunk(
 
   export const resetPassword = createAsyncThunk(
     "users/resetPassword",
-    async function (_, { rejectWithValue, dispatch }) {
+    async function (password, { rejectWithValue, dispatch }) {
       try {
         const response = await fetch(`${BASIC_URL}users/reset-password`, {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-          }
+          },
+          body: JSON.stringify(password)
         });
 
   
