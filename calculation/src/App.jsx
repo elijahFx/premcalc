@@ -13,6 +13,7 @@ import Worker from './components/Employer/Worker.jsx'
 import Account from './components/Account.jsx'
 import SuiteMaker from './components/SuiteMaker.jsx'
 import ForgotPassword from './components/ForgotPassword.jsx'
+import ResetPassword from './components/ResetPassword.jsx'
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/employer/:id" element={<Worker />}/>
             <Route path="/trashbin" element={!user ? <Login /> : <TrashBin />}/>
             <Route path="/forgot-password" element={<ForgotPassword /> }/>
+            <Route path="/reset-password/:id/:token" element={<ResetPassword /> }/>
             <Route path="/suitemaker" element={<SuiteMaker /> }/>
             <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>

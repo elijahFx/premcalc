@@ -92,6 +92,36 @@ export const signupUser = createAsyncThunk(
     }
   );
 
+  export const resetPassword = createAsyncThunk(
+    "users/resetPassword",
+    async function (_, { rejectWithValue, dispatch }) {
+      try {
+        const response = await fetch(`${BASIC_URL}users/reset-password`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+
+  
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
+            throw new Error(errorMessage);
+          }
+  
+        const data = await response.json();
+  
+        console.log(data);
+   
+  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
+
   export const getUsers = createAsyncThunk(
     "users/getUsers",
     async function (user, { rejectWithValue, dispatch }) {
