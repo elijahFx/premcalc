@@ -12,6 +12,8 @@ export default function ForgotPassword() {
     const [isLoading, setIsLoading]= useState(false)
 
     function handleSubmit(e) {
+        e.preventDefault()
+        
         if(!email)return
 
         dispatch(forgotPassword({email: email}))
