@@ -112,9 +112,24 @@ async function forgotPassword(req, res) {
 async function resetPassword(req, res) {
   const { id, token } = req.params
 
+  const oldUser = await User.findOne({ _id: id })
+
+    if(!oldUser) {
+      res.status(400).json({err: `Нет такого пользователя`})
+    }
+
+    const secret = process.env.SECRET + oldUser.password
+
+    try {
+      const verify = jwt.verify(token, process.env.SECRET)
+      res.send("Verified")
+    } catch (error) {
+      res.send("Not verified")
+    }
+
   console.log(id, token);
 
-  res.send()
+  res.send("Пришло")
   
 }
 
