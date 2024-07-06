@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { resetPassword } from '../features/usersSlice';
 
 
 export default function ResetPassword() {
 
-
+    const { id, token } = useParams()
     
     const dispatch = useDispatch()
 
@@ -23,11 +23,12 @@ export default function ResetPassword() {
         dispatch(resetPassword({password: password1}))
         setPassword1("")
         setPassword2("")
-
     }
    
 
-
+    useEffect(() => {
+        console.log(id, token);
+    }, [0])
    
 
 

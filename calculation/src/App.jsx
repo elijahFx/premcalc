@@ -5,7 +5,7 @@ import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import NotFound from './components/NotFound.jsx'
 import AdminPanel from './components/AdminPanel.jsx'
-import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom"
+import { Routes, BrowserRouter, Route, HashRouter } from "react-router-dom"
 import { useSelector } from 'react-redux'
 import TrashBin from './components/Trashbin/Trashbin.jsx'
 import EmployerPanel from './components/Employer/EmployerPanel.jsx'
@@ -21,8 +21,9 @@ function App() {
 
 
   return (
+    
+    <BrowserRouter>
     <div className="container">
-      <BrowserRouter>
         <Navbar/>
         <div className="pages">
           <Routes>
@@ -33,15 +34,15 @@ function App() {
             <Route path="/employer/:id" element={<Worker />}/>
             <Route path="/trashbin" element={!user ? <Login /> : <TrashBin />}/>
             <Route path="/forgot-password" element={<ForgotPassword /> }/>
-            <Route path="/reset-password" element={<ResetPassword /> }/>
+            <Route path="/reset-password/:id/:token" element={<ResetPassword /> }/>
             <Route path="/suitemaker" element={<SuiteMaker /> }/>
             <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>
           </Routes>
         </div>
-      </BrowserRouter>
       <Footer />
     </div>
+    </BrowserRouter>
   )
 }
 

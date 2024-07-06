@@ -105,7 +105,7 @@ async function forgotPassword(req, res) {
 
     const token = jwt.sign({email: oldUser.email, id: oldUser._id}, secret, {expiresIn: "10m"}) 
     
-    const link = `https://premcalc.onrender.com/users/reset-password/${oldUser._id}/${token}`
+    const link = `https://premcalc.netlify.app/reset-password/${oldUser._id}/${token}`
 
     const isName = oldUser.name ? true : false 
 
@@ -189,11 +189,6 @@ async function resetPassword2(req, res) {
 
   
 }
-
-
-
-
-
 
 
 
