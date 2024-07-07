@@ -158,9 +158,12 @@ async function resetPassword(req, res) {
 
     try {
       const verify = jwt.verify(token, secret)
-      res.send("Verified")
+      res.status(200).json(verify)
+      if(verify) {
+        console.log("verified");
+      }
     } catch (error) {
-      res.send("Not verified")
+      res.status(400).json({err: error.message})
     }
 
   

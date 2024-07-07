@@ -123,6 +123,31 @@ export const signupUser = createAsyncThunk(
   );
 
 
+  export const verifyPassword = createAsyncThunk(
+    "users/verifyPassword",
+    async function (auth, { rejectWithValue, dispatch }) {
+      try {
+        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`);
+
+  
+        if (!response.ok) {
+            const errorMessage = `Server Error: ${response.status} - ${response.statusText}`;
+            throw new Error(errorMessage);
+          }
+  
+        const data = await response.json();
+  
+        console.log(data);
+   
+  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
+
   export const getUsers = createAsyncThunk(
     "users/getUsers",
     async function (user, { rejectWithValue, dispatch }) {
@@ -181,7 +206,7 @@ export const signupUser = createAsyncThunk(
 
 export const usersSlice = createSlice({
     name: "users",
-    initialState: {user: null, status: null, error: null, token: null, listOfUsers: [], role: null},
+    initialState: {user: null, status: null, error: null, token: null, listOfUsers: [], role: null, isVerified: false},
     reducers: {
         signup: (state, action) => {
             state.user = action.payload
@@ -245,6 +270,19 @@ export const usersSlice = createSlice({
     },
     [updateOneUser.fulfilled]: (state, action) => {
       state.status = "resolved"
+    },
+    [verifyPassword.rejected]: (state, action) => {
+      state.status = "rejected"
+      state.error = action.payload
+      state.isVerified = false
+    },
+    [verifyPassword.pending]: (state, action) => {
+      state.status = "pending"
+      state.isVerified = false
+    },
+    [verifyPassword.fulfilled]: (state, action) => {
+      state.status = "resolved"
+      state.isVerified = action.payload
     },
 },
   

@@ -349,6 +349,8 @@ th span {
 .noCases {
 	display: flex;
 	justify-content: center;
+	gap: 40px;
+	flex-direction: column;
 	align-items: center;
 	height: 70vh;
 	background-color: #efefef;

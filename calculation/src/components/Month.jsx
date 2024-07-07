@@ -242,7 +242,6 @@ export default function Month() {
     {cases.length >= 1 && <button className='greenBtn' onClick={() => dispatch(changeDialog("show"))}>Удалить все оплаченные дела</button>}
     {role === "admin" && <Link to="/admin"><button className="adminBtn">Панель администратора</button></Link>}
     <Link to="trashbin"><span className="material-symbols-outlined green-trash-bin">delete</span></Link>
-    <Link to="reset-password/3123/31231"><span className="material-symbols-outlined">delete</span></Link>
     </div>
     
     {status === "loading" && <div className='containder-for-loader'><span className="loader"></span></div>}
