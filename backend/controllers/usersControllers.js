@@ -170,8 +170,7 @@ async function resetPassword(req, res) {
 }
 
 async function resetPassword2(req, res) {
-  const { id, token } = req.params
-  const { password } = req.body
+  const { password, id, token } = req.body
 
   const oldUser = await User.findOne({ _id: id })
 
