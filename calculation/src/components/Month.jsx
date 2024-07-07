@@ -26,7 +26,6 @@ export default function Month() {
     const role = useSelector((state) => state.users.role)
     const userId = useSelector((state) => state.users.user.id)
 
-    console.log(userId);
 
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)

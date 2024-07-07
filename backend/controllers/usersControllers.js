@@ -183,11 +183,12 @@ async function resetPassword2(req, res) {
 
     try {
       const verify = jwt.verify(token, secret)
+      console.log(password);
       const encryptedPassword = await bcrypt.hash(password, 10)
       const updatedUser = await User.updateOne({ _id: id }, { $set: {password: encryptedPassword}})
-      res.send(`Пароль изменен на ${password}`)
+      res.status(200).json({res: `Пароль изменен`})
     } catch (error) {
-      res.send("Что-то пошло не так")
+      res.status(400).json({err: `Пароль не сменился`})
     }
 
   
