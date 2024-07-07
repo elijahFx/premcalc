@@ -92,17 +92,12 @@ export const signupUser = createAsyncThunk(
     }
   );
 
-  export const resetPassword = createAsyncThunk(
-    "users/resetPassword",
+
+  export const verifyPassword = createAsyncThunk(
+    "users/verifyPassword",
     async function (auth, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(auth.password)
-        });
+        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`);
 
   
         if (!response.ok) {
@@ -122,12 +117,17 @@ export const signupUser = createAsyncThunk(
     }
   );
 
-
-  export const verifyPassword = createAsyncThunk(
-    "users/verifyPassword",
+  export const resetPassword = createAsyncThunk(
+    "users/resetPassword",
     async function (auth, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`);
+        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(auth)
+        });
 
   
         if (!response.ok) {

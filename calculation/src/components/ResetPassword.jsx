@@ -10,6 +10,7 @@ export default function ResetPassword() {
 
     const { id, token } = useParams()
     
+    
     const dispatch = useDispatch()
 
     const [isLoading, setIsLoading]= useState(false)
@@ -31,6 +32,7 @@ export default function ResetPassword() {
 
     useEffect(() => {
         dispatch(verifyPassword({id, token}))
+        console.log(id, token);
     }, [0])
    
 
