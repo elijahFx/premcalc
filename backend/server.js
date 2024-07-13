@@ -25,10 +25,12 @@ app.use(express.json())
 const casesRoutes = require("./routes/cases")
 const usersRoutes = require("./routes/users") 
 const suitesRoutes = require("./routes/suites")
+const sessionRoutes = require("./routes/sessions")
 
 app.use("/cases", casesRoutes)
 app.use("/users", usersRoutes)
 app.use("/suites", suitesRoutes)
+app.use("/sessions", sessionRoutes)
 
 
 
