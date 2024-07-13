@@ -13,7 +13,7 @@ const sessionSchema = new Schema({
         required: true
     },
     judge: {
-        type: Boolean,
+        type: String,
     },
     date: {
         type: String,
