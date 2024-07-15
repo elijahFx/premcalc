@@ -26,11 +26,13 @@ const casesRoutes = require("./routes/cases")
 const usersRoutes = require("./routes/users") 
 const suitesRoutes = require("./routes/suites")
 const sessionRoutes = require("./routes/sessions")
+const consumerRoutes = require("./routes/consumers")
 
 app.use("/cases", casesRoutes)
 app.use("/users", usersRoutes)
 app.use("/suites", suitesRoutes)
 app.use("/sessions", sessionRoutes)
+app.use("/consumers", consumerRoutes)
 
 
 
