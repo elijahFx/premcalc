@@ -202,6 +202,8 @@ footer p {
 	display: flex;
 	flex-direction: column;
 	overflow-x: hidden;
+	min-height: fit-content;
+	height: fit-content;
 }
 
 .shadow {
@@ -352,7 +354,8 @@ th span {
 	gap: 40px;
 	flex-direction: column;
 	align-items: center;
-	height: 70vh;
+	min-height: 70vh;
+	height: fit-content;
 	background-color: #efefef;
 	width: 100vw;
 }
@@ -672,24 +675,130 @@ td input[type="text"] {
 }
 
 .sessionContainer {
+	border-top: 1px solid black;
 	display: grid;          
 	grid-template-columns: 1fr 1fr; 
 	width: 100vw;          
-	min-height: 70vh; 
+	height: fit-content;
+	min-height: 70vh;
+	overflow-y: hidden;
 }
+
 
 .box {
 	padding: 10px;
 	width: 100%;
-	height: 100px;
+}
+
+.box label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.box input[type="text"],
+.box select {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
+}
+
+.box input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.box select {
+    background-color: #fff;
+    -webkit-appearance: none;  /* For Safari */
+    -moz-appearance: none;     /* For Firefox */
+    appearance: none;
+}
+
+.box select:focus,
+.box input[type="text"]:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.box option {
+    padding: 10px;
 }
 
 .session {
 	border: 1px solid #037a4f;
 	width: 100%;
-	height: 150px;
+	min-height: 150px;
+	height: fit-content;
 	padding: 5px 10px;
 	margin-bottom: 10px;
+}
+
+.blueText {
+	color: blue;
+	text-decoration: underline;
+}
+
+.box button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.box button:hover {
+    background-color: #0056b3;
+}
+
+.box button:focus {
+    outline: none;
+    background-color: #004494;
+}
+
+.box p.guide {
+	width: 97%;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.box p.guide strong {
+    color: #333;
+}
+
+.box ol {
+    margin-top: 20px;
+    padding: 0 20px;
+    list-style: decimal inside;
+    border-top: 1px solid #e0e0e0;
+}
+
+.box ol li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+    color: #333;
+}
+
+.box ol li:last-child {
+    border-bottom: none;
 }
 
 

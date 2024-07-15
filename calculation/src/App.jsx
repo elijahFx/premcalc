@@ -26,7 +26,6 @@ function App() {
     <BrowserRouter>
     <div className="container">
         <Navbar/>
-        <div className="pages">
           <Routes>
             <Route path="/" element={!user ? <Login /> : <Month />}/>
             <Route path="/signup" element={!user ? <Signup /> : <Month />}/>
@@ -41,7 +40,6 @@ function App() {
             <Route path="/admin" element={user?.role === "admin" ? <AdminPanel /> : <NotFound />}/>
             <Route path="/*" element={<NotFound />}/>
           </Routes>
-        </div>
       <Footer />
     </div>
     </BrowserRouter>

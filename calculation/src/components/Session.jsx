@@ -1,29 +1,92 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SingleSession from './SingleSession'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSessions } from '../features/sessionsSlice'
+import { addConsumer, getConsumers, getSessions } from '../features/sessionsSlice'
+import { formattedDate } from './Month'
+import { Link } from 'react-router-dom'
+import { courtsMap, courtsMapReversed } from '../misc/map'
 
 export default function Session() {
 
     const dispatch = useDispatch()
-    const allTheSessions = useSelector(state => state.session)
+    const allTheSessions = useSelector((state) => state.sessions.courtSessions)
+    const allTheConsumers = useSelector((state) => state.sessions.consumerList)
+    const userId = useSelector((state) => state.users.user.id)
+
+    const [consumerName, setConsumerName] = useState('');
+    const [selectedCourt, setSelectedCourt] = useState('Суд Минского района');
 
 
     useEffect(() => {
         dispatch(getSessions())
+        dispatch(getConsumers())
+    }, [0])
 
-    }, [allTheSessions])
+
+    const handleNameChange = (event) => {
+        setConsumerName(event.target.value);
+    };
+
+    const handleCourtChange = (event) => {
+        setSelectedCourt(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if(!consumerName || !selectedCourt)return
+        dispatch(addConsumer({name: consumerName, courtId: courtsMapReversed[selectedCourt], user_id: userId}))
+        setConsumerName("")
+        setSelectedCourt("Суд Минского района")
+        console.log('Submitted:', { consumerName, selectedCourt });
+    };
 
 
-  return (
-    <div className='sessionContainer'>
-         <div className="box">
-            <SingleSession />
-            <SingleSession />
-         </div>
-         <div className="box">
-
-         </div>
+  return (<>
+    <div className='monthContainer'>
+    <div className='month'><h5>{formattedDate}</h5>
+    <Link to="/"><button>На главную</button></Link></div></div>
+    <div className='noCases'>
+        <div className="sessionContainer">
+            <div className="box">
+                {allTheSessions.map((el) => {
+                    return <SingleSession key={el._id} name={el.name} judge={el.judge} date={el.date} time={el.time} court={el.court} courtRoom={el.courtRoom} liabelee={el.liabelee}/>
+                })}
+            </div>
+            <div className="box">
+                <form className='consumerForm' onSubmit={handleSubmit}>
+                <label htmlFor="name">Введите ФИО вашего потребителя или название организации-ответчика</label>
+                <input type="text" value={consumerName} onChange={handleNameChange} name='court' id='name' placeholder='Глазков Николай Андреевич' />
+                <label htmlFor="court">Выберите суд, который рассматривает данное дело:</label>
+                <select value={selectedCourt} onChange={handleCourtChange} name="court" id='court'>
+                                    <option value="" disabled>Суд Минского района</option>
+                                    <option value="Суд Заводского района г. Минска">Суд Заводского района г. Минска</option>
+                                    <option value="Суд Центрального района г. Минска">Суд Центрального района г. Минска</option>
+                                    <option value="Суд Московского района г. Минска">Суд Московского района г. Минска</option>
+                                    <option value="Суд Октябрьского района г. Минска">Суд Октябрьского района г. Минска</option>
+                                    <option value="Суд Ленинского района г. Минска">Суд Ленинского района г. Минска</option>
+                                    <option value="Суд Партизанского района г. Минска">Суд Партизанского района г. Минска</option>
+                                    <option value="Суд Первомайского района г. Минска">Суд Первомайского района г. Минска</option>
+                                    <option value="Суд Советского района г. Минска">Суд Советского района г. Минска</option>
+                                    <option value="Суд Фрунзенского района г. Минска">Суд Фрунзенского района г. Минска</option>
+                                    <option value="Суд Минского района">Суд Минского района</option>
+                                    <option value="Минский городской суд">Минский городской суд</option>
+                                    <option value="Суд Минской области">Суд Минской области</option>
+                                </select>
+                                <button>Внести потребителя (ответчика) в базу данных</button>
+                                </form>
+                                <p className='guide'>Данная страница работает следующим очень простым образом:
+                                    <strong> 1)</strong> Вы вносите <strong>ФИО потребителя</strong> или <strong>название организации</strong>, за которыми хотите осуществлять контроль, а также <strong>суд, в котором необходимо осуществлять контроль</strong>;
+                                    <strong> 2)</strong> Каждый раз, когда вы будете посещать наш великолепный сайт, <strong>premcalc.by</strong> будет делать запрос на сайт <strong>Верховного Суда Республики Беларусь</strong> и проверять нет ли в ближайший месяц судебных заседаний с участием потребителя или ответчика, которых вы указали.
+                                </p>
+                                <ol>
+                                    {allTheConsumers?.map((el) => {
+                                        return <li>{el.name} ({courtsMap[el.courtId]})</li>
+                                    })}
+                                </ol>
+            </div>
+        </div>
     </div>
+</>
+    
   )
 }
