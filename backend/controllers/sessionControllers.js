@@ -29,8 +29,25 @@ const getSessions = async (req, res) => {
     res.status(200).json(sessions)
 }
 
+const deleteSession = async (req, res) => {
+  const { id } = req.params
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({err: "Нет такого дела"})
+  }
+
+  const session = await Session.findOneAndDelete({ _id: id})
+
+  if(!session ) {
+      return res.status(404).json({err: "Нет такого дела"})
+  }
+
+  res.status(200).json(session)
+}
+
 
 module.exports = {
     addSession,
-    getSessions
+    getSessions,
+    deleteSession
 }

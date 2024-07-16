@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SingleSession from './SingleSession'
 import { useDispatch, useSelector } from 'react-redux'
-import { addConsumer, getConsumers, getSessions } from '../features/sessionsSlice'
+import { addConsumer, deleteConsumer, getConsumers, getSessions } from '../features/sessionsSlice'
 import { formattedDate } from './Month'
 import { Link } from 'react-router-dom'
 import { courtsMap, courtsMapReversed } from '../misc/map'
@@ -21,6 +21,10 @@ export default function Session() {
         dispatch(getSessions())
         dispatch(getConsumers())
     }, [0])
+
+    const handleDelete = (id) => {
+        dispatch(deleteConsumer(id))
+    }
 
 
     const handleNameChange = (event) => {
@@ -80,7 +84,7 @@ export default function Session() {
                                 </p>
                                 <ol>
                                     {allTheConsumers?.map((el) => {
-                                        return <li>{el.name} ({courtsMap[el.courtId]})</li>
+                                        return <li>{el.name} ({courtsMap[el.courtId]}) <span onClick={() => {handleDelete(el._id)}} class="material-symbols-outlined red">close</span></li>
                                     })}
                                 </ol>
             </div>

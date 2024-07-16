@@ -88,8 +88,7 @@ export const getSessions = createAsyncThunk(
   
         const data = await response.json();
   
-        // Assuming the response contains the newly added case
-        dispatch(addTheConsumer(newConsumer));
+       
   
         return data;
       } catch (error) {
@@ -98,13 +97,45 @@ export const getSessions = createAsyncThunk(
     }
   );
 
+  export const deleteConsumer = createAsyncThunk(
+    "cases/deleteConsumer",
+    async function (id, {rejectWithValue, dispatch, getState}) {
+
+        const userToken = getState().users.user.token
+
+        try {
+            const response = await fetch(`${BASIC_URL}consumers/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                }
+            })
+
+            dispatch(removeConsumer(id))
+
+            if(!response.ok) {
+                throw new Error("Нельзя удалить несуществующее дело")
+            }
+    
+            dispatch(removeConsumer({id}))
+            
+        } catch (error) {
+           return rejectWithValue(error.message)
+        }
+    }
+)
+
 
 export const sessionsSlice = createSlice({
     name: "sessions",
     initialState: {courtSessions: [], consumerList: []},
     reducers: { addTheConsumer: (state, action) => {
       state.consumerList.push(action.payload)
-    } }, extraReducers: {
+    },
+    removeConsumer: (state, action) => {
+      state.consumerList.filter(el => el._id !== action.payload.id)
+    }
+   }, extraReducers: {
   [getSessions.pending]: (state) => {
       state.status = "loading"
       state.error = null
@@ -139,8 +170,20 @@ export const sessionsSlice = createSlice({
 [addConsumer.rejected]: (state, action) => {
   state.status = "rejected";
   state.error = action.payload;
+},
+[deleteConsumer.pending]: (state) => {
+  state.status = "loading"
+  state.error = null
+},
+[deleteConsumer.fulfilled]: (state, action) => {
+  state.status = "resolved"
+  state.consumerList = state.consumerList.filter(el => el._id !== action.payload.id);
+},
+[deleteConsumer.rejected]: (state, action) => {
+state.status = "rejected";
+state.error = action.payload;
 }}})
 
-export const { addTheConsumer } = sessionsSlice.actions
+export const { addTheConsumer, removeConsumer } = sessionsSlice.actions
 
 export default sessionsSlice.reducer
