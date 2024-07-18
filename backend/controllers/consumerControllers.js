@@ -5,6 +5,20 @@ const { JSDOM } = require('jsdom');
 const url = 'https://service.court.gov.by/ru/public/schedule/schedule';
 const apiUrl = 'https://premcalc.onrender.com/sessions';
 
+const courtsMap = {
+    93: "Минский городской суд",
+    94: "Суд Ленинского района г. Минска",
+    95: "Суд Фрунзенского района г. Минска",
+    96: "Суд Октябрьского района г. Минска",
+    97: "Суд Центрального района г. Минска",
+    98: "Суд Партизанского района г. Минска",
+    99: "Суд Первомайского района г. Минска",
+    100: "Суд Заводского района г. Минска",
+    101: "Суд Советского района г. Минска",
+    103: "Минский областной суд",
+    115: "Суд Минского района" 
+  };
+
 function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
