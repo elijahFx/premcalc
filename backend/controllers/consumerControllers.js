@@ -2,9 +2,9 @@ const fetch = require('node-fetch');
 const Consumer = require("../models/Consumer")
 const mongoose = require("mongoose")
 const { JSDOM } = require('jsdom');
-const HttpsProxyAgent = require('https-proxy-agent');
+const { HttpsProxyAgent } = require('https-proxy-agent');
 
-const proxyUrl = 'http://178.124.81.210:3128'; // Replace with your proxy URL
+const proxyUrl = 'http://mm-210-81-124-178.mogilev.dynamic.pppoe.byfly.by:3128'; // Replace with your proxy URL
 const agent = new HttpsProxyAgent(proxyUrl);
 
 const url = 'https://service.court.gov.by/ru/public/schedule/schedule';
