@@ -688,6 +688,7 @@ td input[type="text"] {
 .box {
 	padding: 10px;
 	width: 100%;
+	position: relative;
 }
 
 .box label {
@@ -834,24 +835,27 @@ td input[type="text"] {
 .loader2 {
 	width: 28px;
 	aspect-ratio: 1;
-	border-radius: 50%;
-	background: #007BFF;
+	border-radius: 50%; 
+	background: #649e89;
 	transform-origin: top;
 	display: grid;
 	animation: l3-0 1s infinite linear;
+	position: absolute;
+	top: 15%;
+	left: 50%
   }
 .loader2::before,
 .loader2::after {
 	content: "";
 	grid-area: 1/1;
-	background:#037a4f;
+	background:#2c8363;
 	border-radius: 50%;
 	transform-origin: top;
 	animation: inherit;
 	animation-name: l3-1;
   }
 .loader2::after {
-	background: gray;
+	background: #037a4f;
 	--s:180deg;
   }
   @keyframes l3-0 {
