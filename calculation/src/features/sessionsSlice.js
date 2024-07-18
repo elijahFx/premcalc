@@ -111,7 +111,7 @@ export const getSessions = createAsyncThunk(
                 }
             })
 
-            dispatch(removeConsumer(id))
+            
 
             if(!response.ok) {
                 throw new Error("Нельзя удалить несуществующее дело")
@@ -125,16 +125,47 @@ export const getSessions = createAsyncThunk(
     }
 )
 
+export const deleteSession = createAsyncThunk(
+  "cases/deleteSession",
+  async function (id, {rejectWithValue, dispatch, getState}) {
+
+      const userToken = getState().users.user.token
+
+      try {
+          const response = await fetch(`${BASIC_URL}sessions/${id}`, {
+              method: "DELETE",
+              headers: {
+                  "Authorization": `Bearer ${userToken}`
+              }
+          })
+
+          
+
+          if(!response.ok) {
+              throw new Error("Нельзя удалить несуществующее дело")
+          }
+  
+          dispatch(removeSession(id))
+          
+      } catch (error) {
+         return rejectWithValue(error.message)
+      }
+  }
+)
+
 
 export const sessionsSlice = createSlice({
     name: "sessions",
     initialState: {courtSessions: [], consumerList: []},
     reducers: { addTheConsumer: (state, action) => {
-      state.consumerList.push(action.payload)
+      state.consumerList.push(action?.meta?.arg)
     },
     removeConsumer: (state, action) => {
-      state.consumerList.filter(el => el._id !== action.payload.id)
-    }
+      state.consumerList.filter(el => el._id !== action?.meta?.arg)
+    },
+    removeSession: (state, action) => {
+      state.courtSessions.filter(el => el._id !== action?.meta?.arg)
+    },
    }, extraReducers: {
   [getSessions.pending]: (state) => {
       state.status = "loading"
@@ -165,7 +196,7 @@ export const sessionsSlice = createSlice({
 },
 [addConsumer.fulfilled]: (state, action) => {
     state.status = "resolved"
-    state.consumerList.push(action.payload)
+    state.consumerList.push(action?.meta?.arg)
 },
 [addConsumer.rejected]: (state, action) => {
   state.status = "rejected";
@@ -177,13 +208,26 @@ export const sessionsSlice = createSlice({
 },
 [deleteConsumer.fulfilled]: (state, action) => {
   state.status = "resolved"
-  state.consumerList = state.consumerList.filter(el => el._id !== action.payload.id);
+  state.consumerList = state.consumerList.filter(el => el._id !== action?.meta?.arg);
 },
 [deleteConsumer.rejected]: (state, action) => {
 state.status = "rejected";
 state.error = action.payload;
-}}})
+},
+[deleteSession.pending]: (state) => {
+  state.status = "loading"
+  state.error = null
+},
+[deleteSession.fulfilled]: (state, action) => {
+  state.status = "resolved"
+  state.courtSessions = state.courtSessions.filter(el => el._id !== action?.meta?.arg);
+},
+[deleteSession.rejected]: (state, action) => {
+state.status = "rejected";
+state.error = action.payload;
+}
+}})
 
-export const { addTheConsumer, removeConsumer } = sessionsSlice.actions
+export const { addTheConsumer, removeConsumer, removeSession } = sessionsSlice.actions
 
 export default sessionsSlice.reducer

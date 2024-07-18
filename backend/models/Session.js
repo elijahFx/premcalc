@@ -32,6 +32,9 @@ const sessionSchema = new Schema({
     court: {
         type: String,
         required: true
+    },
+    user_id: {
+        type: String
     }
 }, {timestamps: true})
 

@@ -15,7 +15,7 @@ app.use(function(req, res, next) {
  });
 
 const corsOptions = {
-    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173", "http://127.0.0.1:5173/", "http://localhost:5173", "http://localhost:5173/forgot-password"]  // frontend URI (ReactJS)
+    origin: ["https://premcalc.netlify.app", "http://127.0.0.1:5173", "http://127.0.0.1:5173/", "http://localhost:5173", "http://localhost:5173/forgot-password", "http://localhost:5173/sessions", "https://premcalc.netlify.app/sessions", "https://premcalc.netlify.app/forgot-password"]  // frontend URI (ReactJS)
 }
 
 app.use(cors(corsOptions))

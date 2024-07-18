@@ -737,6 +737,7 @@ td input[type="text"] {
 	height: fit-content;
 	padding: 5px 10px;
 	margin-bottom: 10px;
+	position: relative;
 }
 
 .blueText {
@@ -802,6 +803,32 @@ td input[type="text"] {
 
 .box ol li:last-child {
     border-bottom: none;
+}
+
+.session .material-symbols-outlined {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
+	gap: 10px
+}
+
+.box .grayBtn, .box .grayBtn:hover, .box .grayBtn:focus {
+	background-color: rgba(128, 128, 128, 0.479);
+	user-select: none;
+	cursor: auto;
+}
+
+.box .grayBtn span {
+	user-select: none;
+	cursor: auto;
 }
 
 

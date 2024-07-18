@@ -5,12 +5,22 @@ import { addConsumer, deleteConsumer, getConsumers, getSessions } from '../featu
 import { formattedDate } from './Month'
 import { Link } from 'react-router-dom'
 import { courtsMap, courtsMapReversed } from '../misc/map'
+import { Tooltip } from 'react-tooltip'
+
+function parseDateTime (dateStr, timeStr) {
+    const [day, month, year] = dateStr.split('.').map(Number);
+    const [hours, minutes] = timeStr.split('.').map(Number);
+    return new Date(year, month - 1, day, hours, minutes);
+}
 
 export default function Session() {
 
     const dispatch = useDispatch()
     const allTheSessions = useSelector((state) => state.sessions.courtSessions)
     const allTheConsumers = useSelector((state) => state.sessions.consumerList)
+    const { error, status } = useSelector((state) => state.sessions)
+
+
     const userId = useSelector((state) => state.users.user.id)
 
     const [consumerName, setConsumerName] = useState('');
@@ -19,8 +29,9 @@ export default function Session() {
 
     useEffect(() => {
         dispatch(getSessions())
-        dispatch(getConsumers())
-    }, [0])
+        dispatch(getConsumers()) 
+        console.log(error, status);  
+    }, [dispatch])
 
     const handleDelete = (id) => {
         dispatch(deleteConsumer(id))
@@ -44,6 +55,18 @@ export default function Session() {
         console.log('Submitted:', { consumerName, selectedCourt });
     };
 
+    const sortedSessions = [...allTheSessions].sort((a, b) => {
+        const dateA = parseDateTime(a.date, a.time);
+        const dateB = parseDateTime(b.date, b.time);
+        return dateA - dateB;
+    });
+
+    const sortedConsumers = [...allTheConsumers].sort((a, b) => {
+        a.courtId - b.courtId
+    })
+
+    
+
 
   return (<>
     <div className='monthContainer'>
@@ -52,8 +75,8 @@ export default function Session() {
     <div className='noCases'>
         <div className="sessionContainer">
             <div className="box">
-                {allTheSessions.map((el) => {
-                    return <SingleSession key={el._id} name={el.name} judge={el.judge} date={el.date} time={el.time} court={el.court} courtRoom={el.courtRoom} liabelee={el.liabelee}/>
+                {sortedSessions.map((el) => {
+                    return <SingleSession id={el._id} key={el._id} name={el.name} judge={el.judge} date={el.date} time={el.time} court={el.court} courtRoom={el.courtRoom} liabelee={el.liabelee}/>
                 })}
             </div>
             <div className="box">
@@ -76,15 +99,22 @@ export default function Session() {
                                     <option value="Минский городской суд">Минский городской суд</option>
                                     <option value="Суд Минской области">Суд Минской области</option>
                                 </select>
-                                <button>Внести потребителя (ответчика) в базу данных</button>
+                                <div className="flex-row">
+                                    <button>Внести потребителя (ответчика) в базу данных</button>
+                                    <button type="button" className={status === "resolved" ? "recycle" : "grayBtn"}><span className="material-symbols-outlined">update</span></button>
+                                    <Tooltip anchorSelect=".recycle" place="bottom">
+                                        Обновление информации по судебным заседаниям
+                                    </Tooltip>
+                                </div>
                                 </form>
                                 <p className='guide'>Данная страница работает следующим очень простым образом:
                                     <strong> 1)</strong> Вы вносите <strong>ФИО потребителя</strong> или <strong>название организации</strong>, за которыми хотите осуществлять контроль, а также <strong>суд, в котором необходимо осуществлять контроль</strong>;
-                                    <strong> 2)</strong> Каждый раз, когда вы будете посещать наш великолепный сайт, <strong>premcalc.by</strong> будет делать запрос на сайт <strong>Верховного Суда Республики Беларусь</strong> и проверять нет ли в ближайший месяц судебных заседаний с участием потребителя или ответчика, которых вы указали.
+                                    <strong> 2)</strong> Каждый раз, когда вы будете посещать наш великолепный сайт, <strong>premcalc.by</strong> будет делать запрос на сайт <strong>Верховного Суда Республики Беларусь</strong> и проверять нет ли в ближайший месяц судебных заседаний с участием потребителя или ответчика, которых вы указали;
+                                    <strong> 3)</strong> Вы также можете нажать на <strong>кнопку обновления</strong> для того, чтобы <strong>premcalc.by</strong> сделал запрос на сайт <strong>Верховного Суда Республики Беларусь</strong> по нажатию вами клавишы.
                                 </p>
                                 <ol>
-                                    {allTheConsumers?.map((el) => {
-                                        return <li>{el.name} ({courtsMap[el.courtId]}) <span onClick={() => {handleDelete(el._id)}} class="material-symbols-outlined red">close</span></li>
+                                    {sortedConsumers?.map((el) => {if(!el)return
+    return <li key={el._id}>{el.name} ({courtsMap[el.courtId]}) <span onClick={() => {handleDelete(el._id)}} className="material-symbols-outlined red">close</span></li>
                                     })}
                                 </ol>
             </div>
