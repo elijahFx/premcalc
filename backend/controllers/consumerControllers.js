@@ -1,6 +1,7 @@
 const Consumer = require("../models/Consumer")
 const mongoose = require("mongoose")
 const { JSDOM } = require('jsdom');
+const fetch = require('node-fetch');
 
 const url = 'https://service.court.gov.by/ru/public/schedule/schedule';
 const apiUrl = 'https://premcalc.onrender.com/sessions';

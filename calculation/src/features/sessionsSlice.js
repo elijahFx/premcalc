@@ -153,10 +153,37 @@ export const deleteSession = createAsyncThunk(
   }
 )
 
+export const checkCourtSessionsForConsumers = createAsyncThunk(
+  "sessions/checkCourtSessionsForConsumers",
+  async function (id, {rejectWithValue, getState}) {
+
+      const userToken = getState().users.user.token
+
+      try {
+          const response = await fetch(`${BASIC_URL}consumers/${id}`, {
+              headers: {
+                  "Authorization": `Bearer ${userToken}`
+              }
+          }
+          )
+
+          if(!response.ok) {
+              throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
+          }
+  
+          const data = await response.json()
+          return data
+          
+      } catch (error) {
+          return rejectWithValue(error.message)
+      }
+  }
+);
+
 
 export const sessionsSlice = createSlice({
     name: "sessions",
-    initialState: {courtSessions: [], consumerList: []},
+    initialState: {courtSessions: [], consumerList: [], sessionStaus: null},
     reducers: { addTheConsumer: (state, action) => {
       state.consumerList.push(action?.meta?.arg)
     },
@@ -225,6 +252,17 @@ state.error = action.payload;
 [deleteSession.rejected]: (state, action) => {
 state.status = "rejected";
 state.error = action.payload;
+},
+[checkCourtSessionsForConsumers.pending]: (state) => {
+  state.sessionStatus = "loading"
+  state.error = null
+},
+[checkCourtSessionsForConsumers.fulfilled]: (state, action) => {
+  state.sessionStatus = "resolved"
+},
+[checkCourtSessionsForConsumers.rejected]: (state, action) => {
+  state.sessionStatus = "rejected";
+  state.error = action.payload;
 }
 }})
 

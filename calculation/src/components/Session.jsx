@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SingleSession from './SingleSession'
 import { useDispatch, useSelector } from 'react-redux'
-import { addConsumer, deleteConsumer, getConsumers, getSessions } from '../features/sessionsSlice'
+import { addConsumer, checkCourtSessionsForConsumers, deleteConsumer, getConsumers, getSessions } from '../features/sessionsSlice'
 import { formattedDate } from './Month'
 import { Link } from 'react-router-dom'
 import { courtsMap, courtsMapReversed } from '../misc/map'
@@ -18,7 +18,7 @@ export default function Session() {
     const dispatch = useDispatch()
     const allTheSessions = useSelector((state) => state.sessions.courtSessions)
     const allTheConsumers = useSelector((state) => state.sessions.consumerList)
-    const { error, status } = useSelector((state) => state.sessions)
+    const { error, status, sessionStatus } = useSelector((state) => state.sessions)
 
 
     const userId = useSelector((state) => state.users.user.id)
@@ -54,6 +54,10 @@ export default function Session() {
         setSelectedCourt("Суд Минского района")
         console.log('Submitted:', { consumerName, selectedCourt });
     };
+    
+    const handleCheckCourtSessionForConsumers = () => {
+        dispatch(checkCourtSessionsForConsumers(userId))
+    }
 
     const sortedSessions = [...allTheSessions].sort((a, b) => {
         const dateA = parseDateTime(a.date, a.time);
@@ -62,8 +66,9 @@ export default function Session() {
     });
 
     const sortedConsumers = [...allTheConsumers].sort((a, b) => {
-        a.courtId - b.courtId
+       return Number(a.courtId) - Number(b.courtId)
     })
+
 
     
 
@@ -74,11 +79,25 @@ export default function Session() {
     <Link to="/"><button>На главную</button></Link></div></div>
     <div className='noCases'>
         <div className="sessionContainer">
-            <div className="box">
-                {sortedSessions.map((el) => {
-                    return <SingleSession id={el._id} key={el._id} name={el.name} judge={el.judge} date={el.date} time={el.time} court={el.court} courtRoom={el.courtRoom} liabelee={el.liabelee}/>
-                })}
-            </div>
+        <div className="box">
+    {sessionStatus === "loading" ? (
+        <div className="loader2"></div>
+    ) : (
+        sortedSessions.map((el) => (
+            <SingleSession
+                id={el._id}
+                key={el._id}
+                name={el.name}
+                judge={el.judge}
+                date={el.date}
+                time={el.time}
+                court={el.court}
+                courtRoom={el.courtRoom}
+                liabelee={el.liabelee}
+            />
+        ))
+    )}
+</div>
             <div className="box">
                 <form className='consumerForm' onSubmit={handleSubmit}>
                 <label htmlFor="name">Введите ФИО вашего потребителя или название организации-ответчика</label>
@@ -97,11 +116,11 @@ export default function Session() {
                                     <option value="Суд Фрунзенского района г. Минска">Суд Фрунзенского района г. Минска</option>
                                     <option value="Суд Минского района">Суд Минского района</option>
                                     <option value="Минский городской суд">Минский городской суд</option>
-                                    <option value="Суд Минской области">Суд Минской области</option>
+                                    <option value="Минский областной суд">Минский областной суд</option>
                                 </select>
                                 <div className="flex-row">
                                     <button>Внести потребителя (ответчика) в базу данных</button>
-                                    <button type="button" className={status === "resolved" ? "recycle" : "grayBtn"}><span className="material-symbols-outlined">update</span></button>
+                                    <button type="button" onClick={handleCheckCourtSessionForConsumers} className={status === "resolved" ? "recycle" : "grayBtn"}><span className="material-symbols-outlined">update</span></button>
                                     <Tooltip anchorSelect=".recycle" place="bottom">
                                         Обновление информации по судебным заседаниям
                                     </Tooltip>
