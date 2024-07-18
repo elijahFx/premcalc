@@ -63,6 +63,7 @@ function formatDate(date) {
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: new URLSearchParams(data).toString(),
+      timeout: 450000,
       agent
     };
   
