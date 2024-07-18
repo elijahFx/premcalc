@@ -120,7 +120,7 @@ export default function Session() {
                                 </select>
                                 <div className="flex-row">
                                     <button>Внести потребителя (ответчика) в базу данных</button>
-                                    <button type="button" onClick={handleCheckCourtSessionForConsumers} className={status === "resolved" ? "recycle" : "grayBtn"}><span className="material-symbols-outlined">update</span></button>
+                                    <button type="button" onClick={handleCheckCourtSessionForConsumers} className={status === "resolved" || sessionStatus !== "loading" ? "recycle" : "grayBtn"}><span className="material-symbols-outlined">update</span></button>
                                     <Tooltip anchorSelect=".recycle" place="bottom">
                                         Обновление информации по судебным заседаниям
                                     </Tooltip>

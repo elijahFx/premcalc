@@ -153,6 +153,8 @@ const checkCourtSessionsForConsumers = async (req, res) => {
         courtId: consumer.courtId
       }));
 
+      console.log(potrebosses);
+
 
       const allCases = [];
 
