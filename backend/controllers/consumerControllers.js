@@ -58,7 +58,8 @@ function formatDate(date) {
         'Origin': 'https://service.court.gov.by',
         'X-Requested-With': 'XMLHttpRequest'
       },
-      body: new URLSearchParams(data).toString()
+      body: new URLSearchParams(data).toString(),
+      timeout: 150000
     };
   
     try {
