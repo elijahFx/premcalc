@@ -818,7 +818,7 @@ td input[type="text"] {
 	flex-wrap: nowrap;
 	justify-content: space-around;
 	align-items: center;
-	gap: 10px
+	gap: 10px;
 }
 
 .box .grayBtn, .box .grayBtn:hover, .box .grayBtn:focus {
@@ -844,6 +844,14 @@ td input[type="text"] {
 	top: 15%;
 	left: 50%
   }
+
+.flex-row p {
+	position: absolute;
+	top: 20%;
+	left: 30%;
+	text-align: center;
+}
+
 .loader2::before,
 .loader2::after {
 	content: "";
@@ -858,6 +866,9 @@ td input[type="text"] {
 	background: #037a4f;
 	--s:180deg;
   }
+
+
+
   @keyframes l3-0 {
 	0%,20% {transform: rotate(0)}
 	100%   {transform: rotate(360deg)}

@@ -259,6 +259,7 @@ state.error = action.payload;
 },
 [checkCourtSessionsForConsumers.fulfilled]: (state, action) => {
   state.sessionStatus = "resolved"
+  state.courtSessions = action?.meta?.arg
 },
 [checkCourtSessionsForConsumers.rejected]: (state, action) => {
   state.sessionStatus = "rejected";

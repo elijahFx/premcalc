@@ -25,6 +25,7 @@ export default function Session() {
 
     const [consumerName, setConsumerName] = useState('');
     const [selectedCourt, setSelectedCourt] = useState('Суд Минского района');
+    const [timeLeft, setTimeLeft] = useState(7.5 * 60)
 
 
     useEffect(() => {
@@ -32,6 +33,22 @@ export default function Session() {
         dispatch(getConsumers()) 
         console.log(error, status);  
     }, [dispatch])
+
+    useEffect(() => {
+        if (sessionStatus === 'loading') {
+            const timer = setInterval(() => {
+                setTimeLeft((prevTime) => {
+                    if (prevTime <= 1) {
+                        clearInterval(timer);
+                        return 0;
+                    }
+                    return prevTime - 1;
+                });
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }
+    }, [sessionStatus]);
 
     const handleDelete = (id) => {
         dispatch(deleteConsumer(id))
@@ -57,6 +74,7 @@ export default function Session() {
     
     const handleCheckCourtSessionForConsumers = () => {
         dispatch(checkCourtSessionsForConsumers(userId))
+
     }
 
     const sortedSessions = [...allTheSessions].sort((a, b) => {
@@ -81,7 +99,11 @@ export default function Session() {
         <div className="sessionContainer">
         <div className="box">
     {sessionStatus === "loading" ? (
-        <div className="loader2"></div>
+        <div className="flex-row">
+            <p>Ожидаем ответа от сервера: {timeLeft} секунд осталось</p>
+            <div className="loader2"></div>
+            
+                </div>
     ) : (
         sortedSessions.map((el) => (
             <SingleSession
@@ -132,8 +154,8 @@ export default function Session() {
                                     <strong> 3)</strong> Вы также можете нажать на <strong>кнопку обновления</strong> для того, чтобы <strong>premcalc.by</strong> сделал запрос на сайт <strong>Верховного Суда Республики Беларусь</strong> по нажатию вами клавишы.
                                 </p>
                                 <ol>
-                                    {sortedConsumers?.map((el) => {if(!el)return
-    return <li key={el._id}>{el.name} ({courtsMap[el.courtId]}) <span onClick={() => {handleDelete(el._id)}} className="material-symbols-outlined red">close</span></li>
+                                    {sortedConsumers?.map((el, index) => {if(!el)return
+    return <li key={el._id}>{index + 1}) {el.name} ({courtsMap[el.courtId]}) <span onClick={() => {handleDelete(el._id)}} className="material-symbols-outlined red">close</span></li>
                                     })}
                                 </ol>
             </div>
