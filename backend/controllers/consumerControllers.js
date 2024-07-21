@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const { JSDOM } = require('jsdom');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 
-const proxyUrl = 'https://93.85.103.195:8080'; // Replace with your proxy URL
+const proxyUrl = 'https://93.170.236.13:8081'; // Replace with your proxy URL
 const agent = new HttpsProxyAgent(proxyUrl);
 
 const url = 'https://service.court.gov.by/ru/public/schedule/schedule';
