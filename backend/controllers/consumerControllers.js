@@ -51,6 +51,8 @@ function formatDate(date) {
       EndDate: getDatePlus30Days(),
       Name: name
     };
+
+    console.log(data);
   
     const options = {
       method: 'POST',
@@ -71,6 +73,7 @@ function formatDate(date) {
       const response = await fetch(url, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
+        console.log(`${response.status}`);
       }
       const html = await response.text();
       const dom = new JSDOM(html);
