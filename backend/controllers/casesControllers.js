@@ -115,8 +115,6 @@ const deleteAllPaidCases = async (req, res) => {
     }
 }
 
-
-
 module.exports = {
     createCase,
     deleteCase,
