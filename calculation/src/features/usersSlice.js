@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
-const BASIC_URL = URLS[1]
+const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/", "https://premiumcalculator.site/"]
+const BASIC_URL = URLS[2]
 
 export const signupUser = createAsyncThunk(
     "users/signupUser",
@@ -42,6 +42,7 @@ export const signupUser = createAsyncThunk(
             "Content-Type": "application/json",
           },
           body: JSON.stringify(user),
+          credentials: "include"
         });
 
   
@@ -57,7 +58,7 @@ export const signupUser = createAsyncThunk(
   
         return data;
       } catch (error) {
-        return rejectWithValue(error.message);
+        return rejectWithValue(error);
       }
     }
   );
@@ -97,7 +98,8 @@ export const signupUser = createAsyncThunk(
     "users/verifyPassword",
     async function (auth, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`);
+        const response = await fetch(`${BASIC_URL}users/reset-password/${auth.id}/${auth.token}`, {
+        });
 
   
         if (!response.ok) {
@@ -126,7 +128,7 @@ export const signupUser = createAsyncThunk(
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(auth)
+          body: JSON.stringify(auth),
         });
 
   
@@ -152,7 +154,8 @@ export const signupUser = createAsyncThunk(
     "users/getUsers",
     async function (user, { rejectWithValue, dispatch }) {
       try {
-        const response = await fetch(`${BASIC_URL}users`);
+        const response = await fetch(`${BASIC_URL}users`, {
+        });
 
   
         if (!response.ok) {
@@ -247,7 +250,7 @@ export const usersSlice = createSlice({
     },
     [loginUser.rejected]: (state, action) => {
       state.status = "rejected"
-      state.error = `Введен неправильный email или пароль`
+      state.error = `${action.payload}`
     },
     [getUsers.pending]: (state) => {
     state.status = "loading"

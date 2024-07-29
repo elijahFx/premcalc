@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
-const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/"]
-const BASIC_URL = URLS[1]
+const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/", "https://premiumcalculator.site/"]
+const BASIC_URL = URLS[2]
 
 
 export const fetchCases = createAsyncThunk(
@@ -14,7 +13,7 @@ export const fetchCases = createAsyncThunk(
             const response = await fetch(`${BASIC_URL}cases`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
-                }
+                },
             }
             )
 
@@ -43,7 +42,7 @@ export const fetchAllCases = createAsyncThunk(
             const response = await fetch(`${BASIC_URL}cases/all`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
-                }
+                },
             }
             )
 
@@ -73,7 +72,7 @@ export const deleteCase = createAsyncThunk(
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${userToken}`
-                }
+                },
             })
 
             if(!response.ok) {
@@ -99,7 +98,7 @@ export const trashBinCase = createAsyncThunk(
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${userToken}`
-                }
+                },
             })
 
             if(!response.ok) {
@@ -127,7 +126,7 @@ export const deleteAllTheCases = createAsyncThunk(
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${userToken}`
-                }
+                },
             })
 
             if(!response.ok) {
@@ -158,7 +157,7 @@ export const toggleStatus = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     isPaid: !CASE.isPaid
-                })
+                }),
             })
 
             const data = await response.json()
@@ -192,7 +191,7 @@ export const alterTakes = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     takes: newTake.takes
-                })
+                }),
             })
 
             const data = await response.json()
@@ -225,7 +224,7 @@ export const alterMyTakes = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     myTakes: newTake.myTakes
-                })
+                }),
             })
 
             const data = await response.json()
@@ -296,7 +295,7 @@ export const addNewCase = createAsyncThunk(
                 body: JSON.stringify({
                     expenses: edit.expenses,
                     name: edit.name
-                })
+                }),
             })
 
             const data = await response.json()
@@ -329,7 +328,7 @@ export const returnCase = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     isDeleted: false
-                })
+                }),
             })
 
             const data = await response.json()

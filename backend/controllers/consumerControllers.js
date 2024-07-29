@@ -2,13 +2,10 @@ const fetch = require('node-fetch');
 const Consumer = require("../models/Consumer")
 const mongoose = require("mongoose")
 const { JSDOM } = require('jsdom');
-const { HttpsProxyAgent } = require('https-proxy-agent');
 
-const proxyUrl = 'https://93.170.236.13:8081'; // Replace with your proxy URL
-const agent = new HttpsProxyAgent(proxyUrl);
 
 const url = 'https://service.court.gov.by/ru/public/schedule/schedule';
-const apiUrl = 'https://premcalc.onrender.com/sessions';
+const apiUrl = 'https://premiumcalculator.site/sessions';
 
 const courtsMap = {
     93: "Минский городской суд",
@@ -65,8 +62,6 @@ function formatDate(date) {
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: new URLSearchParams(data).toString(),
-      timeout: 450000,
-      agent
     };
   
     try {
