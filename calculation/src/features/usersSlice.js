@@ -186,7 +186,7 @@ export const signupUser = createAsyncThunk(
             "Content-Type": "application/json",
             "Authorization": `Bearer ${userToken}`
           },
-          body: JSON.stringify({name: userInfo.name, image: userInfo.image}),
+          body: JSON.stringify(userInfo),
         });
 
   

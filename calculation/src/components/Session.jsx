@@ -8,9 +8,12 @@ import { courtsMap, courtsMapReversed } from '../misc/map'
 import { Tooltip } from 'react-tooltip'
 
 function parseDateTime (dateStr, timeStr) {
+    if(dateStr && timeStr) {
+    console.log(dateStr, timeStr);
     const [day, month, year] = dateStr.split('.').map(Number);
     const [hours, minutes] = timeStr.split('.').map(Number);
     return new Date(year, month - 1, day, hours, minutes);
+}
 }
 
 export default function Session() {
@@ -35,6 +38,7 @@ export default function Session() {
     }, [dispatch])
 
     useEffect(() => {
+        console.log(sessionStatus);
         if (sessionStatus === 'loading') {
             const timer = setInterval(() => {
                 setTimeLeft((prevTime) => {
@@ -47,6 +51,8 @@ export default function Session() {
             }, 1000);
 
             return () => clearInterval(timer);
+        } else if(sessionStatus === "rejected") {
+            dispatch(getSessions())
         }
     }, [sessionStatus]);
 

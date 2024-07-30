@@ -158,23 +158,29 @@ export const checkCourtSessionsForConsumers = createAsyncThunk(
   async function (id, {rejectWithValue, getState}) {
 
       const userToken = getState().users.user.token
-
+      const check = `${BASIC_URL}consumers/${id}`
       try {
           const response = await fetch(`${BASIC_URL}consumers/${id}`, {
+              method: "GET",
               headers: {
-                  "Authorization": `Bearer ${userToken}`
-              }
+                  "Authorization": `Bearer ${userToken}`,
+                  "Content-Type": "application/json"
+              },
+              credentials: "include",
+
+
           }
           )
 
           if(!response.ok) {
               throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
           }
-  
+          console.log(`${BASIC_URL}consumers/${id}`);
           const data = await response.json()
           return data
           
       } catch (error) {
+        console.log(`${BASIC_URL}consumers/${id}`);
           return rejectWithValue(error.message)
       }
   }

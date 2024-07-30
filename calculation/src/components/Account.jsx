@@ -8,6 +8,7 @@ export default function Account() {
     
   const [userName, setUserName] = useState("")  
   const [productImg, setProductImg] = useState("")
+  const [userOklad, setUserOklad] = useState()
 
   const user = useSelector(state => state.users.user)
 
@@ -46,6 +47,13 @@ export default function Account() {
     }
   }
 
+  function controlOklad(e) {
+    const value = (e.target.value).toString()
+    if(value.toString().length >= 5)return
+    setUserOklad(e.target.value)
+    
+  }
+
   return (
     <div className='accountPnl'>
         <div className="account">
@@ -60,12 +68,17 @@ export default function Account() {
               accept="image/*"
               onChange={handleAvatarUpload}
               />
-              {productImg || userName ? <button onClick={handleSubmitUserEdit} className='avatarBtn'>Обновить профиль</button> : <></>}
+              {productImg || userName || userOklad ? <button onClick={handleSubmitUserEdit} className='avatarBtn'>Обновить профиль</button> : <></>}
                 </div>
                 
             <div className="name">
                 <h4>Ваше настоящее Имя: {user?.name ? user?.name : "---"}</h4>
                 <input type="text" onChange={(e) => setUserName(e.target.value)} placeholder='Ваше имя' value={userName} />
+            </div>
+
+            <div className="name">
+                <h4>Ваш Оклад (до вычета налогов): {user?.oklad ? user?.oklad : `${userOklad ? userOklad : 626} бел. руб.`}</h4>
+                <input type="number" onChange={(e) => controlOklad(e)} placeholder='Ваш оклад' value={userOklad} />
             </div>
         </div>
       

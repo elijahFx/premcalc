@@ -12,7 +12,7 @@ function createToken(_id) {
 
 async function editUser(req, res) {
   const { id } = req.params
-  const { image, name } = req.body
+  const { image, name, userOklad } = req.body
 
   if(!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({err: "Нет такого пользователя"})
@@ -20,6 +20,16 @@ async function editUser(req, res) {
 
 
   try {
+
+    if(!image && !name && userOklad) {
+      const USER = await User.findOneAndUpdate({_id: id}, {
+        oklad: userOklad
+    })
+  
+    res.status(200).json(USER)
+  
+  }
+
     if(image || name) {
       const uploadResponse = await cloudinary.uploader.upload(image, {
         upload_preset: "avatars"
@@ -29,6 +39,7 @@ async function editUser(req, res) {
         const USER = await User.findOneAndUpdate({_id: id}, {
           ...req.body
       })
+      
 
       if(!USER) {
         return res.status(404).json({err: "Нет такого пользователя"})

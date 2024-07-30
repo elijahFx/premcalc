@@ -100,12 +100,12 @@ function formatDate(date) {
   }
   
   function parseDateAndTime(dateStr, timeStr) {
-    const [day, month, year] = dateStr.split('.').map(Number);
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return new Date(year, month - 1, day, hours, minutes);
+    if(dateStr && timeStr) {
+      const [day, month, year] = dateStr.split('.').map(Number);
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    }
   }
-  
-
 
 const addConsumer = async (req, res) => {
     const newConsumer = req.body
