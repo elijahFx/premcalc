@@ -67,7 +67,7 @@ const [isPaid, setIsPaid] = useState(true)
       </td>
 			<td>{id}</td>
             <td>{sortUsersMoney().toFixed(2)} бел. руб.</td>
-            <td><span class="material-symbols-outlined" onClick={handleBanUser}>cancel</span></td>
+            <td><span className="material-symbols-outlined" onClick={handleBanUser}>cancel</span></td>
 	</tr>
   )
 }

@@ -8,7 +8,7 @@ export default function Account() {
     
   const [userName, setUserName] = useState("")  
   const [productImg, setProductImg] = useState("")
-  const [userOklad, setUserOklad] = useState()
+  const [userOklad, setUserOklad] = useState("")
 
   const user = useSelector(state => state.users.user)
 
@@ -16,12 +16,16 @@ export default function Account() {
     if (!userName && !productImg) return;
 
     const payload = { id: user.id };
+
+    if(!userName && !productImg && userOklad) {
+      payload.oklad = userOklad
+    }
   
-    if (userName) {
+    if (userName && !productImg) {
       payload.name = userName;
     }
   
-    if (productImg) {
+    if (productImg && !userName) {
       payload.image = productImg;
     }
   
@@ -51,7 +55,6 @@ export default function Account() {
     const value = (e.target.value).toString()
     if(value.toString().length >= 5)return
     setUserOklad(e.target.value)
-    
   }
 
   return (
@@ -77,7 +80,7 @@ export default function Account() {
             </div>
 
             <div className="name">
-                <h4>Ваш Оклад (до вычета налогов): {user?.oklad ? user?.oklad : `${userOklad ? userOklad : 626} бел. руб.`}</h4>
+                <h4>Ваш Оклад (до вычета налогов): {user?.oklad ? user.oklad : `${userOklad ? userOklad : 626} бел. руб.`}</h4>
                 <input type="number" onChange={(e) => controlOklad(e)} placeholder='Ваш оклад' value={userOklad} />
             </div>
         </div>

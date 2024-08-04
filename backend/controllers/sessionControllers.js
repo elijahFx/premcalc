@@ -4,24 +4,29 @@ const mongoose = require("mongoose")
 
 
 const addSession = async (req, res) => {
-    const newSessions = req.body
-    const addedSessions = []
+  try {
+    const newSessions = req.body;
+    const addedSessions = [];
 
     for (const newSession of newSessions) {
-        const exists = await Session.findOne({
-          name: newSession.name,
-          date: newSession.date,
-          time: newSession.time,
-        });
-    
-        if (!exists) {
-          const sessionToAdd = new Session(newSession);
-          await sessionToAdd.save();
-          addedSessions.push(newSession);
-        }
+      const exists = await Session.findOne({
+        name: newSession.name,
+        date: newSession.date,
+        time: newSession.time,
+      });
+
+      if (!exists) {
+        const sessionToAdd = new Session(newSession);
+        await sessionToAdd.save();
+        addedSessions.push(sessionToAdd);  // Push the saved session
       }
-    
-      res.status(200).json({ added: addedSessions });
+    }
+
+    res.status(200).json({ added: addedSessions });
+  } catch (error) {
+    console.error('Error adding sessions:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 const getSessions = async (req, res) => {

@@ -141,6 +141,15 @@ const deleteConsumer = async (req, res) => {
 
 const checkCourtSessionsForConsumers = async (req, res) => {
     const { id } = req.params
+
+    const authHeader = req.headers.authorization;
+    let token;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
+    } else {
+        return res.status(401).json({ err: 'Unauthorized' });
+    }
     
     if(!mongoose.Types.ObjectId.isValid(id)) {
         res.status(404).json({err: "Нет такого потребителя"})
@@ -177,9 +186,10 @@ const checkCourtSessionsForConsumers = async (req, res) => {
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(allCases)
+          body: JSON.stringify(allCases),
         });
     
         if (!response.ok) {
@@ -191,7 +201,7 @@ const checkCourtSessionsForConsumers = async (req, res) => {
         res.status(200).json(result);
       } catch (error) {
         console.error('Error sending cases to the server:', error);
-        res.status(500).json({ err: 'Error sending cases to the server' });
+        res.status(500).json({ err: `Error sending cases to the server, ${error}` });
       }
       
     
