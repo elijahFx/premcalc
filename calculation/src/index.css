@@ -10,6 +10,7 @@
 	border: 1px solid #dddddd;
 	border-collapse: collapse; 
 	font-size: 15px;
+	overflow-y: scroll;
 }
 .table th {
 	font-weight: bold;
@@ -406,6 +407,8 @@ th span {
 	width: 100vw;
 	height: 70vh;
 	background-color: white;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 input[type="checkbox"] {
