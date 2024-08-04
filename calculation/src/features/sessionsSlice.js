@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from 'react-toastify';
 const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/", "https://premiumcalculator.site/"]
 const BASIC_URL = URLS[2]
 
@@ -174,13 +175,11 @@ export const checkCourtSessionsForConsumers = createAsyncThunk(
 
           if(!response.ok) {
               throw new Error(`Ошибка сервера ${JSON.stringify(userToken)}`)
-          }
-          console.log(`${BASIC_URL}consumers/${id}`);
+          };
           const data = await response.json()
           return data
           
       } catch (error) {
-        console.log(`${BASIC_URL}consumers/${id}`);
           return rejectWithValue(error.message)
       }
   }
@@ -264,8 +263,23 @@ state.error = action.payload;
   state.error = null
 },
 [checkCourtSessionsForConsumers.fulfilled]: (state, action) => {
-  state.sessionStatus = "resolved"
-  state.courtSessions = action?.meta?.arg
+  state.sessionStatus = "resolved";
+  const addedSessions = action?.payload?.added;
+  const arrayLength = addedSessions.length;
+
+  if (arrayLength === 0) {
+    toast.info("Новых дел не найдено");
+  } else if (arrayLength === 1) {
+    state.courtSessions = [...state.courtSessions, addedSessions[0]];
+    toast.success(`${addedSessions[0].name} к ${addedSessions[0].liabelee} успешно добавлено`);
+  } else if (arrayLength >= 2) {
+    state.courtSessions = [...state.courtSessions, ...addedSessions];
+    const info = [...addedSessions].map((el, index) => {
+      return `${index + 1}) ${el.name} к ${el.liabelee}\n`
+    }).join('\n');
+    console.log(info);
+    toast.success(` Успешно добавлены дела:\n${info}`);
+  }
 },
 [checkCourtSessionsForConsumers.rejected]: (state, action) => {
   state.sessionStatus = "rejected";

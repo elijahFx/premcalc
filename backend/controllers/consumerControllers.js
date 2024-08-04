@@ -17,8 +17,10 @@ const courtsMap = {
     99: "Суд Первомайского района г. Минска",
     100: "Суд Заводского района г. Минска",
     101: "Суд Советского района г. Минска",
+    102: "Суд Московского района г. Минска",
     103: "Минский областной суд",
-    115: "Суд Минского района" 
+    109: "Суд Дзержинского района",
+    115: "Суд Минского района"
   };
 
 function formatDate(date) {
@@ -49,7 +51,6 @@ function formatDate(date) {
       Name: name
     };
 
-    console.log(data);
   
     const options = {
       method: 'POST',
@@ -140,72 +141,70 @@ const deleteConsumer = async (req, res) => {
 }
 
 const checkCourtSessionsForConsumers = async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params;
 
-    const authHeader = req.headers.authorization;
-    let token;
+  const authHeader = req.headers.authorization;
+  let token;
 
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-        token = authHeader.split(' ')[1];
-    } else {
-        return res.status(401).json({ err: 'Unauthorized' });
-    }
-    
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        res.status(404).json({err: "Нет такого потребителя"})
-    }
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+  } else {
+      return res.status(401).json({ err: 'Unauthorized' });
+  }
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ err: "Нет такого потребителя" });
+  }
 
-    const consumers = await Consumer.find({ user_id: id }).sort({createdAt: 1})
+  try {
+      const consumers = await Consumer.find({ user_id: id }).sort({ createdAt: 1 });
 
-    if(!consumers) {
-        return res.status(404).json({err: "Нет такого потребителей"})
-    }
+      if (!consumers.length) {
+          return res.status(404).json({ err: "Нет такого потребителей" });
+      }
 
-    const potrebosses = consumers.map(consumer => ({
-        name: consumer.name,
-        courtId: consumer.courtId
+      const potrebosses = consumers.map(consumer => ({
+          name: consumer.name,
+          courtId: consumer.courtId
       }));
-
-      console.log(potrebosses);
 
 
       const allCases = [];
 
       for (const potreboss of potrebosses) {
-        const cases = await fetchCourtData(potreboss.name, potreboss.courtId);
-        allCases.push(...cases);
+          const cases = await fetchCourtData(potreboss.name, potreboss.courtId);
+          allCases.push(...cases);
       }
-    
+
       allCases.sort((a, b) => {
-        const dateA = parseDateAndTime(a.date, a.time);
-        const dateB = parseDateAndTime(b.date, b.time);
-        return dateA - dateB;
+          const dateA = parseDateAndTime(a.date, a.time);
+          const dateB = parseDateAndTime(b.date, b.time);
+          return dateA - dateB;
       });
-    
-      try {
-        const response = await fetch(apiUrl, {
+
+      const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(allCases),
-        });
-    
-        if (!response.ok) {
+      });
+
+      if (!response.ok) {
+          const errorBody = await response.text();
+          console.error('Error response from server:', response.status, errorBody);
           throw new Error(`Failed to send data: ${response.statusText}`);
-        }
-    
-        const result = await response.json();
-        console.log('Successfully sent cases to the server:', result);
-        res.status(200).json(result);
-      } catch (error) {
-        console.error('Error sending cases to the server:', error);
-        res.status(500).json({ err: `Error sending cases to the server, ${error}` });
       }
-      
-    
-}
+
+      const result = await response.json();
+      console.log('Successfully sent cases to the server:', result);
+      res.status(200).json(result);
+  } catch (error) {
+      console.error('Error sending cases to the server:', error.stack);
+      res.status(500).json({ err: `Error sending cases to the server: ${error.message}` });
+  }
+};
 
 
 module.exports = {

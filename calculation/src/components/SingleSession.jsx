@@ -8,7 +8,6 @@ export default function SingleSession({ name, date, time, judge, courtRoom, cour
 
   function handleDeleteSession() {
     dispatch(deleteSession(id))
-    console.log("сработало!");
   }
 
 

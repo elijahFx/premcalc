@@ -18,6 +18,7 @@ const addSession = async (req, res) => {
       if (!exists) {
         const sessionToAdd = new Session(newSession);
         await sessionToAdd.save();
+        console.log("МЫ ТУТУ");
         addedSessions.push(sessionToAdd);  // Push the saved session
       }
     }
@@ -25,7 +26,7 @@ const addSession = async (req, res) => {
     res.status(200).json({ added: addedSessions });
   } catch (error) {
     console.error('Error adding sessions:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: `ЧТО БЛЯТЬ?` });
   }
 }
 

@@ -6,6 +6,8 @@ import { formattedDate } from './Month';
 import { Link } from 'react-router-dom';
 import { courtsMap, courtsMapReversed } from '../misc/map';
 import { Tooltip } from 'react-tooltip';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../Session.css'; // Import the CSS file for styling
 
 function parseDateTime(dateStr, timeStr) {
@@ -33,16 +35,13 @@ export default function Session() {
   const [dropdownOpen1, setDropdownOpen1] = useState(false)
   const [dropdownOpen2, setDropdownOpen2] = useState(false)
 
-  console.log(dropdownOpen2);
 
   useEffect(() => {
     dispatch(getSessions());
     dispatch(getConsumers());
-    console.log(error, status);
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(sessionStatus);
     if (sessionStatus === 'loading') {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => {
@@ -55,9 +54,7 @@ export default function Session() {
       }, 1000);
 
       return () => clearInterval(timer);
-    } else if (sessionStatus === 'rejected') {
-      dispatch(getSessions());
-    }
+    } 
   }, [sessionStatus]);
 
   const handleDelete = (id) => {
@@ -82,7 +79,6 @@ export default function Session() {
     dispatch(addConsumer({ name: consumerName, courtId: courtsMapReversed[selectedCourt], user_id: userId }));
     setConsumerName('');
     setSelectedCourt('Суд Минского района');
-    console.log('Submitted:', { consumerName, selectedCourt });
   };
 
   const handleCheckCourtSessionForConsumers = () => {
@@ -124,6 +120,7 @@ export default function Session() {
   return (
     <>
       <div className="monthContainer">
+      <ToastContainer position="bottom-left"/>
         <div className="month">
           <h5>{formattedDate}</h5>
           <Link to="/">
