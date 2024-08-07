@@ -27,6 +27,10 @@ const userSchema = new Schema({
     image: {
         type: Object,
         default: null
+    },
+    oklad: {
+        type: Number,
+        default: 538.36
     }
 })
 

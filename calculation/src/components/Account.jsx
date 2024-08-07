@@ -13,7 +13,7 @@ export default function Account() {
   const user = useSelector(state => state.users.user)
 
   function handleSubmitUserEdit() {
-    if (!userName && !productImg) return;
+    if (!userName && !productImg && !userOklad) return;
 
     const payload = { id: user.id };
 
