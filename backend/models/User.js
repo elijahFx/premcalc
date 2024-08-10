@@ -30,7 +30,7 @@ const userSchema = new Schema({
     },
     oklad: {
         type: Number,
-        default: 538.36
+        default: 626
     }
 })
 

@@ -8,6 +8,12 @@ import { Link } from 'react-router-dom'
 import { Tooltip } from 'react-tooltip'
 
 export let OKLAD = 476.44
+let coefficient = 1
+let coefficientString = `0%`
+const minBonus = 1000
+const maxBonus = 2500
+let KPIAfterTaxes = 0
+
 
 
   const date = new Date();
@@ -17,6 +23,23 @@ export let OKLAD = 476.44
   year: 'numeric',
     }).format(date);
 
+
+    function calculateKPIBonus(percentage) {
+        if(percentage >= 50 && percentage <= 59) {
+            return 0.01
+        } else if(percentage >= 60 && percentage <= 69) {
+            return 0.02
+        } else if(percentage >= 70 && percentage <= 79) {
+            return 0.03
+        } else if(percentage >= 80 && percentage <= 89) {
+            return 0.04
+        } else if(percentage >= 90) {
+            return 0.05
+        } else {
+            return 0
+        }
+    }
+
 export default function Month() {
 
     const [isOKLAD, setIsOKLAD] = useState(false)
@@ -25,7 +48,7 @@ export default function Month() {
 	const {error, status, showDialog} = useSelector((state) => state.cases)
     const role = useSelector((state) => state.users.role)
     const userId = useSelector((state) => state.users.user.id)
-
+    const userOklad = useSelector((state) => state?.users?.user?.oklad)
 
     const myTake = useSelector(state => state.cases.myTake)
     const myPureMoney = useSelector(state => state.cases.myPureMoney)
@@ -39,12 +62,13 @@ export default function Month() {
     const [isDown6, setIsDown6] = useState(false)
     const [isDown7, setIsDown7] = useState(false)
     const [finalCut, setFinalCut] = useState(0)
-    const [isDialog, setIsDialog] = useState(false)
 
     function changeMZP() {
         if(OKLAD === 476.44) {
             OKLAD = 538.36
             setIsOKLAD(!isOKLAD)
+        } else if(OKLAD > 476.44) {
+           console.log("nothing :)")
         } else {
             OKLAD = 476.44
             setIsOKLAD(!isOKLAD)
@@ -190,32 +214,55 @@ export default function Month() {
 
 	const dispatch = useDispatch()
 
- async function count() {
-		let moneyOfROZP = 0
-        let myActualMoney = 0 + OKLAD
+    async function count() {
+        let moneyOfROZP = 0
+        let myActualMoney = 0
         let myBonus = 0
-        
-        if(userId === "6634c2be3d9f0ebeba1ae3b2") {
-            myActualMoney = 0 + 560.72
+
+        // Use userOklad if it's defined, otherwise use OKLAD
+        const baseOklad = userOklad || OKLAD
+        myActualMoney += baseOklad
+
+        if (userId === "6634c2be3d9f0ebeba1ae3b2") {
+            myActualMoney = 560.72
         }
 
-        
-	  
-		await cases.forEach((el) => {
-			if(el.isPaid && !el.isDeleted) {
-          moneyOfROZP += el.expenses * 0.7
-          let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
-          myBonus += thoseMoney
-          let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
-          myActualMoney += thoseMoneyAfterTaxes
-		}
-		})
-        if(myActualMoney < 538.36) {
-            myActualMoney = 538.36
+        await cases.forEach((el) => {
+            if (el.isPaid && !el.isDeleted) {
+                moneyOfROZP += el.expenses * 0.7
+                let thoseMoney = ((el.expenses * 0.3) / el.takes) * el.myTakes
+                myBonus += thoseMoney
+                let thoseMoneyAfterTaxes = thoseMoney - (thoseMoney / 100) * 14;
+                myActualMoney += thoseMoneyAfterTaxes
+            }
+        })
+
+        coefficient = (((myBonus - minBonus) / (maxBonus - minBonus)) * 100).toFixed(2);
+
+    // Ensure the coefficient is within valid range
+    if (coefficient < 0) coefficient = 0;
+    if (coefficient > 100) coefficient = 100;
+
+    coefficientString = `${coefficient}%`;
+
+    // Fix: Adjusting KPI Bonus calculation
+    const KPIBonus = (calculateKPIBonus(coefficient) * myBonus).toFixed(2);
+    KPIAfterTaxes = (KPIBonus * 0.86) 
+    console.log(KPIAfterTaxes);
+    
+
+    myActualMoney += parseFloat(KPIAfterTaxes); // Add KPI bonus after taxes
+
+    console.log(`Coefficient: ${coefficient}`);
+    console.log(`KPI Bonus: ${KPIBonus}`);
+    console.log(`calculateKPIBonus: ${calculateKPIBonus(coefficient)}, kpiBonus: ${KPIBonus}`);
+
+        if (myActualMoney < baseOklad) {
+            myActualMoney = baseOklad
         }
         setFinalCut((myActualMoney - 150).toFixed(2))
-		dispatch(updateMoney({rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2)}))
-	  }
+        dispatch(updateMoney({ rozpMoney: moneyOfROZP.toFixed(2), myTake: myBonus.toFixed(2), myPureMoney: myActualMoney.toFixed(2) }))
+    }
 
 	useEffect(() => {
 		dispatch(fetchCases())
@@ -298,14 +345,14 @@ arrow_downward
   До выплаты аванса: {finalCut} бел. руб.
 </Tooltip>
 
-<Tooltip anchorSelect=".mzpToggle" clickable place="top">
-  Оклад: {OKLAD} бел. руб.
+<Tooltip anchorSelect=".kpd" clickable place="top">
+  Ваш KPI бонус (после налогов): {KPIAfterTaxes ? KPIAfterTaxes.toFixed(2) : 0} бел. руб.
 </Tooltip>
 
 <h1>Общая сумма расходов РОЗП за этот месяц: {rozpMoney} бел. руб.</h1>
 <h1>Моя премия до налогов: {myTake} бел. руб.</h1>
 <h1>Мои чистые деньги: <span className='money'>{myPureMoney}</span> бел. руб. </h1>
-{isOKLAD ? <span onClick={() => changeMZP()} className="material-symbols-outlined mzpToggle">toggle_off</span> : <span onClick={() => changeMZP()} className="material-symbols-outlined mzpToggle">toggle_on</span>}
+<h1>Ваш процент (КПД): <span className="kpd">{coefficientString}</span></h1>
 </div>
 </div>
 </>

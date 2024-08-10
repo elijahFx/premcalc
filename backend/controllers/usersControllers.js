@@ -47,7 +47,7 @@ async function editUser(req, res) {
   
     res.status(200).json(USER)
   }}
-  if(!image && !name) {
+  if(!image && !name && !userOklad) {
     return res.status(400).json({ err: "Пожалуйста, укажите имя или изображение" })
   }
    
@@ -65,7 +65,7 @@ async function signupUser(req, res) {
 
     const token = createToken(user._id)
 
-    res.status(200).json({email, token, role, id: user._id, name: user.name})
+    res.status(200).json({email, token, role, id: user._id, name: user.name, userOklad: user.oklad})
 
   } catch (error) {
     console.log(`ЭТО ТУУУУТ!`);
@@ -81,7 +81,7 @@ async function loginUser(req, res) {
 
     const token = createToken(user._id)
 
-    res.status(200).json({email, token, role: user.role, id: user._id, name: user.name, image: user.image})
+    res.status(200).json({email, token, role: user.role, id: user._id, name: user.name, image: user.image, userOklad: user.oklad})
 
   } catch (error) {
     res.status(400).json({err: error.message})

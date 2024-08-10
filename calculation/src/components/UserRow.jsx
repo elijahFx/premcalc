@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { OKLAD } from './Month';
+
+let OKLAD = 476.44
 
 export default function UserRow({ email, num, id, role, name }) {
 
 const allCases = useSelector(state => state.cases.allCases)
 
+
 const [roleData, setRoleData] = useState(role)
 const roles = ["worker", "employer", "admin"]
+
+
+const userOklad = useSelector((state) => state?.users?.user?.userOklad)
+OKLAD = userOklad ? (OKLAD * (1 - 0.14)) : OKLAD
 
 useEffect(() => {
 setRoleData(role)

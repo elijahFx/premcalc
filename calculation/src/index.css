@@ -870,6 +870,12 @@ td input[type="text"] {
 	--s:180deg;
   }
 
+  .account p {
+	text-align: center;
+	margin: 0 20px;
+	width: 50%;
+  }
+
 
 
   @keyframes l3-0 {
