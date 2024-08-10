@@ -299,12 +299,10 @@ export const addNewCase = createAsyncThunk(
             })
 
             const data = await response.json()
-            console.log(edit);
 
             if(!response.ok) {
                 throw new Error(JSON.stringify(data))
             }
-            console.log(edit);
             dispatch(editTheCase({id: edit.id, name: edit.name, expenses: edit.expenses}))
     
         } catch (error) {
@@ -336,7 +334,6 @@ export const returnCase = createAsyncThunk(
             if(!response.ok) {
                 throw new Error(JSON.stringify(data))
             }
-            console.log(edit);
             dispatch(returnTheCase({id: edit.id}))
     
         } catch (error) {
@@ -374,7 +371,6 @@ export const casesSlice = createSlice({
 
       if (caseToUpdate) {
         caseToUpdate.takes = action.payload.takes;
-        console.log(caseToUpdate);
       }
         },
         changeMyTakes: (state, action) => {
@@ -384,7 +380,6 @@ export const casesSlice = createSlice({
 
       if (caseToUpdate) {
         caseToUpdate.myTakes = action.payload.myTakes;
-        console.log(caseToUpdate);
       }
         },
         updateMoney: (state, action) => {
@@ -409,7 +404,6 @@ export const casesSlice = createSlice({
             }
         },
         editTheCase: (state, action) => {
-            console.log(action);
             const { id, name, expenses } = action.payload;
             const caseToUpdate = state.cases.find((el) => el._id === id);
         
@@ -465,12 +459,10 @@ export const casesSlice = createSlice({
           [alterTakes.fulfilled]: (state, action) => {
             state.status = "fullfilled";
             state.error = null;
-            console.log(action);
           },
           [alterMyTakes.fulfilled]: (state, action) => {
             state.status = "fullfilled";
             state.error = null;
-            console.log(action);
           },
           [alterMyTakes.rejected]: (state, action) => {
             state.status = "rejected";
@@ -494,7 +486,6 @@ export const casesSlice = createSlice({
           },
           [editCase.fulfilled]: (state, action) => {
             state.status = "fulfilled";
-            console.log(action);
             const { id, name, expenses } = action.meta.arg;
             const caseToUpdate = state.cases.find((el) => el._id === id);
         

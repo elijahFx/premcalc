@@ -277,7 +277,6 @@ state.error = action.payload;
     const info = [...addedSessions].map((el, index) => {
       return `${index + 1}) ${el.name} к ${el.liabelee}\n`
     }).join('\n');
-    console.log(info);
     toast.success(` Успешно добавлены дела:\n${info}`);
   }
 },

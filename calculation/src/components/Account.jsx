@@ -29,8 +29,6 @@ export default function Account() {
     if (productImg && !userName) {
       payload.image = productImg;
     }
-
-    console.log(payload);
   
     dispatch(updateOneUser(payload));
     setUserName('');

@@ -248,14 +248,9 @@ export default function Month() {
     // Fix: Adjusting KPI Bonus calculation
     const KPIBonus = (calculateKPIBonus(coefficient) * myBonus).toFixed(2);
     KPIAfterTaxes = (KPIBonus * 0.86) 
-    console.log(KPIAfterTaxes);
     
 
     myActualMoney += parseFloat(KPIAfterTaxes); // Add KPI bonus after taxes
-
-    console.log(`Coefficient: ${coefficient}`);
-    console.log(`KPI Bonus: ${KPIBonus}`);
-    console.log(`calculateKPIBonus: ${calculateKPIBonus(coefficient)}, kpiBonus: ${KPIBonus}`);
 
         if (myActualMoney < baseOklad) {
             myActualMoney = baseOklad
