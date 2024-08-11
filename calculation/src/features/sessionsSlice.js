@@ -6,12 +6,12 @@ const BASIC_URL = URLS[2]
 
 export const getSessions = createAsyncThunk(
     "sessions/getSessions",
-    async function (_, {rejectWithValue, getState}) {
+    async function (id, {rejectWithValue, getState}) {
 
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`${BASIC_URL}sessions`, {
+            const response = await fetch(`${BASIC_URL}sessions/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
                 }
@@ -35,12 +35,12 @@ export const getSessions = createAsyncThunk(
 
   export const getConsumers = createAsyncThunk(
     "sessions/getConsumers",
-    async function (_, {rejectWithValue, getState}) {
+    async function (id, {rejectWithValue, getState}) {
 
         const userToken = getState().users.user.token
 
         try {
-            const response = await fetch(`${BASIC_URL}consumers`, {
+            const response = await fetch(`${BASIC_URL}consumers/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${userToken}`
                 }
@@ -161,7 +161,7 @@ export const checkCourtSessionsForConsumers = createAsyncThunk(
       const userToken = getState().users.user.token
       const check = `${BASIC_URL}consumers/${id}`
       try {
-          const response = await fetch(`${BASIC_URL}consumers/${id}`, {
+          const response = await fetch(`${BASIC_URL}consumers/sessions/${id}`, {
               method: "GET",
               headers: {
                   "Authorization": `Bearer ${userToken}`,
@@ -200,6 +200,7 @@ export const sessionsSlice = createSlice({
     },
    }, extraReducers: {
   [getSessions.pending]: (state) => {
+      state.courtSessions = []
       state.status = "loading"
       state.error = null
   },

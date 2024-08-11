@@ -6,11 +6,11 @@ const { addConsumer, getConsumers, deleteConsumer, checkCourtSessionsForConsumer
 
 router.post("/", addConsumer)
 
-router.get("/", getConsumers)
+router.get("/:id", getConsumers)
 
 router.delete("/:id", deleteConsumer)
 
-router.get("/:id", checkCourtSessionsForConsumers)
+router.get("/sessions/:id", checkCourtSessionsForConsumers)
 
 
 

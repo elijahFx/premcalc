@@ -6,7 +6,7 @@ const { addSession, getSessions, deleteSession } = require("../controllers/sessi
 
 router.post("/", addSession)
 
-router.get("/", getSessions)
+router.get("/:id", getSessions)
 
 router.delete("/:id", deleteSession)
 

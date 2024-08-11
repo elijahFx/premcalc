@@ -37,8 +37,10 @@ export default function Session() {
 
 
   useEffect(() => {
-    dispatch(getSessions());
-    dispatch(getConsumers());
+    if(userId) {
+      dispatch(getSessions(userId));
+      dispatch(getConsumers(userId));
+    }
   }, [dispatch]);
 
   useEffect(() => {
@@ -72,6 +74,9 @@ export default function Session() {
   const handleCourtFilterChange = (event) => {
     setCourtFilter(event.target.value);
   };
+
+  console.log(userId);
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();

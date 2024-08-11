@@ -31,7 +31,13 @@ const addSession = async (req, res) => {
 }
 
 const getSessions = async (req, res) => {
-    const sessions = await Session.find({}).sort({createdAt: 1})
+    const { id } = req.params
+    
+    if(!id) {
+      res.status(400).json({err: "Нет такого пользователя"})
+    }
+
+    const sessions = await Session.find({ user_id: id }).sort({createdAt: 1})
     res.status(200).json(sessions)
 }
 

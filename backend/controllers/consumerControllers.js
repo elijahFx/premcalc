@@ -119,7 +119,14 @@ const addConsumer = async (req, res) => {
 }
 
 const getConsumers = async (req, res) => {
-    const consumers = await Consumer.find({}).sort({createdAt: 1})
+
+    const { id } = req.params
+    
+    if(!id) {
+      res.status(400).json({err: "Нет такого пользователя"})
+    }
+
+    const consumers = await Consumer.find({ user_id: id }).sort({createdAt: 1})
     res.status(200).json(consumers)
 }
 
@@ -182,13 +189,18 @@ const checkCourtSessionsForConsumers = async (req, res) => {
           return dateA - dateB;
       });
 
+      const casesWithUserId = allCases.map(caseItem => ({
+        ...caseItem,
+        user_id: id
+    }));
+
       const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(allCases),
+          body: JSON.stringify(casesWithUserId),
       });
 
       if (!response.ok) {
