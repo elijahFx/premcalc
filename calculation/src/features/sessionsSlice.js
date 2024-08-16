@@ -159,7 +159,6 @@ export const checkCourtSessionsForConsumers = createAsyncThunk(
   async function (id, {rejectWithValue, getState}) {
 
       const userToken = getState().users.user.token
-      const check = `${BASIC_URL}consumers/${id}`
       try {
           const response = await fetch(`${BASIC_URL}consumers/sessions/${id}`, {
               method: "GET",

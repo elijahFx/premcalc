@@ -50,6 +50,16 @@
 	background: gold;
 }
 
+.redBtn {
+	background: rgba(255, 0, 0, 0.582);
+	transition: 0.5s;
+ }
+
+.redBtn:hover {
+	background: rgba(197, 0, 0, 0.726);
+	transition: 0.5s;
+ }
+
 input {
   width: 40px;
 }
@@ -744,6 +754,20 @@ td input[type="text"] {
 	position: relative;
 }
 
+.todaySession {
+	border: 2px solid #ff8c00; 
+	background-color: #fdf5e6; 
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+	position: relative;
+	width: 100%;
+	min-height: 150px;
+	height: fit-content;
+	padding: 5px 10px;
+	margin-bottom: 10px;
+  }
+  
+  
+
 .blueText {
 	color: blue;
 	text-decoration: underline;
@@ -810,6 +834,12 @@ td input[type="text"] {
 }
 
 .session .material-symbols-outlined {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+
+.todaySession .material-symbols-outlined {
 	position: absolute;
 	bottom: 5px;
 	right: 5px;

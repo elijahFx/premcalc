@@ -159,7 +159,7 @@ export default function Session() {
           </div>
           <div className="box">
             <form className="consumerForm" onSubmit={handleSubmit}>
-              <label htmlFor="name">
+              <label htmlFor="nameTwo">
                 Введите ФИО вашего потребителя или название организации-ответчика
               </label>
               <input
@@ -167,8 +167,9 @@ export default function Session() {
                 value={consumerName}
                 onChange={handleNameChange}
                 name="court"
-                id="name"
+                id="nameTwo"
                 placeholder="Глазков Николай Андреевич"
+                autoComplete='true'
               />
               <label htmlFor="court">Выберите суд, который рассматривает данное дело:</label>
               <div className="arrowContainer" onClick={toggleDropdown1}>

@@ -167,7 +167,7 @@ const checkCourtSessionsForConsumers = async (req, res) => {
       const consumers = await Consumer.find({ user_id: id }).sort({ createdAt: 1 });
 
       if (!consumers.length) {
-          return res.status(404).json({ err: "Нет такого потребителей" });
+          return res.status(404).json({ err: "У вас вообще нет потребителей" });
       }
 
       const potrebosses = consumers.map(consumer => ({

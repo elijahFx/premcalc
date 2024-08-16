@@ -44,13 +44,14 @@ export default function AdminPanel() {
       <th>Имя: </th>
       <th>Роль: </th>
 			<th>id: </th>
+      <th>Оклад:</th>
       <th>Настоящий заработок: </th>
       <th>Действия: </th>
 		</tr>
 	</thead>
 	<tbody>
      {listOfUsers ? listOfUsers.map((el, number) => {
-      return <UserRow id={el._id} key={number} num={number} email={el.email} role={el.role} name={el.name}/>
+      return <UserRow userOklad={el.oklad} id={el._id} key={number} num={number} email={el.email} role={el.role} name={el.name}/>
     }) : <></>}
 	</tbody>
 </table>
