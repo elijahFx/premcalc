@@ -166,7 +166,6 @@ export const checkCourtSessionsForConsumers = createAsyncThunk(
                   "Authorization": `Bearer ${userToken}`,
                   "Content-Type": "application/json"
               },
-              credentials: "include",
 
 
           }
