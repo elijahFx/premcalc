@@ -85,7 +85,7 @@ export default function Navbar() {
         {email && !user?.error && (
           <>
             <Link to='account'>
-              <h5>{user?.name ? user?.name : email}</h5>
+              <h5>{user?.name ? user?.name : email} <span className="exitBtn">[профиль]</span></h5>
             </Link>
             <button onClick={handleClick} className='exitBtn'>
               Выйти

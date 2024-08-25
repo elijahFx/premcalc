@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOneUser } from '../features/usersSlice';
+import imageCompression from 'browser-image-compression';
 
 export default function Account() {
   const dispatch = useDispatch();
 
-  const useroklad = useSelector((state) => state.users.user.userOklad)
-
-  const [userName, setUserName] = useState('');  
+  const useroklad = useSelector((state) => state.users.user.userOklad);
+  const [userName, setUserName] = useState('');
   const [productImg, setProductImg] = useState('');
   const [userOklad, setUserOklad] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const user = useSelector((state) => state.users.user);
 
@@ -21,15 +22,15 @@ export default function Account() {
     if (!userName && !productImg && userOklad) {
       payload.userOklad = Number(userOklad);
     }
-  
+
     if (userName && !productImg) {
       payload.name = userName;
     }
-  
+
     if (productImg && !userName) {
       payload.image = productImg;
     }
-  
+
     dispatch(updateOneUser(payload));
     setUserName('');
     setUserOklad('');
@@ -37,7 +38,26 @@ export default function Account() {
 
   async function handleAvatarUpload(e) {
     const file = e.target.files[0];
-    transformFile(file);
+    if (file) {
+      setUploading(true);
+      const compressedFile = await compressFile(file);
+      transformFile(compressedFile);
+      setUploading(false);
+    }
+  }
+
+  async function compressFile(file) {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 800,
+      useWebWorker: true
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      return compressedFile;
+    } catch (error) {
+      console.error("Compression error:", error);
+    }
   }
 
   function transformFile(file) {
@@ -78,14 +98,16 @@ export default function Account() {
             type="file"
             accept="image/*"
             onChange={handleAvatarUpload}
+            disabled={uploading}
           />
+          {uploading ? <p>Uploading...</p> : null}
           {productImg || userName || userOklad ? (
             <button onClick={handleSubmitUserEdit} className="avatarBtn">
               Обновить профиль
             </button>
           ) : null}
         </div>
-        
+
         <div className="name">
           <h4>Ваше настоящее Имя: {user?.name ? user?.name : "---"}</h4>
           <input

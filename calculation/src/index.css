@@ -163,7 +163,7 @@ header {
 	align-items: center;
 }
 
-.logo span {
+.logo .material-symbols-outlined {
 	font-size: 60px;
 	color: rgba(255, 0, 0, 0.582);
 	animation: walk;
@@ -415,7 +415,7 @@ th span {
 
 .adminPnl {
 	width: 100vw;
-	height: 70vh;
+	min-height: 70vh;
 	background-color: white;
 	overflow-y: auto;
 	overflow-x: hidden;

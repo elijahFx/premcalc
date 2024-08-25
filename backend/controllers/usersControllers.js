@@ -11,49 +11,57 @@ function createToken(_id) {
 }
 
 async function editUser(req, res) {
-  const { id } = req.params
-  const { image, name, userOklad } = req.body
+  const { id } = req.params;
+  const { image, name, userOklad } = req.body;
 
-  if(!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({err: "Нет такого пользователя"})
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ err: "Нет такого пользователя" });
   }
-
 
   try {
+    if (image || name) {
+      let uploadResponse;
+      if (image) {
+        uploadResponse = await cloudinary.uploader.upload(image, {
+          upload_preset: "avatars",
+        });
+      }
 
-    if(!image && !name && userOklad) {
-      const USER = await User.findOneAndUpdate({_id: id}, {
-        oklad: userOklad
-    })
-  
-    res.status(200).json(USER)
-  
-  }
+      const USER = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          ...(name && { name }),
+          ...(image && { image: uploadResponse.secure_url }),
+          ...(userOklad && { oklad: userOklad }),
+        },
+        { new: true }
+      );
 
-    if(image || name) {
-      const uploadResponse = await cloudinary.uploader.upload(image, {
-        upload_preset: "avatars"
-      })
+      if (!USER) {
+        return res.status(404).json({ err: "Нет такого пользователя" });
+      }
 
-      if(uploadResponse || name) {
-        const USER = await User.findOneAndUpdate({_id: id}, {
-          ...req.body
-      })
-      
-
-      if(!USER) {
-        return res.status(404).json({err: "Нет такого пользователя"})
+      return res.status(200).json(USER);
     }
-  
-    res.status(200).json(USER)
-  }}
-  if(!image && !name && !userOklad) {
-    return res.status(400).json({ err: "Пожалуйста, укажите имя или изображение" })
-  }
-   
+
+    if (!image && !name && userOklad) {
+      const USER = await User.findOneAndUpdate(
+        { _id: id },
+        {
+          oklad: userOklad,
+        },
+        { new: true }
+      );
+
+      return res.status(200).json(USER);
+    }
+
+    if (!image && !name && !userOklad) {
+      return res.status(400).json({ err: "Пожалуйста, укажите имя или изображение" });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).json({err: error.message})
+    res.status(500).json({ err: error.message });
   }
 }
 
