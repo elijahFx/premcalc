@@ -1,31 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { calculateSalary } from '../misc/salary'; // Import the calculateSalary function
 
-export default function UserRow({ email, num, id, role, name, userOklad }) {
-  const allCases = useSelector(state => state.cases.allCases);
+export default function UserRow({ email, num, id, role, name, userOklad, money, image }) {
   const [roleData, setRoleData] = useState(role);
   const roles = ["worker", "employer", "admin"];
 
-  const [money, setMoney] = useState(0)
-
-  const actualOklad = userOklad 
+  const defaultImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+  image = image || defaultImage;
 
   useEffect(() => {
     setRoleData(role);
   }, [role]);
-
- async function getUserSalary() {
-    const userCases = await allCases?.filter((el) => el.user_id === id); 
-    
-    const salaryData = calculateSalary(userCases, actualOklad); 
-    
-    setMoney(salaryData.myPureMoney)
-  }
-
-  useEffect(() => {
-    getUserSalary();
-  }, [allCases]);
 
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -41,7 +25,17 @@ export default function UserRow({ email, num, id, role, name, userOklad }) {
   return (
     <tr className={role === "admin" ? "golden" : "gray"}>
       <td>{num + 1}</td>
-      <td>{email}</td>
+      <td>
+        <div className="user-email">
+          <div className="user-image-wrapper">
+            <img className="user-image" src={image} alt={`${name}'s avatar`} />
+            <div className="hover-image-wrapper">
+              <img className="hover-image" src={image} alt={`${name}'s avatar large`} />
+            </div>
+          </div>
+          {email}
+        </div>
+      </td>
       <td>{name ? name : "Безымянный"}</td>
       <td>
         <select name="role" value={roleData} onChange={(e) => handleInputChange(e)}>
@@ -51,7 +45,7 @@ export default function UserRow({ email, num, id, role, name, userOklad }) {
         </select>
       </td>
       <td>{id}</td>
-      <td>{actualOklad.toFixed(2)} бел. руб.</td> 
+      <td>{userOklad.toFixed(2)} бел. руб.</td> 
       <td>{money} бел. руб.</td> 
       <td><span className="material-symbols-outlined" onClick={handleBanUser}>cancel</span></td>
     </tr>
