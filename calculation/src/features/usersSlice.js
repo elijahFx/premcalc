@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { checkCourtSessionsForConsumers } from "./sessionsSlice";
 const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/", "https://premiumcalculator.site/"]
-const BASIC_URL = URLS[2]
+const BASIC_URL = URLS[0]
 
 export const signupUser = createAsyncThunk(
     "users/signupUser",
@@ -54,7 +54,7 @@ export const signupUser = createAsyncThunk(
         const data = await response.json();
          
           
-        localStorage.setItem("token", JSON.stringify({token: data.token, email: data.email, role: data.role, id: data.id, name: data.name, image: data.image, userOklad: data.userOklad}))
+        localStorage.setItem("token", JSON.stringify({token: data.token, role: data.role, email: data.email, id: data.id, name: data.name, image: data.image, userOklad: data.userOklad}))
         dispatch(login(data));
 
         dispatch(checkCourtSessionsForConsumers(data.id))

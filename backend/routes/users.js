@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { signupUser, loginUser, getUsers, editUser, forgotPassword, resetPassword, resetPassword2 } = require("../controllers/usersControllers")
+const { signupUser, loginUser, getUsers, editUser, forgotPassword, resetPassword, resetPassword2, addStatistic } = require("../controllers/usersControllers")
 
 router.post("/login", loginUser)
 
@@ -11,6 +11,8 @@ router.post("/forgot-password", forgotPassword)
 router.get("/reset-password/:id/:token", resetPassword)
 
 router.post("/reset-password/:id/:token", resetPassword2)
+
+router.get("/statistics", addStatistic)
 
 router.patch("/:id", editUser)
 

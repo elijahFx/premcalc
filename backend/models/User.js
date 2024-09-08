@@ -1,9 +1,8 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const roleOptions = ["worker", "admin", "employer"]
-
-
 const Schema = mongoose.Schema
+
 
 const userSchema = new Schema({
     email: {
@@ -31,7 +30,17 @@ const userSchema = new Schema({
     oklad: {
         type: Number,
         default: 626
-    }
+    },
+    statistics: [{
+        date: {
+            type: String,
+            required: true
+        },
+        money: {
+            type: Number,
+            required: true
+        }
+    }]
 })
 
 userSchema.statics.signup = async function(email, password, role) {

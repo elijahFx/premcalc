@@ -1,13 +1,15 @@
 const User = require("../models/User")
+const Case = require("../models/Case")
 const jwt = require("jsonwebtoken")
 const cloudinary = require("../utils/cloudinary")
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const nodemailer = require("nodemailer")
+const calculateSalary = require("../utils/salary")
 
 
-function createToken(_id) {
-   return jwt.sign({_id}, process.env.SECRET, {expiresIn: "5h"})
+function createToken(_id,) {
+  return jwt.sign({ _id }, process.env.SECRET, {expiresIn: "5h"});
 }
 
 async function editUser(req, res) {
@@ -215,6 +217,57 @@ async function resetPassword2(req, res) {
 }
 
 
+async function addStatistic(req, res) {
+  try {
+    // Fetch all users
+    const users = await User.find();
+
+    if (!users.length) {
+      return res.status(404).json({ err: "Пользователи не найдены" });
+    }
+
+    // Get today's date in the format DD.MM.YYYY
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = today.getFullYear();
+    const formattedDate = `${day}.${month}.${year}`;
+
+    // Iterate over each user
+    for (let user of users) {
+      // Get the user's cases and oklad
+      const cases = await Case.find({ user_id: user._id }).sort({ createdAt: 1 });
+      const userOklad = user.oklad;
+
+      // Calculate salary
+      const salary = calculateSalary(cases, userOklad, user._id);
+
+      // Check if the user already has a 'statistics' field
+      let statistics = user.statistics || [];
+
+      // Check if today's date is already in the statistics
+      const isStatisticExists = statistics.some(stat => stat.date === formattedDate);
+
+      if (!isStatisticExists) {
+        // Add new statistic
+        statistics.push({ date: formattedDate, money: salary.myPureMoney });
+      }
+
+      // Update the user's statistics
+      user.statistics = statistics;
+
+      // Save the updated user data
+      await user.save();
+    }
+
+    // Return success message
+    return res.status(200).json({ message: "Статистика обновлена для всех пользователей" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Ошибка сервера" });
+  }
+}
+
 
 module.exports = {
     loginUser,
@@ -223,5 +276,6 @@ module.exports = {
     editUser,
     forgotPassword,
     resetPassword,
-    resetPassword2
+    resetPassword2,
+    addStatistic
 }
