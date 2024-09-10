@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOneUser } from '../features/usersSlice';
 import imageCompression from 'browser-image-compression';
+import Statistics from './Statistics';
 
 export default function Account() {
   const dispatch = useDispatch();
 
-  const useroklad = useSelector((state) => state.users.user.userOklad);
   const [userName, setUserName] = useState('');
   const [productImg, setProductImg] = useState('');
   const [userOklad, setUserOklad] = useState('');
@@ -136,6 +136,11 @@ export default function Account() {
         <p>
           Сюда необходимо ввести Ваш оклад после всех налоговых вычетов и иных выплат (подоходный, ФСЗН, страховка и т.д.). Если Вы уже ввели неправильный размер оклада, то Вы можете в любой момент сменить его посредством ввода нужного Вам оклада и нажатия кнопки "Обновить профиль".
         </p>
+
+<div className="name">
+        <h6>Ваша статистика:</h6>
+          <Statistics />
+</div>
       </div>
     </div>
   );

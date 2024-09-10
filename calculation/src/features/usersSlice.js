@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { checkCourtSessionsForConsumers } from "./sessionsSlice";
 const URLS = ["http://localhost:4000/", "https://premcalc.onrender.com/", "https://premiumcalculator.site/"]
-const BASIC_URL = URLS[0]
+const BASIC_URL = URLS[2]
 
 export const signupUser = createAsyncThunk(
     "users/signupUser",
