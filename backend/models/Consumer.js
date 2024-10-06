@@ -14,6 +14,10 @@ const consumerSchema = new Schema({
     },
     user_id: {
         type: String
+    },
+    allCourts: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

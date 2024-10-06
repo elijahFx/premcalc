@@ -131,21 +131,30 @@ const getConsumers = async (req, res) => {
 }
 
 const deleteConsumer = async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        res.status(404).json({err: "Нет такого потребителя"})
+  // Check if the provided ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ err: "Нет такого потребителя" });
+  }
+
+  try {
+    // Find and delete the consumer by ID
+    const consumer = await Consumer.findOneAndDelete({ _id: id });
+
+    // If the consumer doesn't exist, return a 404 error
+    if (!consumer) {
+      return res.status(404).json({ err: "Нет такого потребителя" });
     }
 
-    const consumer = await Consumer.findOneAndDelete({ _id: id})
-
-    if(!consumer) {
-        return res.status(404).json({err: "Нет такого потребителя"})
-    }
-
-    res.status(200).json(consumer)
-
-}
+    // Return the deleted consumer object as a response
+    res.status(200).json(consumer);
+  } catch (error) {
+    // Log the error and return a 500 error response if something goes wrong
+    console.error('Error deleting consumer:', error);
+    res.status(500).json({ err: "Ошибка при удалении потребителя" });
+  }
+};
 
 const checkCourtSessionsForConsumers = async (req, res) => {
   const { id } = req.params;
@@ -154,67 +163,84 @@ const checkCourtSessionsForConsumers = async (req, res) => {
   let token;
 
   if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+    token = authHeader.split(' ')[1];
   } else {
-      return res.status(401).json({ err: 'Unauthorized' });
+    return res.status(401).json({ err: 'Unauthorized' });
   }
-  
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ err: "Нет такого потребителя" });
+    return res.status(404).json({ err: "Нет такого потребителя" });
   }
 
   try {
-      const consumers = await Consumer.find({ user_id: id }).sort({ createdAt: 1 });
+    const consumers = await Consumer.find({ user_id: id }).sort({ createdAt: 1 });
 
-      if (!consumers.length) {
-          return res.status(404).json({ err: "У вас вообще нет потребителей" });
-      }
+    if (!consumers.length) {
+      return res.status(404).json({ err: "У вас вообще нет потребителей" });
+    }
 
-      const potrebosses = consumers.map(consumer => ({
-          name: consumer.name,
-          courtId: consumer.courtId
-      }));
-
-
-      const allCases = [];
-
-      for (const potreboss of potrebosses) {
-          const cases = await fetchCourtData(potreboss.name, potreboss.courtId);
-          allCases.push(...cases);
-      }
-
-      allCases.sort((a, b) => {
-          const dateA = parseDateAndTime(a.date, a.time);
-          const dateB = parseDateAndTime(b.date, b.time);
-          return dateA - dateB;
-      });
-
-      const casesWithUserId = allCases.map(caseItem => ({
-        ...caseItem,
-        user_id: id
+    const potrebosses = consumers.map(consumer => ({
+      name: consumer.name,
+      courtId: consumer.courtId
     }));
 
-      const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(casesWithUserId),
-      });
+    const allCases = [];
 
-      if (!response.ok) {
-          const errorBody = await response.text();
-          console.error('Error response from server:', response.status, errorBody);
-          throw new Error(`Failed to send data: ${response.statusText}`);
+    // Define the court IDs to search when courtId is 1000
+    const allCourtIds = [93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 109, 115];
+
+    for (const potreboss of potrebosses) {
+      if (potreboss.courtId === 1000 || potreboss.courtId === "1000") {
+        console.log(`мы туту`);
+        // Check court sessions in all courts
+        for (const courtId of allCourtIds) {
+          const cases = await fetchCourtData(potreboss.name, courtId);
+          console.log(cases);
+          console.log(`мы туту ${courtsMap[courtId]}`);
+          allCases.push(...cases);
+        }
+      } else {
+        // Check court sessions for the specific court ID
+        const cases = await fetchCourtData(potreboss.name, potreboss.courtId);
+        allCases.push(...cases);
       }
+    }
 
-      const result = await response.json();
-      console.log('Successfully sent cases to the server:', result);
-      res.status(200).json(result);
+    // Sort cases by date and time
+    allCases.sort((a, b) => {
+      const dateA = parseDateAndTime(a.date, a.time);
+      const dateB = parseDateAndTime(b.date, b.time);
+      return dateA - dateB;
+    });
+
+    // Add user_id to each case
+    const casesWithUserId = allCases.map(caseItem => ({
+      ...caseItem,
+      user_id: id
+    }));
+
+    // Send cases to the server
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(casesWithUserId),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error('Error response from server:', response.status, errorBody);
+      throw new Error(`Failed to send data: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('Successfully sent cases to the server:', result);
+    res.status(200).json(result);
   } catch (error) {
-      console.error('Error sending cases to the server:', error.stack);
-      res.status(500).json({ err: `Error sending cases to the server: ${error.message}` });
+    console.error('Error sending cases to the server:', error.stack);
+    res.status(500).json({ err: `Error sending cases to the server: ${error.message}` });
   }
 };
 

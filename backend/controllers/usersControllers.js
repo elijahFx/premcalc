@@ -107,6 +107,28 @@ async function getUsers(req, res) {
 
 }
 
+async function getStatistics(req, res) {
+  const { id } = req.body;
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ err: "Нет такого пользователя" });
+  }
+
+  try {
+    // Use findById to get a single user object, not an array
+    const user = await User.findById(id);
+    
+    if (!user) {
+      return res.status(404).json({ err: "Нет такого пользователя" });
+    }
+
+    // Directly send the user statistics
+    res.status(200).json(user.statistics);
+  } catch (error) {
+    return res.status(500).json({ err: `Ошибка сервера: ${error.message}` });
+  }
+}
+
 async function forgotPassword(req, res) {
   const { email } = req.body
 
@@ -264,7 +286,7 @@ async function addStatistic(req, res) {
     return res.status(200).json({ message: "Статистика обновлена для всех пользователей" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: `Ошибка сервера: ${error}` });
   }
 }
 
@@ -277,5 +299,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     resetPassword2,
-    addStatistic
+    addStatistic,
+    getStatistics
 }

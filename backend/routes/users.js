@@ -1,22 +1,33 @@
-const express = require("express")
-const router = express.Router()
-const { signupUser, loginUser, getUsers, editUser, forgotPassword, resetPassword, resetPassword2, addStatistic } = require("../controllers/usersControllers")
+const express = require("express");
+const router = express.Router();
+const {
+  signupUser,
+  loginUser,
+  getUsers,
+  editUser,
+  forgotPassword,
+  resetPassword,
+  resetPassword2,
+  addStatistic,
+  getStatistics,
+} = require("../controllers/usersControllers");
 
-router.post("/login", loginUser)
+router.post("/login", loginUser);
 
-router.post("/signup", signupUser)
+router.post("/signup", signupUser);
 
-router.post("/forgot-password", forgotPassword)
+router.post("/forgot-password", forgotPassword);
 
-router.get("/reset-password/:id/:token", resetPassword)
+router.get("/reset-password/:id/:token", resetPassword);
 
-router.post("/reset-password/:id/:token", resetPassword2)
+router.post("/reset-password/:id/:token", resetPassword2);
 
-router.get("/statistics", addStatistic)
+router.get("/statistics", addStatistic);
 
-router.patch("/:id", editUser)
+router.post("/getstatistics", getStatistics);
 
-router.get("/", getUsers)
+router.patch("/:id", editUser);
 
+router.get("/", getUsers);
 
-module.exports = router
+module.exports = router;

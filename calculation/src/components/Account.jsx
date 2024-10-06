@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateOneUser } from '../features/usersSlice';
-import imageCompression from 'browser-image-compression';
-import Statistics from './Statistics';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getStatistics, updateOneUser } from "../features/usersSlice";
+import imageCompression from "browser-image-compression";
+import Statistics from "./Statistics";
 
 export default function Account() {
   const dispatch = useDispatch();
 
-  const [userName, setUserName] = useState('');
-  const [productImg, setProductImg] = useState('');
-  const [userOklad, setUserOklad] = useState('');
+  const [userName, setUserName] = useState("");
+  const [productImg, setProductImg] = useState("");
+  const [userOklad, setUserOklad] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const user = useSelector((state) => state.users.user);
+  
+
 
   function handleSubmitUserEdit() {
     if (!userName && !productImg && !userOklad) return;
@@ -32,8 +34,8 @@ export default function Account() {
     }
 
     dispatch(updateOneUser(payload));
-    setUserName('');
-    setUserOklad('');
+    setUserName("");
+    setUserOklad("");
   }
 
   async function handleAvatarUpload(e) {
@@ -50,7 +52,7 @@ export default function Account() {
     const options = {
       maxSizeMB: 1,
       maxWidthOrHeight: 800,
-      useWebWorker: true
+      useWebWorker: true,
     };
     try {
       const compressedFile = await imageCompression(file, options);
@@ -69,7 +71,7 @@ export default function Account() {
         setProductImg(reader.result);
       };
     } else {
-      setProductImg('');
+      setProductImg("");
     }
   }
 
@@ -121,8 +123,10 @@ export default function Account() {
 
         <div className="name">
           <h4>
-            Ваш Оклад (до вычета налогов):{' '}
-            {user?.userOklad ? `${user.userOklad} бел. руб.` : `${userOklad ? userOklad : 626} бел. руб.`}
+            Ваш Оклад (до вычета налогов):{" "}
+            {user?.userOklad
+              ? `${user.userOklad} бел. руб.`
+              : `${userOklad ? userOklad : 626} бел. руб.`}
           </h4>
           <input
             type="number"
@@ -134,13 +138,17 @@ export default function Account() {
           />
         </div>
         <p>
-          Сюда необходимо ввести Ваш оклад после всех налоговых вычетов и иных выплат (подоходный, ФСЗН, страховка и т.д.). Если Вы уже ввели неправильный размер оклада, то Вы можете в любой момент сменить его посредством ввода нужного Вам оклада и нажатия кнопки "Обновить профиль".
+          Сюда необходимо ввести Ваш оклад после всех налоговых вычетов и иных
+          выплат (подоходный, ФСЗН, страховка и т.д.). Если Вы уже ввели
+          неправильный размер оклада, то Вы можете в любой момент сменить его
+          посредством ввода нужного Вам оклада и нажатия кнопки "Обновить
+          профиль".
         </p>
 
-<div className="name">
-        <h6>Ваша статистика:</h6>
-          <Statistics />
-</div>
+        <div className="name">
+          <h5>Ваша статистика:</h5>
+          <Statistics /> 
+        </div>
       </div>
     </div>
   );

@@ -948,6 +948,68 @@ td input[type="text"] {
   }
 
 
+  .chart-container {
+	transition: 0.4s;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .label-container {
+	transition: 0.4s;
+	display: flex;
+	justify-content: space-between;
+	width: 100%; /* Set to 100% for full width */
+	margin-bottom: 5px;
+	position: relative;
+  }
+  
+  .resizer-container {
+	transition: 0.4s;
+	position: relative;
+	width: 80%; /* Fixed width for the resizer-container */
+	margin-top: 20px;
+  }
+  
+  .resizer-line {
+	transition: 0.4s;
+	width: 100%; /* Fixed width for the resizer line */
+	max-width: 600px; /* Set a maximum width so it doesn't grow with the chart */
+	height: 4px;
+	background-color: #ccc;
+	position: relative;
+	cursor: pointer;
+	margin: 0 auto; /* Center the line */
+  }
+  
+  .resizer-circle {
+	transition: 0.4s;
+	width: 16px;
+	height: 16px;
+	background-color: #007bff;
+	border-radius: 50%;
+	position: absolute;
+	top: -6px;
+	transform: translateX(-50%);
+  }
+  
+  .resizer-min-label,
+  .resizer-max-label {
+	font-size: 14px;
+	color: #666;
+	position: absolute;
+	top: -20px; /* Position labels above the line */
+  }
+  
+  .resizer-min-label {
+	left: 0; /* Align the min label to the start of the line */
+  }
+  
+  .resizer-max-label {
+	right: 0; /* Align the max label to the end of the line */
+  }
+
+
 
   @keyframes l3-0 {
 	0%,20% {transform: rotate(0)}
