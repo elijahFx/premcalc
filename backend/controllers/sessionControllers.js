@@ -1,9 +1,11 @@
 const Session = require("../models/Session");
 const mongoose = require("mongoose");
 
+
 const addSession = async (req, res) => {
   try {
     const newSessions = req.body;
+    
     const addedSessions = [];
 
     for (const newSession of newSessions) {
@@ -11,7 +13,11 @@ const addSession = async (req, res) => {
         name: newSession.name,
         date: newSession.date,
         time: newSession.time,
+        user_id: newSession.user_id,
       });
+
+      console.log(`Сессия внутри sessionControllers: ${JSON.stringify(newSession)}`);
+      
 
       if (!exists) {
         const sessionToAdd = new Session(newSession);

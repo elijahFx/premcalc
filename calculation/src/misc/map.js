@@ -32,4 +32,16 @@ const courtsMapReversed = {
   "Все суды города Минска": 1000
 };
 
-export { courtsMap, courtsMapReversed };
+const caseMap = {
+  "Гражданское дело": "civil",
+  "Административное дело": "administrative",
+  "Уголовное дело": "criminal"
+}
+
+const caseMapReversed = {
+  "civil": "Гражданское дело",
+  "administrative": "Административное дело",
+  "criminal": "Уголовное дело"
+}
+
+export { courtsMap, courtsMapReversed, caseMap, caseMapReversed };

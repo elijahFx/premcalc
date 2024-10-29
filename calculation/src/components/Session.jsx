@@ -15,6 +15,7 @@ import { Tooltip } from "react-tooltip";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../Session.css"; // Import the CSS file for styling
+import { caseMap } from "../misc/map";
 
 function parseDateTime(dateStr, timeStr) {
   if (dateStr && timeStr) {
@@ -42,6 +43,9 @@ export default function Session() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [dropdownOpen2, setDropdownOpen2] = useState(false);
+  const [caseType, setCaseType] = useState("Гражданское дело");
+
+  
 
   useEffect(() => {
     if (userId) {
@@ -82,8 +86,6 @@ export default function Session() {
     setCourtFilter(event.target.value);
   };
 
-  console.log(userId);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!consumerName || !selectedCourt) return;
@@ -97,6 +99,7 @@ export default function Session() {
           courtId: 1000,
           user_id: userId,
           allCourts: true,
+          type: caseMap[caseType]
         })
       );
 
@@ -108,11 +111,15 @@ export default function Session() {
           name: consumerName,
           courtId: courtsMapReversed[selectedCourt],
           user_id: userId,
+          type: caseMap[caseType]
         })
       );
       setConsumerName("");
       setSelectedCourt("Суд Минского района");
+      setCaseType("Гражданское дело")
     }
+    console.log(caseMap[caseType]);
+    
   };
 
   const handleCheckCourtSessionForConsumers = () => {
@@ -181,6 +188,9 @@ export default function Session() {
                   court={el.court}
                   courtRoom={el.courtRoom}
                   liabelee={el.liabelee}
+                  caseNum={el.caseNum}
+                  caseType={el.caseType}
+                  type={el.type}
                 />
               ))
             )}
@@ -265,7 +275,44 @@ export default function Session() {
                     Все суды города Минска
                   </option>
                 </select>
+                
               </div>
+              <div className="caseTypeContainer">
+                  <label htmlFor="caseType">Выберите тип дела:</label>
+                  <div className="caseTypeOptions">
+                    <label className="styled-radio">
+                      <input
+                        type="radio"
+                        value="Гражданское дело"
+                        checked={caseType === "Гражданское дело"}
+                        onChange={(e) => setCaseType(e.target.value)}
+                      />
+                      <span className="radio-mark"></span>
+                      Гражданское дело
+                    </label>
+                    <label className="styled-radio">
+                      <input
+                        type="radio"
+                        value="Административное дело"
+                        checked={caseType === "Административное дело"}
+                        onChange={(e) => setCaseType(e.target.value)}
+                      />
+                      <span className="radio-mark"></span>
+                      Административное дело
+                    </label>
+                    <label className="styled-radio">
+                      <input
+                        type="radio"
+                        value="Уголовное дело"
+                        checked={caseType === "Уголовное дело"}
+                        onChange={(e) => setCaseType(e.target.value)}
+                      />
+                      <span className="radio-mark"></span>
+                      Уголовное дело
+                    </label>
+                  </div>
+                </div>
+
               <div className="flex-row">
                 <button>Внести потребителя (ответчика) в базу данных</button>
                 <button
