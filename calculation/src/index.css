@@ -601,6 +601,28 @@ input[type="checkbox"]:checked:before {
   object-fit: cover;
 }
 
+.christmasHat {
+  position: absolute;
+  top: -12px; /* Adjust this to position the hat correctly */
+  left: 14px; /* Adjust this to center the hat horizontally */
+  width: 40px; /* Adjust size as needed */
+  height: auto;
+  pointer-events: none; /* Prevents the hat from interfering with pointer events */
+}
+
+.microProfilePictureContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.walk {
+  position: absolute;
+  top: -8px;
+  animation-name: walk;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+
 .dialog {
   position: absolute;
   top: 37vh;
@@ -764,7 +786,6 @@ td input[type="text"] {
   padding: 5px 10px;
   margin-bottom: 10px;
   position: relative;
-  
 }
 
 .sessionCrime {
@@ -859,8 +880,6 @@ td input[type="text"] {
   bottom: 5px;
   right: 5px;
 }
-
-
 
 .todaySession .material-symbols-outlined {
   position: absolute;
@@ -1066,7 +1085,7 @@ td input[type="text"] {
 }
 
 .styled-checkbox input:checked ~ .checkmark {
-  background-color: #2196F3; /* Change background color when checked */
+  background-color: #2196f3; /* Change background color when checked */
 }
 
 .checkmark:after {
@@ -1089,6 +1108,11 @@ td input[type="text"] {
   transform: rotate(45deg);
 }
 
+.total_p {
+  padding-top: 25px;
+  font-size: 15px;
+  font-weight: 600;
+}
 
 @keyframes l3-0 {
   0%,
@@ -1122,11 +1146,11 @@ td input[type="text"] {
     color: black;
   }
   25% {
-    color: rgba(255, 0, 0, 0.582);
+    color: rgba(0, 81, 255, 0.582);
     transform: rotate(-25deg);
   }
   50% {
-    color: gold;
+    color: rgb(14, 181, 223);
   }
   100% {
     color: rgb(0, 0, 0);

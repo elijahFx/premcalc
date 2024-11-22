@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from '../features/usersSlice';
-import UserRow from './UserRow';
-import { fetchAllCases } from '../features/casesSlice.mjs';
-import { calculateSalary } from '../misc/salary';
+import { getUsers } from "../features/usersSlice";
+import UserRow from "./UserRow";
+import { fetchAllCases } from "../features/casesSlice.mjs";
+import { calculateSalary } from "../misc/salary";
 
 const date = new Date();
-export const formattedDate = new Intl.DateTimeFormat('ru-RU', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
+export const formattedDate = new Intl.DateTimeFormat("ru-RU", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
 }).format(date);
 
 export default function AdminPanel() {
   const dispatch = useDispatch();
-  const listOfUsers = useSelector(state => state.users.listOfUsers);
-  const allCases = useSelector(state => state.cases.allCases);
+  const listOfUsers = useSelector((state) => state.users.listOfUsers);
+  const allCases = useSelector((state) => state.cases.allCases);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -28,9 +28,13 @@ export default function AdminPanel() {
 
   useEffect(() => {
     // Calculate the money for each user and update the sortedUsers state
-    const usersWithMoney = listOfUsers.map(user => {
-      const userCases = allCases?.filter(c => c.user_id === user._id);
-      const money = calculateSalary(userCases, user.oklad, user._id).myPureMoney;
+    const usersWithMoney = listOfUsers.map((user) => {
+      const userCases = allCases?.filter((c) => c.user_id === user._id);
+      const money = calculateSalary(
+        userCases,
+        user.oklad,
+        user._id
+      ).myPureMoney;
       return { ...user, money };
     });
     setSortedUsers(usersWithMoney);
@@ -45,11 +49,13 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className='adminPnl'>
-      <div className='monthContainer'>
-        <div className='month'>
+    <div className="adminPnl">
+      <div className="monthContainer">
+        <div className="month">
           <h5>{formattedDate}</h5>
-          <Link to="/"><button>На главную</button></Link>
+          <Link to="/">
+            <button>На главную</button>
+          </Link>
         </div>
       </div>
       <div className="subPanel">
@@ -63,12 +69,19 @@ export default function AdminPanel() {
               <th>id: </th>
               <th>Оклад:</th>
               <th>
-                Настоящий заработок: {isDown ? (
-                  <span className='material-symbols-outlined' onClick={() => sortZarplata(1)}>
+                Настоящий заработок:{" "}
+                {isDown ? (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => sortZarplata(1)}
+                  >
                     arrow_upward
                   </span>
                 ) : (
-                  <span className='material-symbols-outlined' onClick={() => sortZarplata(-1)}>
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => sortZarplata(-1)}
+                  >
                     arrow_downward
                   </span>
                 )}
@@ -78,15 +91,15 @@ export default function AdminPanel() {
           </thead>
           <tbody>
             {sortedUsers.map((el, number) => (
-              <UserRow 
+              <UserRow
                 image={el.image}
                 money={el.money}
-                userOklad={el.oklad} 
-                id={el._id} 
-                key={number} 
-                num={number} 
-                email={el.email} 
-                role={el.role} 
+                userOklad={el.oklad}
+                id={el._id}
+                key={number}
+                num={number}
+                email={el.email}
+                role={el.role}
                 name={el.name}
                 allCases={allCases} // pass allCases to UserRow if needed
               />

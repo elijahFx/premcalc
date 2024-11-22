@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Dialog from './Dialog';
-import { addNewCase } from '../features/casesSlice.mjs';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../features/usersSlice';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Dialog from "./Dialog";
+import { addNewCase } from "../features/casesSlice.mjs";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout } from "../features/usersSlice";
+import { Link } from "react-router-dom";
+import christmasHat from "../images/hat.png"
 
 export default function Navbar() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [money, setMoney] = useState(0);
   const [takes, setTakes] = useState(1);
   const [myTakes, setMyTakes] = useState(1);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [error1, setError1] = useState(false);
   const [error2, setError2] = useState(false);
 
@@ -24,7 +25,7 @@ export default function Navbar() {
   }, [user]);
 
   useEffect(() => {
-    const autoLogin = JSON.parse(localStorage.getItem('token'));
+    const autoLogin = JSON.parse(localStorage.getItem("token"));
     if (autoLogin) {
       dispatch(login(autoLogin));
     }
@@ -54,7 +55,7 @@ export default function Navbar() {
           isPaid: false,
         })
       );
-      setName('');
+      setName("");
       setMoney(0);
       setTakes(1);
       setMyTakes(1);
@@ -67,82 +68,99 @@ export default function Navbar() {
   return (
     <header>
       {showDialog && <Dialog />}
-      <div className='logo'>
-        <Link to='/'>
-          <div className='subLogo'>
+      <div className="logo">
+        <Link to="/">
+          <div className="subLogo">
             {user?.image ? (
+              <div className="microProfilePictureContainer">
               <img
-                className='microProfilePicture'
+                className="microProfilePicture"
                 src={user.image}
-                alt='Ваш аватар'
+                alt="Ваш аватар"
               />
+              <img
+                className="christmasHat"
+                src={christmasHat}
+                alt="Шапочка"
+              />
+              </div>
             ) : (
-              <span className='material-symbols-outlined'>savings</span>
+              <div className="microProfilePictureContainer">
+              <span className="material-symbols-outlined">savings</span>
+              <img
+                className="christmasHat walk"
+                src={christmasHat}
+                alt="Шапочка"
+              />
+              </div>
             )}
-            <h2>Премкальк</h2>
+            <h2>Премкальк❄️</h2>
           </div>
         </Link>
         {email && !user?.error && (
           <>
-            <Link to='account'>
-              <h5>{user?.name ? user?.name : email} <span className="exitBtn">[профиль]</span></h5>
+            <Link to="account">
+              <h5>
+                {user?.name ? user?.name : email}{" "}
+                <span className="exitBtn">[профиль]</span>
+              </h5>
             </Link>
-            <button onClick={handleClick} className='exitBtn'>
+            <button onClick={handleClick} className="exitBtn">
               Выйти
             </button>
           </>
         )}
       </div>
 
-      <form className='navbar' onSubmit={handleSubmit}>
-        <div className='navbarContainer'>
-          <label htmlFor='name'>Ответчик:</label>
+      <form className="navbar" onSubmit={handleSubmit}>
+        <div className="navbarContainer">
+          <label htmlFor="name">Ответчик:</label>
           <input
-            className={error1 ? 'redInput' : ''}
-            type='text'
-            placeholder='Ответчик'
-            id='name'
+            className={error1 ? "redInput" : ""}
+            type="text"
+            placeholder="Ответчик"
+            id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            name='name'
-            autoComplete='on'
+            name="name"
+            autoComplete="on"
           />
         </div>
-        <div className='navbarContainer'>
-          <label htmlFor='expenses'>Расходы РОЗП:</label>
+        <div className="navbarContainer">
+          <label htmlFor="expenses">Расходы РОЗП:</label>
           <input
-            className={error2 ? 'redInput' : ''}
-            type='number'
-            placeholder='Расходы'
-            id='expenses'
+            className={error2 ? "redInput" : ""}
+            type="number"
+            placeholder="Расходы"
+            id="expenses"
             value={money}
             onChange={(e) => setMoney(e.target.value)}
-            name='expenses'
+            name="expenses"
           />
         </div>
-        <div className='navbarContainer'>
-          <label htmlFor='takes'>Доли:</label>
+        <div className="navbarContainer">
+          <label htmlFor="takes">Доли:</label>
           <input
-            type='number'
-            placeholder='Доли'
-            id='takes'
+            type="number"
+            placeholder="Доли"
+            id="takes"
             value={takes}
             onChange={(e) => setTakes(e.target.value)}
-            name='takes'
+            name="takes"
           />
         </div>
-        <div className='navbarContainer'>
-          <label htmlFor='myTakes'>Мои доли:</label>
+        <div className="navbarContainer">
+          <label htmlFor="myTakes">Мои доли:</label>
           <input
-            type='number'
-            placeholder='Мои доли'
-            id='myTakes'
+            type="number"
+            placeholder="Мои доли"
+            id="myTakes"
             value={myTakes}
             onChange={(e) => setMyTakes(e.target.value)}
-            name='myTakes'
+            name="myTakes"
           />
         </div>
-        <button type='submit'>Добавить+</button>
+        <button type="submit">Добавить+</button>
       </form>
     </header>
   );

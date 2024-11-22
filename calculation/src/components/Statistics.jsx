@@ -12,6 +12,8 @@ export default function Statistics() {
   let dates = stats?.map((stat) => stat.date) || [];
   let salaries = stats?.map((stat) => stat.money) || [];
 
+  const allTimeSum = salaries.reduce((acc, curr) => acc + curr, 0).toFixed(2);
+
   useEffect(() => {
     if (user?.id) {
       dispatch(getStatistics({ id: user.id }));
@@ -64,6 +66,11 @@ export default function Statistics() {
           />
         </div>
       </div>
+      {allTimeSum && (
+        <p className="total_p">
+          Общий заработок за все время: <span className="money">{allTimeSum}</span> бел. руб.
+        </p>
+      )}
     </div>
   );
 }
