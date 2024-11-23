@@ -289,6 +289,10 @@ footer p {
   color: rgb(34, 141, 34);
 }
 
+.redMoney {
+  color: rgb(163, 29, 29);
+}
+
 .loader {
   width: 48px;
   height: 48px;
@@ -468,6 +472,15 @@ input[type="checkbox"]:checked:before {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.flex-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 40px;
+  white-space: nowrap;
 }
 
 .greenBtn {
@@ -1112,6 +1125,24 @@ td input[type="text"] {
   padding-top: 25px;
   font-size: 15px;
   font-weight: 600;
+}
+
+.spin {
+  display: inline-block;
+  transition: transform 3s ease-in-out;
+}
+
+.spin.spinning {
+  animation: spinAnimation 3s linear;
+}
+
+@keyframes spinAnimation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(1800deg); /* 5 rotations */
+  }
 }
 
 @keyframes l3-0 {

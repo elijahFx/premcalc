@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useDispatch, useSelector } from "react-redux";
 import { getStatistics } from "../features/usersSlice";
+import { formatToRussianMonthYear } from "../misc/dates";
 
 export default function Statistics() {
   const dispatch = useDispatch();
@@ -13,6 +14,15 @@ export default function Statistics() {
   let salaries = stats?.map((stat) => stat.money) || [];
 
   const allTimeSum = salaries.reduce((acc, curr) => acc + curr, 0).toFixed(2);
+  const averageSum = (allTimeSum / dates.length).toFixed(2);
+
+  const lowestSalary = salaries.sort((a, b) => a - b)[0];
+  const highestSalary = salaries.sort((a, b) => b - a)[0];
+
+  const startDate = dates[0] ? formatToRussianMonthYear(dates[0], true) : null;
+  const lastDate = dates[dates.length - 1]
+    ? formatToRussianMonthYear(dates[dates.length - 1])
+    : null;
 
   useEffect(() => {
     if (user?.id) {
@@ -67,9 +77,26 @@ export default function Statistics() {
         </div>
       </div>
       {allTimeSum && (
-        <p className="total_p">
-          Общий заработок за все время: <span className="money">{allTimeSum}</span> бел. руб.
-        </p>
+        <>
+          <p className="total_p">
+            Общий заработок за все время:{" "}
+            <span className="money">{allTimeSum}</span> бел. руб.
+          </p>
+          <p className="total_p">
+            Средняя заработная плата за период с {startDate} по {lastDate}:
+            <span className="money"> {averageSum}</span> бел. руб.
+          </p>
+          <div className="flex-2">
+            <p className="total_p">
+              Макс. ЗП:
+              <span className="money"> {highestSalary}</span> бел. руб.
+            </p>
+            <p className="total_p">
+              Мин. ЗП:
+              <span className="redMoney"> {lowestSalary}</span> бел. руб.
+            </p>
+          </div>
+        </>
       )}
     </div>
   );

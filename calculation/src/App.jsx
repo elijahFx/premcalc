@@ -19,8 +19,7 @@ import Session from './components/Session.jsx'
 function App() {
 
   const user = useSelector(state => state.users.user)
-
-
+  
   return (
     
     <BrowserRouter>
