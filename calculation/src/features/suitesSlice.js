@@ -4,7 +4,7 @@ const URLS = [
   "https://premcalc.onrender.com/",
   "https://premiumcalculator.site/",
 ];
-const BASIC_URL = URLS[2];
+const BASIC_URL = URLS[0];
 
 export const makeNewSuite = createAsyncThunk(
   "suites/makeNewSuite",

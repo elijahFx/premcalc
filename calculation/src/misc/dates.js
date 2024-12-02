@@ -24,8 +24,6 @@ const genitiveMonths = {
   
     // Replace with genitive month if needed
     const monthName = useGenitive ? genitiveMonths[nominativeMonth] : nominativeMonth;
-    console.log(monthName, useGenitive);
-    
   
     return `${monthName} ${yearPart} г.`;
   };

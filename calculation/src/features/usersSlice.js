@@ -5,7 +5,7 @@ const URLS = [
   "https://premcalc.onrender.com/",
   "https://premiumcalculator.site/",
 ];
-const BASIC_URL = URLS[2];
+const BASIC_URL = URLS[0];
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
@@ -106,8 +106,6 @@ export const forgotPassword = createAsyncThunk(
       }
 
       const data = await response.json();
-
-      console.log(data);
 
       return data;
     } catch (error) {
@@ -239,7 +237,6 @@ export const getStatistics = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

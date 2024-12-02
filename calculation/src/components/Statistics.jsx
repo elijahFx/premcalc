@@ -10,28 +10,39 @@ export default function Statistics() {
   const user = useSelector((state) => state.users.user);
   const stats = useSelector((state) => state.users.statistics);
 
-  let dates = stats?.map((stat) => stat.date) || [];
-  let salaries = stats?.map((stat) => stat.money) || [];
-
-  const allTimeSum = salaries.reduce((acc, curr) => acc + curr, 0).toFixed(2);
-  const averageSum = (allTimeSum / dates.length).toFixed(2);
-
-  const lowestSalary = salaries.sort((a, b) => a - b)[0];
-  const highestSalary = salaries.sort((a, b) => b - a)[0];
-
-  const startDate = dates[0] ? formatToRussianMonthYear(dates[0], true) : null;
-  const lastDate = dates[dates.length - 1]
-    ? formatToRussianMonthYear(dates[dates.length - 1])
-    : null;
+  const [dates, setDates] = useState([]);
+  const [salaries, setSalaries] = useState([]);
 
   useEffect(() => {
     if (user?.id) {
       dispatch(getStatistics({ id: user.id }));
     }
-
-    dates = stats?.map((stat) => stat.date) || [];
-    salaries = stats?.map((stat) => stat.money) || [];
   }, [dispatch, user]);
+
+  useEffect(() => {
+    if (stats) {
+      // Sort stats by date
+      const sortedStats = [...stats].sort(
+        (a, b) =>
+          new Date(a.date.split(".").reverse().join("-")) -
+          new Date(b.date.split(".").reverse().join("-"))
+      );
+
+      setDates(sortedStats.map((stat) => stat.date));
+      setSalaries(sortedStats.map((stat) => stat.money));
+    }
+  }, [stats]);
+
+  const allTimeSum = salaries.reduce((acc, curr) => acc + curr, 0).toFixed(2);
+  const averageSum = (allTimeSum / dates.length).toFixed(2);
+
+  const lowestSalary = Math.min(...salaries);
+  const highestSalary = Math.max(...salaries);
+
+  const startDate = dates[0] ? formatToRussianMonthYear(dates[0], true) : null;
+  const lastDate = dates[dates.length - 1]
+    ? formatToRussianMonthYear(dates[dates.length - 1])
+    : null;
 
   const [chartWidth, setChartWidth] = useState(500); // Initial chart width
   const minWidth = 400; // Minimum chart width
