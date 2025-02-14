@@ -14,10 +14,6 @@ export default function Navbar() {
   const [email, setEmail] = useState("");
   const [error1, setError1] = useState(false);
   const [error2, setError2] = useState(false);
-  const [isSpinning, setIsSpinning] = useState(false);
-
-  const emojis = ["🎅", "❄️", "☃️", "🎄", "🎁", "🎉", "🥂", "🔔"];
-  const [emoji, setEmoji] = useState("");
 
   const user = useSelector((state) => state.users.user);
   const { showDialog } = useSelector((state) => state.cases);
@@ -25,7 +21,6 @@ export default function Navbar() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setEmoji(emojis[Math.floor(Math.random() * emojis.length)]);
     setEmail(user?.email);
   }, [user]);
 
@@ -39,11 +34,6 @@ export default function Navbar() {
   const handleClick = () => {
     dispatch(logout());
     localStorage.clear();
-  };
-
-  const handleSpin = () => {
-    setIsSpinning(true); // Trigger spin
-    setTimeout(() => setIsSpinning(false), 3000); // Reset after animation duration
   };
 
   const handleSubmit = (e) => {
@@ -88,28 +78,13 @@ export default function Navbar() {
                   src={user.image}
                   alt="Ваш аватар"
                 />
-                <img
-                  className="christmasHat"
-                  src={christmasHat}
-                  alt="Шапочка"
-                />
               </div>
             ) : (
               <div className="microProfilePictureContainer">
                 <span className="material-symbols-outlined">savings</span>
-                <img
-                  className="christmasHat walk"
-                  src={christmasHat}
-                  alt="Шапочка"
-                />
               </div>
             )}
-            <h2>Премкальк<span
-                className={`spin ${isSpinning ? "spinning" : ""}`}
-                onMouseEnter={handleSpin} // Start animation on click
-              >
-                {emoji}
-              </span></h2>
+            <h2>Премкальк</h2>
           </div>
         </Link>
         {email && !user?.error && (
